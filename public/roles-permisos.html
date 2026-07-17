@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HSEQ GESTIÓN - Parametrización de Roles y Permisos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#a04100", "tertiary-container": "#006722", "background": "#f7f9ff",
+                    "on-secondary-fixed-variant": "#7a3000", "secondary-fixed": "#ffdbcc", "surface-dim": "#d7dadf",
+                    "outline": "#727784", "surface-tint": "#115cb9", "outline-variant": "#c2c6d4",
+                    "secondary-container": "#fe6b00", "inverse-primary": "#acc7ff", "tertiary-fixed-dim": "#66df75",
+                    "on-secondary-fixed": "#351000", "on-primary-fixed-variant": "#004491", "on-secondary": "#ffffff",
+                    "primary-fixed": "#d7e2ff", "on-tertiary-fixed": "#002106", "error-container": "#ffdad6",
+                    "tertiary": "#004c17", "surface-container-highest": "#e0e3e8", "surface-bright": "#f7f9ff",
+                    "on-primary": "#ffffff", "tertiary-fixed": "#83fc8e", "on-surface": "#181c20",
+                    "on-error-container": "#93000a", "surface": "#f7f9ff", "primary": "#003f87",
+                    "surface-container-low": "#f1f4f9", "error": "#ba1a1a", "surface-container": "#ebeef3",
+                    "surface-container-lowest": "#ffffff", "on-tertiary": "#ffffff", "primary-container": "#0056b3",
+                    "on-primary-fixed": "#001a40", "on-background": "#181c20", "surface-container-high": "#e5e8ee",
+                    "primary-fixed-dim": "#acc7ff", "on-error": "#ffffff", "secondary-fixed-dim": "#ffb693",
+                    "on-tertiary-fixed-variant": "#00531a", "on-tertiary-container": "#6fe87c", "on-secondary-container": "#572000",
+                    "on-primary-container": "#bbd0ff", "inverse-on-surface": "#eef1f6", "on-surface-variant": "#424752",
+                    "inverse-surface": "#2d3135", "surface-variant": "#e0e3e8"
+            },
+            "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+            "spacing": { "xl": "32px", "xs": "4px", "base": "4px", "margin-desktop": "32px", "md": "16px", "lg": "24px", "sm": "8px", "margin-mobile": "16px", "gutter": "16px" },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"], "headline-lg": ["Inter"], "title-md": ["Inter"], "display-lg": ["Inter"],
+                    "body-lg": ["Inter"], "label-md": ["JetBrains Mono"], "label-sm": ["JetBrains Mono"], "body-md": ["Inter"], "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav-item .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
+        .role-item.active { background-color: #0056b3; color: #ffffff; }
+        .role-item.active .role-desc { color: #d7e2ff; }
+        input[type="checkbox"].perm-check { width: 20px; height: 20px; accent-color: #003f87; cursor: pointer; }
+        .toast { transition: opacity 0.3s ease, transform 0.3s ease; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col h-screen w-72 left-0 top-0 fixed border-r border-outline-variant bg-surface py-xl z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">HSEQ GESTIÓN</h1>
+<p class="text-on-surface-variant font-label-md text-label-md mt-xs">Sistema Integrado</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/centro-mando.html">
+<span class="material-symbols-outlined">strategy</span><span class="font-label-md text-label-md">Planear (Estratégico)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/inspecciones-rondas.html">
+<span class="material-symbols-outlined">construction</span><span class="font-label-md text-label-md">Hacer (Operativo)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/bitacora.html">
+<span class="material-symbols-outlined">fact_check</span><span class="font-label-md text-label-md">Verificar (Auditoría)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">published_with_changes</span><span class="font-label-md text-label-md">Actuar (Mejora)</span>
+</a>
+<div class="mt-xl pt-lg border-t border-outline-variant mx-4">
+<p class="text-on-surface-variant font-label-sm text-label-sm px-2 uppercase mb-2">Herramientas</p>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Analítica Avanzada">
+<span class="material-symbols-outlined">analytics</span><span class="font-label-md text-label-md">Analítica Avanzada</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/usuarios-roles.html">
+<span class="material-symbols-outlined">manage_accounts</span><span class="font-label-md text-label-md">Usuarios y Roles</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/clientes.html">
+<span class="material-symbols-outlined">domain</span><span class="font-label-md text-label-md">Clientes</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proyectos.html">
+<span class="material-symbols-outlined">apartment</span><span class="font-label-md text-label-md">Proyectos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/empleados.html">
+<span class="material-symbols-outlined">badge</span><span class="font-label-md text-label-md">Empleados</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">campaign</span><span class="font-label-md text-label-md">Charlas Diarias</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/bitacora.html">
+<span class="material-symbols-outlined">menu_book</span><span class="font-label-md text-label-md">Bitácora</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-r-full font-bold transition-colors scale-[0.98] active-nav-item" href="/roles-permisos.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">admin_panel_settings</span><span class="font-label-md text-label-md">Roles y Permisos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Configuración">
+<span class="material-symbols-outlined">settings_suggest</span><span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+</nav>
+<a class="px-lg py-md border-t border-outline-variant flex items-center gap-3 hover:bg-surface-container-high transition-colors" href="/seleccion-empresa.html" title="Cambiar de empresa">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">JD</div>
+<div><p class="font-title-md text-body-md font-bold">Juan Delgado</p><p class="font-label-sm text-label-sm text-on-surface-variant">Director HSEQ</p></div>
+</a>
+</aside>
+<!-- Main -->
+<main class="lg:pl-72 pt-lg px-margin-mobile md:px-margin-desktop pb-xl max-w-[1400px] mx-auto">
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-lg">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Parametrización de Roles y Permisos</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Defina qué puede Ver, Imprimir, Modificar o Eliminar cada perfil, por módulo del sistema.</p>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-gutter">
+<!-- Roles list -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-2 h-fit">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase px-3 pt-2 pb-1">Perfiles</p>
+<div id="roles-list" class="flex flex-col gap-1"></div>
+</section>
+<!-- Matrix -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg">
+<div class="flex items-center justify-between mb-md">
+<div>
+<h3 class="font-title-md text-title-md text-on-surface" id="matrix-role-name">—</h3>
+<p class="font-body-md text-body-md text-on-surface-variant" id="matrix-role-desc"></p>
+</div>
+<button class="flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container transition-all" id="btn-save">
+<span class="material-symbols-outlined">save</span>
+Guardar cambios
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr class="font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-4 py-3">Módulo</th>
+<th class="px-4 py-3 text-center">Ver</th>
+<th class="px-4 py-3 text-center">Imprimir</th>
+<th class="px-4 py-3 text-center">Modificar</th>
+<th class="px-4 py-3 text-center">Eliminar</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant" id="matrix-tbody"></tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+<div class="toast fixed bottom-6 right-6 bg-tertiary-container text-on-tertiary px-5 py-3 rounded-xl shadow-lg opacity-0 pointer-events-none flex items-center gap-2" id="toast">
+<span class="material-symbols-outlined">check_circle</span>
+<span id="toast-text">Guardado</span>
+</div>
+<script>
+    let modulesInfo = { modules: [], actions: [] };
+    let roles = [];
+    let selectedRoleId = null;
+
+    async function loadData() {
+      const [modRes, rolesRes] = await Promise.all([
+        fetch('/api/modules').then(r => r.json()),
+        fetch('/api/roles').then(r => r.json())
+      ]);
+      modulesInfo = modRes;
+      roles = rolesRes;
+      renderRolesList();
+      selectRole(roles[0].id);
+    }
+
+    function renderRolesList() {
+      const container = document.getElementById('roles-list');
+      container.innerHTML = '';
+      roles.forEach(role => {
+        const el = document.createElement('button');
+        el.className = 'role-item text-left px-3 py-3 rounded-lg hover:bg-surface-container-high transition-colors';
+        el.dataset.roleId = role.id;
+        el.innerHTML = `<div class="font-bold font-body-md text-body-md">${role.nombre}</div><div class="role-desc font-label-sm text-label-sm text-on-surface-variant mt-1">${role.descripcion}</div>`;
+        el.addEventListener('click', () => selectRole(role.id));
+        container.appendChild(el);
+      });
+    }
+
+    function selectRole(roleId) {
+      selectedRoleId = roleId;
+      document.querySelectorAll('.role-item').forEach(el => {
+        el.classList.toggle('active', el.dataset.roleId === roleId);
+      });
+      const role = roles.find(r => r.id === roleId);
+      document.getElementById('matrix-role-name').textContent = role.nombre;
+      document.getElementById('matrix-role-desc').textContent = role.descripcion;
+      renderMatrix(role);
+    }
+
+    function renderMatrix(role) {
+      const tbody = document.getElementById('matrix-tbody');
+      tbody.innerHTML = '';
+      modulesInfo.modules.forEach(mod => {
+        const perms = role.permisos[mod.id] || { ver: false, imprimir: false, modificar: false, eliminar: false };
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-bold text-on-surface">${mod.label}</td>
+          ${modulesInfo.actions.map(action => `
+            <td class="px-4 py-3 text-center">
+              <input class="perm-check" type="checkbox" data-module="${mod.id}" data-action="${action}" ${perms[action] ? 'checked' : ''}/>
+            </td>
+          `).join('')}
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function showToast(text) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').textContent = text;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      setTimeout(() => toast.classList.add('opacity-0', 'pointer-events-none'), 2200);
+    }
+
+    document.getElementById('btn-save').addEventListener('click', async () => {
+      const role = roles.find(r => r.id === selectedRoleId);
+      const permisos = {};
+      modulesInfo.modules.forEach(mod => {
+        permisos[mod.id] = {};
+        modulesInfo.actions.forEach(action => {
+          const input = document.querySelector(`input[data-module="${mod.id}"][data-action="${action}"]`);
+          permisos[mod.id][action] = input.checked;
+        });
+      });
+      const res = await fetch(`/api/roles/${role.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ permisos })
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        role.permisos = updated.permisos;
+        showToast(`Permisos de "${role.nombre}" actualizados`);
+      } else {
+        showToast('Error al guardar');
+      }
+    });
+
+    loadData();
+  </script>
+</body></html>

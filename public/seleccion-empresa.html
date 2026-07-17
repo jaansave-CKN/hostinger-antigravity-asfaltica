@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#a04100",
+                    "tertiary-container": "#006722",
+                    "background": "#f7f9ff",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "secondary-fixed": "#ffdbcc",
+                    "surface-dim": "#d7dadf",
+                    "outline": "#727784",
+                    "surface-tint": "#115cb9",
+                    "outline-variant": "#c2c6d4",
+                    "secondary-container": "#fe6b00",
+                    "inverse-primary": "#acc7ff",
+                    "tertiary-fixed-dim": "#66df75",
+                    "on-secondary-fixed": "#351000",
+                    "on-primary-fixed-variant": "#004491",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#d7e2ff",
+                    "on-tertiary-fixed": "#002106",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#004c17",
+                    "surface-container-highest": "#e0e3e8",
+                    "surface-bright": "#f7f9ff",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#83fc8e",
+                    "on-surface": "#181c20",
+                    "on-error-container": "#93000a",
+                    "surface": "#f7f9ff",
+                    "primary": "#003f87",
+                    "surface-container-low": "#f1f4f9",
+                    "error": "#ba1a1a",
+                    "surface-container": "#ebeef3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#0056b3",
+                    "on-primary-fixed": "#001a40",
+                    "on-background": "#181c20",
+                    "surface-container-high": "#e5e8ee",
+                    "primary-fixed-dim": "#acc7ff",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#ffb693",
+                    "on-tertiary-fixed-variant": "#00531a",
+                    "on-tertiary-container": "#6fe87c",
+                    "on-secondary-container": "#572000",
+                    "on-primary-container": "#bbd0ff",
+                    "inverse-on-surface": "#eef1f6",
+                    "on-surface-variant": "#424752",
+                    "inverse-surface": "#2d3135",
+                    "surface-variant": "#e0e3e8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "margin-desktop": "32px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "label-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(222, 226, 230, 0.5);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24 lg:pb-0 lg:pl-72">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 z-40 bg-surface dark:bg-surface-dim border-b border-outline-variant fixed top-0 left-0 right-0 lg:left-72">
+<div class="flex items-center gap-4">
+<button class="lg:hidden p-2 text-on-surface-variant min-h-[48px]">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">HSEQ Plataforma</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-label-md text-label-md text-on-surface-variant">Sincronizando...</span>
+<div class="w-2 h-2 bg-tertiary-container rounded-full animate-pulse"></div>
+</div>
+</header>
+<!-- NavigationDrawer (Desktop) -->
+<aside class="hidden lg:flex flex-col h-full py-xl h-screen w-72 left-0 top-0 fixed border-r border-outline-variant dark:border-outline bg-surface dark:bg-surface-dim">
+<div class="px-6 mb-8">
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">HSEQ GESTIÓN</span>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/centro-mando.html">
+<span class="material-symbols-outlined">strategy</span>
+<span class="font-label-md text-label-md">Planear (Estratégico)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/inspecciones-rondas.html">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Hacer (Operativo)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/bitacora.html">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Verificar (Auditoría)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">published_with_changes</span>
+<span class="font-label-md text-label-md">Actuar (Mejora)</span>
+</a>
+</nav>
+<div class="mt-auto px-4">
+<div class="p-4 bg-surface-container-low rounded-xl border border-outline-variant">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">JD</div>
+<div>
+<p class="font-label-md text-label-md font-bold">Juan Delgado</p>
+<p class="text-[10px] text-on-surface-variant">Supervisor HSEQ</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="pt-24 px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto">
+<!-- Header & Search -->
+<section class="mb-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-lg">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Selección de Empresa</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Gestione múltiples proyectos y organizaciones de forma centralizada.</p>
+</div>
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-12 pr-4 py-3 rounded-full bg-surface-container border-none focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface" placeholder="Buscar por nombre o NIT..." type="text"/>
+</div>
+</div>
+</section>
+<!-- Bento Grid Layout for Companies -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Company Card 1 -->
+<div class="glass-card rounded-xl p-lg flex flex-col hover:shadow-lg transition-all cursor-pointer group border-l-4 border-primary" onclick="localStorage.setItem('empresa_actual_id','TEN-0001'); localStorage.setItem('empresa_actual_nombre','Construcciones El Roble SAS'); window.location.href='/centro-mando.html?empresa=TEN-0001';">
+<div class="flex justify-between items-start mb-md">
+<div class="w-16 h-16 rounded-lg bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist architectural logo featuring a stylized oak tree integrated into a geometric construction blueprint. The logo is rendered in dark slate gray against a crisp white background, emphasizing precision, reliability, and professional construction industry aesthetics. The lighting is clean and even, suggesting a high-end corporate identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtLu5k3L6xWDZ4lu3my2w3UpSA4cKc2HTUA9umvGNZE1CFyAKP2kc_wP4PW5tul-xYY1FSSHdF_2J3sTlWlRZihUhBqV5qLwPEutiJRhDn6KHWpIPWqdWuHrPZDpWApQXSUQyE5WvYQp8GjB85ZuiUdrOzBZpggVHQoiW7zl0A4bq-r_NskugIqXQ_TtPaakbIRkTtERQBbdG6KjlqH0XewjcyFTlfwLcGW4UpUQWF7tAjLNvhlaTSSg"/>
+</div>
+<span class="font-label-sm text-label-sm px-3 py-1 bg-primary-container text-on-primary-container rounded-full">ADMIN</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Construcciones El Roble SAS</h3>
+<p class="text-xs text-on-surface-variant font-label-md mt-1">NIT: 900.123.456-1</p>
+<div class="mt-lg pt-md border-t border-outline-variant flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Cumplimiento SGSST</span>
+<span class="font-bold text-tertiary-container">92% Excelente</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-all">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Company Card 2 -->
+<div class="glass-card rounded-xl p-lg flex flex-col hover:shadow-lg transition-all cursor-pointer group border-l-4 border-secondary" onclick="localStorage.setItem('empresa_actual_id','TEN-0002'); localStorage.setItem('empresa_actual_nombre','Seguridad Nacional Ltda'); window.location.href='/centro-mando.html?empresa=TEN-0002';">
+<div class="flex justify-between items-start mb-md">
+<div class="w-16 h-16 rounded-lg bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A modern security shield logo with a stylized eagle head inside, representing vigilance and national protection. The style is industrial and authoritative, using metallic silver and deep navy blue tones. The composition is centered, conveying a sense of systematic order and resilience suitable for a high-stakes private security firm." src="https://lh3.googleusercontent.com/aida-public/AB6AXuClmZp2o_fL8ok-wO-E2M2ETg0bNhnMH9FIZatjXMxbMoG2-8pzkoKlGBMJnucbYac8_KNGcmyV3OgvWSBtrYaaz8XVFTBVTgJRwc-JT8t6ddgn8kkGEv8SrjXXGGu902BS-FwkwH0DGmglHhE1cub2B5U_BHKsVwb8vczX8BFy5tn2rzHNMKOdwPwNUBW5TH4rzxfVM80Jq6AE3cT0YRAs9YJE13nUM9wlCazIjGNYsA-2g9z_OkIDfQ"/>
+</div>
+<span class="font-label-sm text-label-sm px-3 py-1 bg-secondary-fixed text-on-secondary-fixed-variant rounded-full">SUPERVISOR</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface group-hover:text-secondary transition-colors">Seguridad Nacional Ltda</h3>
+<p class="text-xs text-on-surface-variant font-label-md mt-1">NIT: 860.987.654-2</p>
+<div class="mt-lg pt-md border-t border-outline-variant flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Cumplimiento SGSST</span>
+<span class="font-bold text-secondary">78% Parcial</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-secondary hover:bg-secondary hover:text-on-secondary transition-all">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Company Card 3 -->
+<div class="glass-card rounded-xl p-lg flex flex-col hover:shadow-lg transition-all cursor-pointer group border-l-4 border-outline" onclick="localStorage.setItem('empresa_actual_id','TEN-0003'); localStorage.setItem('empresa_actual_nombre','Logística &amp; Vías del Caribe'); window.location.href='/centro-mando.html?empresa=TEN-0003';">
+<div class="flex justify-between items-start mb-md">
+<div class="w-16 h-16 rounded-lg bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional engineering and logistics logo featuring interlocking hexagonal gears and a stylized bridge icon. The aesthetic is clean and modern, utilizing a sophisticated palette of technical grays and deep blues. The lighting is professional and architectural, reflecting a corporate culture of industrial precision and operational clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQD-kvVTIbvHvwUzy5EVnTbI21G9nLyuKiAgFJ8b7T0Jezipeqw0W5nA6WuR_Zgn7NJt6cvkEvIiWFe_LO6z_M93XjzbctFcNXxD2F6yzKFasBHA0TZnEF_uA37gFQipalQaTeF12o1tMnzRvszFJfWsx3HnWizTmubIub844heQQ2KViUErjhmu_oCO5JHE3OG5uR3nA5bHId-Zg0IRASlZF-B1WVuO_1TbfeIfm5g_PvTtMHpL34bw"/>
+</div>
+<span class="font-label-sm text-label-sm px-3 py-1 bg-surface-container-high text-on-surface-variant rounded-full">AUDITOR</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface group-hover:text-primary transition-colors">Logística &amp; Vías del Caribe</h3>
+<p class="text-xs text-on-surface-variant font-label-md mt-1">NIT: 891.455.003-8</p>
+<div class="mt-lg pt-md border-t border-outline-variant flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Cumplimiento SGSST</span>
+<span class="font-bold text-on-surface-variant">64% En Proceso</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:bg-on-surface-variant hover:text-surface transition-all">
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Add New Company (Action Card) -->
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center hover:border-primary hover:bg-primary-container/5 transition-all cursor-pointer min-h-[220px]" id="btn-vincular-empresa">
+<div class="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center text-primary mb-md">
+<span class="material-symbols-outlined text-4xl">add</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary">Vincular Nueva Empresa</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-center mt-2 px-4">Solicite acceso a un nuevo tenant mediante su código de invitación.</p>
+</div>
+</section>
+<!-- Information/Compliance Summary Section -->
+<section class="mt-xl grid grid-cols-1 md:grid-cols-2 gap-gutter pb-xl">
+<div class="p-lg bg-surface-container-low rounded-xl border border-outline-variant">
+<div class="flex items-center gap-3 mb-md">
+<span class="material-symbols-outlined text-primary">notifications_active</span>
+<h4 class="font-title-md text-title-md">Alertas Recientes</h4>
+</div>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 p-3 bg-error-container/30 rounded-lg">
+<span class="material-symbols-outlined text-error text-sm mt-0.5">warning</span>
+<p class="text-xs text-on-surface font-body-md">Vencimiento de curso de alturas en <strong>Construcciones El Roble</strong> (3 empleados).</p>
+</li>
+<li class="flex items-start gap-3 p-3 bg-secondary-container/20 rounded-lg">
+<span class="material-symbols-outlined text-secondary text-sm mt-0.5">assignment_late</span>
+<p class="text-xs text-on-surface font-body-md">Auditoría trimestral pendiente por iniciar en <strong>Seguridad Nacional Ltda</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="p-lg bg-surface-container-low rounded-xl border border-outline-variant">
+<div class="flex items-center gap-3 mb-md">
+<span class="material-symbols-outlined text-tertiary">analytics</span>
+<h4 class="font-title-md text-title-md">Estado Global SGSST</h4>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative w-24 h-24">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container-highest" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="50.24" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-lg font-bold text-primary">80%</span>
+</div>
+</div>
+<div class="flex-1 space-y-2">
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-surface-variant font-label-md">Resolución 0312</span>
+<span class="text-on-surface font-bold">85%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-surface-variant font-label-md">Decreto 1072</span>
+<span class="text-on-surface font-bold">75%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[75%]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="lg:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface-container dark:bg-surface-container-lowest border-t border-outline-variant shadow-[0_-4px_12px_rgba(0,0,0,0.08)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-2 scale-95 transition-all duration-200" href="/centro-mando.html">
+<span class="material-symbols-outlined" data-weight="fill">grid_view</span>
+<span class="font-label-sm text-[10px] mt-0.5">Hub</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/inspecciones-rondas.html">
+<span class="material-symbols-outlined">checklist_rtl</span>
+<span class="font-label-sm text-[10px] mt-0.5">Inspecciones</span>
+</a>
+<button class="flex flex-col items-center justify-center text-error hover:bg-surface-container-high transition-colors" id="btn-sos-mobile" type="button">
+<span class="material-symbols-outlined">emergency</span>
+<span class="font-label-sm text-[10px] mt-0.5">SOS</span>
+</button>
+</nav>
+<!-- Floating Action Button (Only relevant to home/hub screens as per mandate) -->
+<button class="fixed bottom-24 right-6 lg:bottom-12 lg:right-12 w-16 h-16 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40" id="btn-fab-empresa" type="button">
+<span class="material-symbols-outlined text-3xl">add_business</span>
+</button>
+
+<!-- Modal SOS / Botón de Pánico -->
+<div class="fixed inset-0 bg-on-surface/40 z-[70] hidden items-center justify-center p-4" id="modal-sos">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-sm p-lg text-center" id="sos-content">
+<div class="w-16 h-16 mx-auto mb-md rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[32px]">emergency</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-2">¿Enviar alerta de pánico?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Se notificará de inmediato al supervisor de turno con tu ubicación actual.</p>
+<div class="flex gap-3">
+<button class="flex-1 px-4 py-3 rounded-xl border border-outline text-on-surface-variant hover:bg-surface-container-high" id="btn-sos-cancel" type="button">Cancelar</button>
+<button class="flex-1 px-4 py-3 rounded-xl bg-error text-on-error font-bold hover:opacity-90" id="btn-sos-confirm" type="button">Sí, enviar alerta</button>
+</div>
+</div>
+</div>
+<script>
+        document.getElementById('btn-fab-empresa').addEventListener('click', () => {
+            const codigo = prompt('Ingrese el código de invitación del tenant:');
+            if (codigo) alert(`Solicitud enviada con el código "${codigo}". El administrador del tenant debe aprobarla (demo local, sin backend de invitaciones todavía).`);
+        });
+        document.getElementById('btn-vincular-empresa').addEventListener('click', () => {
+            document.getElementById('btn-fab-empresa').click();
+        });
+        function closeSos() { document.getElementById('modal-sos').classList.add('hidden'); document.getElementById('modal-sos').classList.remove('flex'); }
+        document.getElementById('btn-sos-mobile').addEventListener('click', () => {
+            document.getElementById('modal-sos').classList.remove('hidden');
+            document.getElementById('modal-sos').classList.add('flex');
+        });
+        document.getElementById('btn-sos-cancel').addEventListener('click', closeSos);
+        document.getElementById('btn-sos-confirm').addEventListener('click', () => {
+            document.getElementById('sos-content').innerHTML = `
+              <div class="w-16 h-16 mx-auto mb-md rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed-variant">
+                <span class="material-symbols-outlined text-[32px]">check_circle</span>
+              </div>
+              <h3 class="font-title-md text-title-md text-on-surface mb-2">Alerta enviada</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">Se notificó al supervisor de turno. Demo local: en producción esto dispara push/SMS y registra la entrada en la bitácora.</p>
+              <button class="w-full px-4 py-3 rounded-xl bg-primary text-on-primary font-bold" onclick="document.getElementById('modal-sos').classList.add('hidden'); document.getElementById('modal-sos').classList.remove('flex');">Cerrar</button>
+            `;
+        });
+    </script>
+<script>
+        // Simple search filter micro-interaction
+        document.querySelector('input[type="text"]').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.glass-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const nit = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(term) || nit.includes(term)) {
+                    card.style.display = 'flex';
+                    card.style.opacity = '1';
+                } else {
+                    card.style.display = 'none';
+                    card.style.opacity = '0';
+                }
+            });
+        });
+
+        // Toggle Active State logic for Side Nav on Desktop
+        const sideNavLinks = document.querySelectorAll('aside nav a');
+        sideNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                sideNavLinks.forEach(l => {
+                    l.className = "flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors";
+                });
+                link.className = "flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-r-full font-bold transition-colors scale-[0.98]";
+            });
+        });
+    </script>
+</body></html>

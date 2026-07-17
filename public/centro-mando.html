@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HSEQ GESTIÓN - Dashboard Principal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#a04100",
+                    "tertiary-container": "#006722",
+                    "background": "#f7f9ff",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "secondary-fixed": "#ffdbcc",
+                    "surface-dim": "#d7dadf",
+                    "outline": "#727784",
+                    "surface-tint": "#115cb9",
+                    "outline-variant": "#c2c6d4",
+                    "secondary-container": "#fe6b00",
+                    "inverse-primary": "#acc7ff",
+                    "tertiary-fixed-dim": "#66df75",
+                    "on-secondary-fixed": "#351000",
+                    "on-primary-fixed-variant": "#004491",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#d7e2ff",
+                    "on-tertiary-fixed": "#002106",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#004c17",
+                    "surface-container-highest": "#e0e3e8",
+                    "surface-bright": "#f7f9ff",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#83fc8e",
+                    "on-surface": "#181c20",
+                    "on-error-container": "#93000a",
+                    "surface": "#f7f9ff",
+                    "primary": "#003f87",
+                    "surface-container-low": "#f1f4f9",
+                    "error": "#ba1a1a",
+                    "surface-container": "#ebeef3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#0056b3",
+                    "on-primary-fixed": "#001a40",
+                    "on-background": "#181c20",
+                    "surface-container-high": "#e5e8ee",
+                    "primary-fixed-dim": "#acc7ff",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#ffb693",
+                    "on-tertiary-fixed-variant": "#00531a",
+                    "on-tertiary-container": "#6fe87c",
+                    "on-secondary-container": "#572000",
+                    "on-primary-container": "#bbd0ff",
+                    "inverse-on-surface": "#eef1f6",
+                    "on-surface-variant": "#424752",
+                    "inverse-surface": "#2d3135",
+                    "surface-variant": "#e0e3e8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "margin-desktop": "32px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "label-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-item .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        .gauge-container { position: relative; width: 120px; height: 120px; }
+        .gauge-svg { transform: rotate(-90deg); }
+        .gauge-circle-bg { fill: none; stroke: #e0e3e8; stroke-width: 8; }
+        .gauge-circle-val { fill: none; stroke: #003f87; stroke-width: 8; stroke-dasharray: 282.7; stroke-dashoffset: 42.4; stroke-linecap: round; transition: stroke-dashoffset 1s ease-out; }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto;
+            gap: 16px;
+        }
+        
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Navigation Drawer (Desktop Shell) -->
+<aside class="hidden lg:flex flex-col h-screen w-72 left-0 top-0 fixed border-r border-outline-variant bg-surface py-xl z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">HSEQ GESTIÓN</h1>
+<p class="text-on-surface-variant font-label-md text-label-md mt-xs">Sistema Integrado</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<!-- Active item mapping to "Planear" based on Dashboard context -->
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-r-full font-bold transition-colors scale-[0.98] transition-transform duration-150 active-nav-item" href="/centro-mando.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">strategy</span>
+<span class="font-label-md text-label-md">Planear (Estratégico)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/inspecciones-rondas.html">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Hacer (Operativo)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/bitacora.html">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Verificar (Auditoría)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">published_with_changes</span>
+<span class="font-label-md text-label-md">Actuar (Mejora)</span>
+</a>
+<div class="mt-xl pt-lg border-t border-outline-variant mx-4">
+<p class="text-on-surface-variant font-label-sm text-label-sm px-2 uppercase mb-2">Herramientas</p>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Analítica Avanzada">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analítica Avanzada</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/usuarios-roles.html">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="font-label-md text-label-md">Usuarios y Roles</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/clientes.html">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md text-label-md">Clientes</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proyectos.html">
+<span class="material-symbols-outlined">apartment</span>
+<span class="font-label-md text-label-md">Proyectos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/empleados.html">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-label-md text-label-md">Empleados</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">campaign</span>
+<span class="font-label-md text-label-md">Charlas Diarias</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/bitacora.html">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">Bitácora</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/roles-permisos.html">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="font-label-md text-label-md">Roles y Permisos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Configuración">
+<span class="material-symbols-outlined">settings_suggest</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+</nav>
+<a class="px-lg py-md border-t border-outline-variant flex items-center gap-3 hover:bg-surface-container-high transition-colors" href="/seleccion-empresa.html" title="Cambiar de empresa">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">
+                    JD
+                </div>
+<div>
+<p class="font-title-md text-body-md font-bold">Juan Delgado</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Director HSEQ</p>
+</div>
+</a>
+</aside>
+<!-- Main Canvas -->
+<main class="lg:ml-72 min-h-screen pb-xl">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 z-40 bg-surface border-b border-outline-variant sticky top-0">
+<div class="flex items-center gap-4">
+<button class="lg:hidden p-2 text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-md text-headline-md font-bold text-primary">Panel de Control General</h2>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex flex-col items-end">
+<span class="font-label-md text-label-md text-primary font-bold">Sincronizando...</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Último backup: Hace 5 min</span>
+</div>
+<div class="relative">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-low cursor-pointer" id="btn-notifications" type="button">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="hidden absolute right-0 mt-2 w-80 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg z-50 p-2" id="notifications-panel">
+<div class="px-3 py-2 font-label-md text-label-md text-on-surface-variant uppercase">Notificaciones</div>
+<a class="block p-3 rounded-lg hover:bg-surface-container-high" href="/empleados.html"><p class="font-body-md text-body-md font-bold">Curso de alturas vencido</p><p class="font-label-sm text-label-sm text-on-surface-variant">Luisa Fernanda Ortiz — Urbanización Los Álamos</p></a>
+<a class="block p-3 rounded-lg hover:bg-surface-container-high" href="/clientes.html"><p class="font-body-md text-body-md font-bold">Cliente en Trial por vencer</p><p class="font-label-sm text-label-sm text-on-surface-variant">Logística &amp; Vías del Caribe</p></a>
+<a class="block p-3 rounded-lg hover:bg-surface-container-high" href="/bitacora.html"><p class="font-body-md text-body-md font-bold">Nuevo incidente registrado</p><p class="font-label-sm text-label-sm text-on-surface-variant">Torre Norte - Etapa 2</p></a>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-margin-mobile md:p-margin-desktop">
+<!-- Hero Bento Section: KPIs -->
+<div class="bento-grid mb-lg">
+<!-- KPI 1: Resolución 0312 -->
+<div class="col-span-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col items-center justify-between card-hover">
+<div class="w-full flex justify-between items-start mb-md">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase font-bold tracking-wider">Cumplimiento Res. 0312</span>
+<span class="material-symbols-outlined text-primary">verified</span>
+</div>
+<div class="gauge-container my-md">
+<svg class="gauge-svg w-full h-full" viewbox="0 0 100 100">
+<circle class="gauge-circle-bg" cx="50" cy="50" r="45"></circle>
+<circle class="gauge-circle-val" cx="50" cy="50" r="45" style="stroke-dashoffset: 56.5;"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<span class="font-headline-md text-headline-md font-extrabold text-primary">85%</span>
+</div>
+</div>
+<div class="bg-primary-container/10 px-3 py-1 rounded-full">
+<span class="text-primary font-label-sm text-label-sm font-bold">+2.4% vs mes anterior</span>
+</div>
+</div>
+<!-- KPI 2: Accidentes -->
+<div class="col-span-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between card-hover">
+<div class="w-full flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase font-bold tracking-wider">Días sin Accidentes</span>
+<span class="material-symbols-outlined text-secondary">safety_check</span>
+</div>
+<div class="py-md text-center">
+<h3 class="text-[64px] font-black text-on-surface leading-tight">142</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Récord histórico: 210 días</p>
+</div>
+<div class="w-full bg-secondary-fixed h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[67%]"></div>
+</div>
+</div>
+<!-- KPI 3: Satisfacción ISO 9001 -->
+<div class="col-span-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between card-hover">
+<div class="w-full flex justify-between items-start">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase font-bold tracking-wider">Satisfacción ISO 9001</span>
+<span class="material-symbols-outlined text-tertiary">sentiment_satisfied</span>
+</div>
+<div class="py-md">
+<div class="flex items-baseline gap-2">
+<h3 class="font-headline-lg text-headline-lg font-extrabold">4.8</h3>
+<span class="text-on-surface-variant">/ 5.0</span>
+</div>
+<div class="flex gap-1 text-secondary mt-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined">star_half</span>
+</div>
+</div>
+<div class="text-tertiary-container font-label-md text-label-md flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+                        Satisfacción Óptima
+                    </div>
+</div>
+<!-- KPI 4: ISO 14001 Huella -->
+<div class="col-span-1 bg-tertiary-container text-on-tertiary border border-tertiary rounded-xl p-lg flex flex-col justify-between card-hover overflow-hidden relative">
+<div class="absolute top-0 right-0 p-4 opacity-20 transform translate-x-4 -translate-y-4">
+<span class="material-symbols-outlined text-[120px]">eco</span>
+</div>
+<div class="w-full flex justify-between items-start relative z-10">
+<span class="font-label-md text-label-md text-on-tertiary/80 uppercase font-bold tracking-wider">Impacto ISO 14001</span>
+<span class="material-symbols-outlined text-white">psychiatry</span>
+</div>
+<div class="py-md relative z-10">
+<h3 class="font-headline-lg text-headline-lg font-extrabold">-12% CO2</h3>
+<p class="font-label-md text-label-md text-on-tertiary/70">Reducción de consumo energético</p>
+</div>
+<a class="block text-center bg-white/20 hover:bg-white/30 transition-colors py-2 rounded-lg font-bold font-label-md text-label-md relative z-10" href="/proyectos.html">Ver Informe Ambiental</a>
+</div>
+</div>
+<!-- Main Charts & Tables Area -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Accident Trend Chart (Simplified CSS drawing) -->
+<div class="col-span-12 xl:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg card-hover">
+<div class="flex justify-between items-center mb-lg">
+<div>
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Tendencia de Accidentalidad</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Frecuencia de incidentes reportados (Últimos 6 meses)</p>
+</div>
+<div class="flex gap-2">
+<select class="bg-surface-container border-none rounded-lg text-label-md font-label-md">
+<option>Año 2024</option>
+</select>
+</div>
+</div>
+<div class="h-64 flex items-end gap-gutter px-md">
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container-high rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="bg-primary-container h-[40%] rounded-t-lg group-hover:bg-primary transition-colors"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover:block bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">4 ops</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">ENE</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container-high rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="bg-primary-container h-[30%] rounded-t-lg group-hover:bg-primary transition-colors"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover:block bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">3 ops</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">FEB</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container-high rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="bg-secondary-container h-[60%] rounded-t-lg group-hover:bg-secondary transition-colors"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover:block bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">6 ops</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">MAR</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container-high rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="bg-primary-container h-[20%] rounded-t-lg group-hover:bg-primary transition-colors"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover:block bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">2 ops</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">ABR</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container-high rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="bg-primary-container h-[10%] rounded-t-lg group-hover:bg-primary transition-colors"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover:block bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">1 ops</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">MAY</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container-high rounded-t-lg relative flex flex-col justify-end h-full">
+<div class="bg-primary-container h-[15%] rounded-t-lg group-hover:bg-primary transition-colors"></div>
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 hidden group-hover:block bg-inverse-surface text-inverse-on-surface text-xs p-1 rounded">1.5 ops</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-2">JUN</span>
+</div>
+</div>
+</div>
+<!-- Tasks Today -->
+<div class="col-span-12 xl:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg card-hover">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-md text-title-md font-bold text-on-surface">Tareas Pendientes</h3>
+<span class="bg-error-container text-on-error-container px-2 py-0.5 rounded text-label-sm font-label-sm">3 Críticas</span>
+</div>
+<div class="space-y-3">
+<div class="p-3 bg-surface rounded-lg border-l-4 border-error flex gap-3">
+<div class="pt-1">
+<span class="material-symbols-outlined text-error text-[20px]">report_problem</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-bold">Cierre de Acción Correctiva AC-092</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Vence hoy: 5:00 PM</p>
+</div>
+</div>
+<div class="p-3 bg-surface rounded-lg border-l-4 border-secondary flex gap-3">
+<div class="pt-1">
+<span class="material-symbols-outlined text-secondary text-[20px]">assignment_turned_in</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-bold">Inspección de Alturas - Torre A</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Encargado: Carlos Ruiz</p>
+</div>
+</div>
+<div class="p-3 bg-surface rounded-lg border-l-4 border-primary flex gap-3 opacity-60">
+<div class="pt-1">
+<span class="material-symbols-outlined text-primary text-[20px]">check_circle</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-bold line-through">Revisión de Botiquines Piso 4</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Completado: 9:30 AM</p>
+</div>
+</div>
+<div class="p-3 bg-surface rounded-lg border-l-4 border-tertiary flex gap-3">
+<div class="pt-1">
+<span class="material-symbols-outlined text-tertiary text-[20px]">calendar_today</span>
+</div>
+<div>
+<p class="font-body-md text-body-md font-bold">Capacitación Prevención de Riesgos</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Próxima semana</p>
+</div>
+</div>
+</div>
+<a class="block text-center w-full mt-lg text-primary font-bold font-label-md text-label-md py-2 border border-primary/20 rounded-lg hover:bg-primary/5 transition-colors" href="/bitacora.html">Ver Toda la Agenda</a>
+</div>
+<!-- Recent Activity Table -->
+<div class="col-span-12 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden card-hover">
+<div class="px-lg py-md border-b border-outline-variant bg-surface flex justify-between items-center">
+<h3 class="font-title-md text-title-md font-bold text-on-surface">Últimos Registros del Sistema</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md">
+<span class="w-3 h-3 rounded-full bg-tertiary-container"></span> Cumple
+                            </div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md">
+<span class="w-3 h-3 rounded-full bg-secondary-container"></span> Parcial
+                            </div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md">
+<span class="w-3 h-3 rounded-full bg-error"></span> No Cumple
+                            </div>
+</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-lg py-3">Código</th>
+<th class="px-lg py-3">Actividad / Registro</th>
+<th class="px-lg py-3">Responsable</th>
+<th class="px-lg py-3">Fecha</th>
+<th class="px-lg py-3 text-right">Estado</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer" onclick="window.location='/bitacora.html'">
+<td class="px-lg py-4 font-label-md text-primary font-bold">AUD-102</td>
+<td class="px-lg py-4 font-body-md text-on-surface">Auditoría Interna de Control de Accesos</td>
+<td class="px-lg py-4 font-body-md text-on-surface-variant">Sandra Torres</td>
+<td class="px-lg py-4 font-body-md text-on-surface-variant">22 May 2024</td>
+<td class="px-lg py-4 text-right">
+<span class="inline-flex items-center gap-1 bg-tertiary-fixed text-on-tertiary-fixed-variant px-3 py-1 rounded-full text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Cumple
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer" onclick="window.location='/bitacora.html'">
+<td class="px-lg py-4 font-label-md text-primary font-bold">INC-551</td>
+<td class="px-lg py-4 font-body-md text-on-surface">Reporte de Derrame en Bodega Principal</td>
+<td class="px-lg py-4 font-body-md text-on-surface-variant">Roberto Gómez</td>
+<td class="px-lg py-4 font-body-md text-on-surface-variant">21 May 2024</td>
+<td class="px-lg py-4 text-right">
+<span class="inline-flex items-center gap-1 bg-error-container text-on-error-container px-3 py-1 rounded-full text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px]">cancel</span> No Cumple
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group cursor-pointer" onclick="window.location='/bitacora.html'">
+<td class="px-lg py-4 font-label-md text-primary font-bold">MANT-08</td>
+<td class="px-lg py-4 font-body-md text-on-surface">Mantenimiento preventivo de montacargas</td>
+<td class="px-lg py-4 font-body-md text-on-surface-variant">Ing. Electromecánica S.A.</td>
+<td class="px-lg py-4 font-body-md text-on-surface-variant">20 May 2024</td>
+<td class="px-lg py-4 text-right">
+<span class="inline-flex items-center gap-1 bg-secondary-fixed text-on-secondary-fixed-variant px-3 py-1 rounded-full text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px]">warning</span> Parcial
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Shell) -->
+<nav class="lg:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 border-t border-outline-variant bg-surface-container dark:bg-surface-container-lowest shadow-[0_-4px_12px_rgba(0,0,0,0.08)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-2 scale-95 transition-all duration-200" href="/centro-mando.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-label-sm text-label-sm">Hub</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high" href="/inspecciones-rondas.html">
+<span class="material-symbols-outlined">checklist_rtl</span>
+<span class="font-label-sm text-label-sm">Inspecciones</span>
+</a>
+<button class="flex flex-col items-center justify-center text-error hover:bg-surface-container-high" id="btn-sos-mobile" type="button">
+<span class="material-symbols-outlined">emergency</span>
+<span class="font-label-sm text-label-sm">SOS</span>
+</button>
+</nav>
+<!-- Floating Action Button (Only on Home/Dashboard context) -->
+<button class="fixed bottom-24 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40 lg:bottom-12" id="btn-fab" title="Nuevo Proyecto" type="button">
+<span class="material-symbols-outlined text-[32px]">add</span>
+</button>
+
+<!-- Modal SOS / Botón de Pánico -->
+<div class="fixed inset-0 bg-on-surface/40 z-[70] hidden items-center justify-center p-4" id="modal-sos">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-sm p-lg text-center" id="sos-content">
+<div class="w-16 h-16 mx-auto mb-md rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[32px]">emergency</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-2">¿Enviar alerta de pánico?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Se notificará de inmediato al supervisor de turno con tu ubicación actual.</p>
+<div class="flex gap-3">
+<button class="flex-1 px-4 py-3 rounded-xl border border-outline text-on-surface-variant hover:bg-surface-container-high" id="btn-sos-cancel" type="button">Cancelar</button>
+<button class="flex-1 px-4 py-3 rounded-xl bg-error text-on-error font-bold hover:opacity-90" id="btn-sos-confirm" type="button">Sí, enviar alerta</button>
+</div>
+</div>
+</div>
+
+<script>
+        // Micro-interaction for the compliance gauge animation
+        window.addEventListener('DOMContentLoaded', () => {
+            const circle = document.querySelector('.gauge-circle-val');
+            // Animate after load
+            setTimeout(() => {
+                circle.style.strokeDashoffset = '42.4'; // Target 85%
+            }, 500);
+        });
+
+        // Notificaciones (dropdown)
+        const btnNotif = document.getElementById('btn-notifications');
+        const panelNotif = document.getElementById('notifications-panel');
+        btnNotif.addEventListener('click', (e) => {
+            e.stopPropagation();
+            panelNotif.classList.toggle('hidden');
+        });
+        document.addEventListener('click', () => panelNotif.classList.add('hidden'));
+
+        // FAB: acceso rápido a Nuevo Proyecto
+        document.getElementById('btn-fab').addEventListener('click', () => {
+            window.location.href = '/proyectos.html';
+        });
+
+        // SOS / Botón de Pánico
+        function openSos() {
+            document.getElementById('modal-sos').classList.remove('hidden');
+            document.getElementById('modal-sos').classList.add('flex');
+        }
+        function closeSos() {
+            document.getElementById('modal-sos').classList.add('hidden');
+            document.getElementById('modal-sos').classList.remove('flex');
+        }
+        document.getElementById('btn-sos-mobile').addEventListener('click', openSos);
+        document.getElementById('btn-sos-cancel').addEventListener('click', closeSos);
+        document.getElementById('btn-sos-confirm').addEventListener('click', () => {
+            document.getElementById('sos-content').innerHTML = `
+              <div class="w-16 h-16 mx-auto mb-md rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed-variant">
+                <span class="material-symbols-outlined text-[32px]">check_circle</span>
+              </div>
+              <h3 class="font-title-md text-title-md text-on-surface mb-2">Alerta enviada</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">Juan Delgado (Director HSEQ) fue notificado. Demo local: en producción esto dispara push/SMS y registra la entrada en la bitácora del proyecto.</p>
+              <button class="w-full px-4 py-3 rounded-xl bg-primary text-on-primary font-bold" onclick="document.getElementById('modal-sos').classList.add('hidden'); document.getElementById('modal-sos').classList.remove('flex');">Cerrar</button>
+            `;
+        });
+    </script>
+</body></html>

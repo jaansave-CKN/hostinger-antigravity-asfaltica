@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Inspecciones Pre-operacionales | HSEQ Gestión</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#a04100",
+                      "tertiary-container": "#006722",
+                      "background": "#f7f9ff",
+                      "on-secondary-fixed-variant": "#7a3000",
+                      "secondary-fixed": "#ffdbcc",
+                      "surface-dim": "#d7dadf",
+                      "outline": "#727784",
+                      "surface-tint": "#115cb9",
+                      "outline-variant": "#c2c6d4",
+                      "secondary-container": "#fe6b00",
+                      "inverse-primary": "#acc7ff",
+                      "tertiary-fixed-dim": "#66df75",
+                      "on-secondary-fixed": "#351000",
+                      "on-primary-fixed-variant": "#004491",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed": "#d7e2ff",
+                      "on-tertiary-fixed": "#002106",
+                      "error-container": "#ffdad6",
+                      "tertiary": "#004c17",
+                      "surface-container-highest": "#e0e3e8",
+                      "surface-bright": "#f7f9ff",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#83fc8e",
+                      "on-surface": "#181c20",
+                      "on-error-container": "#93000a",
+                      "surface": "#f7f9ff",
+                      "primary": "#003f87",
+                      "surface-container-low": "#f1f4f9",
+                      "error": "#ba1a1a",
+                      "surface-container": "#ebeef3",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "primary-container": "#0056b3",
+                      "on-primary-fixed": "#001a40",
+                      "on-background": "#181c20",
+                      "surface-container-high": "#e5e8ee",
+                      "primary-fixed-dim": "#acc7ff",
+                      "on-error": "#ffffff",
+                      "secondary-fixed-dim": "#ffb693",
+                      "on-tertiary-fixed-variant": "#00531a",
+                      "on-tertiary-container": "#6fe87c",
+                      "on-secondary-container": "#572000",
+                      "on-primary-container": "#bbd0ff",
+                      "inverse-on-surface": "#eef1f6",
+                      "on-surface-variant": "#424752",
+                      "inverse-surface": "#2d3135",
+                      "surface-variant": "#e0e3e8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "xl": "32px",
+                      "xs": "4px",
+                      "base": "4px",
+                      "margin-desktop": "32px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "sm": "8px",
+                      "margin-mobile": "16px",
+                      "gutter": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "title-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["JetBrains Mono"],
+                      "label-sm": ["JetBrains Mono"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .watermark-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 40%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c2c6d4;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md text-body-md min-h-screen flex flex-col lg:flex-row overflow-hidden">
+<!-- NavigationDrawer (Desktop Only) -->
+<aside class="hidden lg:flex flex-col h-screen w-72 left-0 top-0 fixed border-r border-outline-variant bg-surface py-xl z-50">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">HSEQ GESTIÓN</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant tracking-widest mt-1 uppercase">PHVA Framework</p>
+</div>
+<nav class="flex-1 space-y-2 pr-4">
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/centro-mando.html">
+<span class="material-symbols-outlined">strategy</span>
+<span class="font-label-md text-label-md">Planear (Estratégico)</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 bg-primary-container text-on-primary-container rounded-r-full font-bold transition-colors scale-[0.98]" href="/inspecciones-rondas.html">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Hacer (Operativo)</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/bitacora.html">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Verificar (Auditoría)</span>
+</a>
+<a class="flex items-center gap-4 px-6 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">published_with_changes</span>
+<span class="font-label-md text-label-md">Actuar (Mejora)</span>
+</a>
+<div class="mt-xl pt-lg border-t border-outline-variant mx-2">
+<p class="text-on-surface-variant font-label-sm text-label-sm px-2 uppercase mb-2">Herramientas</p>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/usuarios-roles.html">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="font-label-md text-label-md">Usuarios y Roles</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/clientes.html">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md text-label-md">Clientes</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proyectos.html">
+<span class="material-symbols-outlined">apartment</span>
+<span class="font-label-md text-label-md">Proyectos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/empleados.html">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-label-md text-label-md">Empleados</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">campaign</span>
+<span class="font-label-md text-label-md">Charlas Diarias</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/bitacora.html">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">Bitácora</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/roles-permisos.html">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="font-label-md text-label-md">Roles y Permisos</span>
+</a>
+</div>
+</nav>
+<a class="px-6 py-md mt-auto flex items-center gap-3 hover:bg-surface-container-high transition-colors" href="/seleccion-empresa.html" title="Cambiar de empresa">
+<div class="p-4 bg-surface-container-low rounded-xl border border-outline-variant w-full">
+<p class="font-label-sm text-label-sm text-on-surface-variant">OPERADOR ACTIVO</p>
+<p class="font-title-md text-title-md text-primary truncate">Carlos Rodriguez</p>
+</div>
+</a>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 lg:ml-72 flex flex-col h-screen overflow-hidden relative">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop h-16 z-40 border-b border-outline-variant bg-surface">
+<div class="flex items-center gap-3">
+<button class="lg:hidden p-2 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-md text-headline-md font-bold text-primary">HSEQ Plataforma</h2>
+</div>
+<div class="flex items-center gap-2">
+<span class="hidden md:inline font-label-md text-label-md text-on-surface-variant">Sincronizando...</span>
+<span class="material-symbols-outlined text-primary animate-spin" style="font-size: 20px;">sync</span>
+</div>
+</header>
+<!-- Content Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-margin-mobile md:p-margin-desktop pb-32">
+<!-- Page Heading -->
+<div class="mb-8">
+<span class="inline-block px-3 py-1 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded-full mb-2">OPERATIVO</span>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Inspecciones y Rondas</h1>
+<p class="text-on-surface-variant font-body-lg text-body-lg max-w-2xl mt-2">Cumplimiento técnico de seguridad para infraestructuras de alto riesgo y servicios de protección privada.</p>
+</div>
+<!-- Bento Layout Container -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Sector Tabs (Bento Card 1) -->
+<div class="lg:col-span-12 bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-wrap gap-2 overflow-x-auto shadow-sm">
+<button class="flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-on-primary transition-all font-bold" id="btn-construccion" onclick="switchSector('construccion')">
+<span class="material-symbols-outlined">engineering</span>
+<span class="font-label-md text-label-md uppercase">Construcción</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-all" id="btn-vigilancia" onclick="switchSector('vigilancia')">
+<span class="material-symbols-outlined">security</span>
+<span class="font-label-md text-label-md uppercase">Vigilancia</span>
+</button>
+</div>
+<!-- Main Checklist (Bento Card 2) -->
+<div class="lg:col-span-8 space-y-4">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
+<div class="bg-surface-container-low px-6 py-4 border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-title-md text-title-md text-on-surface" id="sector-title">Ítems de Seguridad: Andamios / Grúa</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface rounded px-2 py-1">PASO 1 DE 2</span>
+</div>
+<div class="divide-y divide-outline-variant" id="checklist-container">
+<!-- Construction Items -->
+<div class="checklist-item p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 sector-content sector-construccion">
+<div class="flex-1">
+<h4 class="font-title-md text-body-lg font-bold text-on-surface">Nivelación de bases de andamio</h4>
+<p class="text-on-surface-variant text-body-md mt-1">Verificar que los husillos de nivelación no excedan el 75% de su longitud.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-tertiary-container hover:text-on-tertiary hover:border-transparent transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">check_circle</span> CUMPLE
+                                    </button>
+<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-error hover:text-on-error hover:border-transparent transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">cancel</span> NO CUMPLE
+                                    </button>
+</div>
+</div>
+<div class="checklist-item p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 sector-content sector-construccion">
+<div class="flex-1">
+<h4 class="font-title-md text-body-lg font-bold text-on-surface">Estado de cables y poleas (Grúa)</h4>
+<p class="text-on-surface-variant text-body-md mt-1">Inspección visual de hilos rotos o corrosión excesiva en el cable principal.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-tertiary-container hover:text-on-tertiary hover:border-transparent transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">check_circle</span> CUMPLE
+                                    </button>
+<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-error hover:text-on-error hover:border-transparent transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">cancel</span> NO CUMPLE
+                                    </button>
+</div>
+</div>
+<!-- Security Items (Hidden by default) -->
+<div class="checklist-item p-4 md:p-6 hidden flex flex-col md:flex-row md:items-center justify-between gap-4 sector-content sector-vigilancia">
+<div class="flex-1">
+<h4 class="font-title-md text-body-lg font-bold text-on-surface">Estado y carga de armamento</h4>
+<p class="text-on-surface-variant text-body-md mt-1">Verificación de número de serie y munición reglamentaria completa.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-tertiary-container hover:text-on-tertiary hover:border-transparent transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">check_circle</span> CUMPLE
+                                    </button>
+<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-error hover:text-on-error hover:border-transparent transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">cancel</span> NO CUMPLE
+                                    </button>
+</div>
+</div>
+<div class="checklist-item p-4 md:p-6 hidden flex flex-col md:flex-row md:items-center justify-between gap-4 sector-content sector-vigilancia">
+<div class="flex-1">
+<h4 class="font-title-md text-body-lg font-bold text-on-surface">Prueba de radiofrecuencia</h4>
+<p class="text-on-surface-variant text-body-md mt-1">Conectividad directa con el centro de control (CAD) y nivel de batería.</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-tertiary-container hover:text-on-tertiary hover:border-transparent transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">check_circle</span> CUMPLE
+                                    </button>
+<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-error hover:text-on-error hover:border-transparent transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[18px]">cancel</span> NO CUMPLE
+                                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Finish Button (Large Action) -->
+<button class="w-full py-5 bg-primary text-on-primary rounded-xl font-headline-md text-headline-md shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+                        FINALIZAR INSPECCIÓN
+                    </button>
+</div>
+<!-- Media Evidence (Bento Card 3) -->
+<div class="lg:col-span-4 space-y-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
+<h3 class="font-title-md text-title-md text-on-surface mb-4">Evidencia Fotográfica</h3>
+<div class="relative group cursor-pointer overflow-hidden rounded-xl border-2 border-dashed border-outline-variant aspect-square bg-surface-container-low flex flex-col items-center justify-center text-on-surface-variant hover:border-primary hover:text-primary transition-all">
+<img class="absolute inset-0 w-full h-full object-cover opacity-30 grayscale group-hover:opacity-50 transition-opacity" data-alt="A POV smartphone photo showing a construction site worker taking a picture of a crane structure. The image has a semi-transparent watermark at the bottom showing real-time GPS coordinates like 4.7110 N, 74.0721 W and a timestamp in a clean, modern digital font. High-contrast lighting, industrial aesthetic, safety-focused mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnEQ1lVqMLlD8mK_YNgT99YfDqQhHZ9v58bLG5N2faIdyfIHDNt30T1yviCTTiv60htWptO23q_qEp3Q1hBo1cGU4FmUYuLdDibkiSM-k6MwFP1XJqpWRqnvTAs5-n5R25Mn7aDvnkmP44pZdM-FnzTcOZTfh5EAJNgZapsjtRVhCJjbvssslo654iIG65VcmNqXddfjkM5BcADCa-7TqQm_M7bgoIF-YytKq3vwfxG_gYBFJbwm-1sQ"/>
+<span class="material-symbols-outlined text-4xl mb-2">add_a_photo</span>
+<p class="font-label-md text-label-md font-bold uppercase">Capturar Foto</p>
+<p class="text-xs mt-1 text-center px-4">Incluye marca de agua GPS y Fecha automática</p>
+<!-- Watermark Simulation -->
+<div class="watermark-overlay absolute bottom-0 left-0 w-full p-3 flex flex-col justify-end text-white pointer-events-none">
+<div class="flex items-center gap-2 text-[10px] font-mono leading-tight">
+<span class="material-symbols-outlined text-[12px]">location_on</span>
+<span>COORD: 4.7110° N, 74.0721° W</span>
+</div>
+<div class="flex items-center gap-2 text-[10px] font-mono leading-tight">
+<span class="material-symbols-outlined text-[12px]">calendar_today</span>
+<span id="current-date-sim">24-MAY-2024 | 09:42 AM</span>
+</div>
+</div>
+</div>
+<div class="mt-4 grid grid-cols-3 gap-2">
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover opacity-80" data-alt="Close-up macro photography of a steel construction bolt and scaffolding joint. Professional lighting with shallow depth of field. Industrial textures of galvanized steel. Clean light-mode UI color palette integrated." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEbkGNaJDgPYX8AF0VBsm52UDGBCW-b3rxnJQnNkr79kLNPVcGtJ2b5qObELl5jzXMoN_wiCTt88vKVWp2fI1bpbgYeAVFzl8yfQJCApP18t94YRw3lHiDRIKMtT5nxc9jouiMhRom5cBnmjZocG2m-Twju7ITAh_0BP-3vqGtxp2im2MoPpG1PdJ43hjoVGtQ4vNVWPLRSWMjTFSv26OqrS-WVQH6YJG85hey_f4gXSNxQphu6iGTlg"/>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-outline-variant">image</span>
+</div>
+<div class="aspect-square bg-surface-container rounded-lg border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-outline-variant">image</span>
+</div>
+</div>
+</div>
+<!-- Compliance Summary (Mini Card) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 shadow-sm border-l-4 border-l-primary">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Resumen de Inspección</p>
+<div class="mt-2 flex items-end justify-between">
+<div>
+<span class="text-3xl font-black text-primary">02/14</span>
+<span class="text-on-surface-variant text-body-md ml-1">ítems marcados</span>
+</div>
+<div class="h-2 w-24 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-1/6"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="lg:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface-container border-t border-outline-variant shadow-[0_-4px_12px_rgba(0,0,0,0.08)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2" href="/centro-mando.html">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-sm text-[10px] mt-1">Hub</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-6 py-2 scale-95 transition-all" href="/inspecciones-rondas.html">
+<span class="material-symbols-outlined">checklist_rtl</span>
+<span class="font-label-sm text-[10px] mt-1">Inspecciones</span>
+</a>
+<button class="flex flex-col items-center justify-center text-error px-4 py-2" id="btn-sos-mobile" type="button">
+<span class="material-symbols-outlined">emergency</span>
+<span class="font-label-sm text-[10px] mt-1">SOS</span>
+</button>
+</nav>
+
+<!-- Modal SOS / Botón de Pánico -->
+<div class="fixed inset-0 bg-on-surface/40 z-[70] hidden items-center justify-center p-4" id="modal-sos">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-sm p-lg text-center" id="sos-content">
+<div class="w-16 h-16 mx-auto mb-md rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[32px]">emergency</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mb-2">¿Enviar alerta de pánico?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg">Se notificará de inmediato al supervisor de turno con tu ubicación actual.</p>
+<div class="flex gap-3">
+<button class="flex-1 px-4 py-3 rounded-xl border border-outline text-on-surface-variant hover:bg-surface-container-high" id="btn-sos-cancel" type="button">Cancelar</button>
+<button class="flex-1 px-4 py-3 rounded-xl bg-error text-on-error font-bold hover:opacity-90" id="btn-sos-confirm" type="button">Sí, enviar alerta</button>
+</div>
+</div>
+</div>
+<script>
+    function closeSos() { document.getElementById('modal-sos').classList.add('hidden'); document.getElementById('modal-sos').classList.remove('flex'); }
+    document.getElementById('btn-sos-mobile').addEventListener('click', () => {
+      document.getElementById('modal-sos').classList.remove('hidden');
+      document.getElementById('modal-sos').classList.add('flex');
+    });
+    document.getElementById('btn-sos-cancel').addEventListener('click', closeSos);
+    document.getElementById('btn-sos-confirm').addEventListener('click', () => {
+      document.getElementById('sos-content').innerHTML = `
+        <div class="w-16 h-16 mx-auto mb-md rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed-variant">
+          <span class="material-symbols-outlined text-[32px]">check_circle</span>
+        </div>
+        <h3 class="font-title-md text-title-md text-on-surface mb-2">Alerta enviada</h3>
+        <p class="font-body-md text-body-md text-on-surface-variant mb-lg">Se notificó al supervisor de turno. Demo local: en producción esto dispara push/SMS y registra la entrada en la bitácora.</p>
+        <button class="w-full px-4 py-3 rounded-xl bg-primary text-on-primary font-bold" onclick="document.getElementById('modal-sos').classList.add('hidden'); document.getElementById('modal-sos').classList.remove('flex');">Cerrar</button>
+      `;
+    });
+  </script>
+<!-- Floating SOS (Mobile Only Contextual Action) - Hidden because it's not the primary screen, but defined in JSON components logic sometimes -->
+</main>
+<script>
+        function switchSector(sector) {
+            const btnConstruccion = document.getElementById('btn-construccion');
+            const btnVigilancia = document.getElementById('btn-vigilancia');
+            const sectorTitle = document.getElementById('sector-title');
+            const items = document.querySelectorAll('.sector-content');
+
+            // Reset buttons
+            btnConstruccion.className = 'flex items-center gap-2 px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-all';
+            btnVigilancia.className = 'flex items-center gap-2 px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-all';
+
+            // Hide all items
+            items.forEach(item => item.classList.add('hidden'));
+
+            if (sector === 'construccion') {
+                btnConstruccion.className = 'flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-on-primary transition-all font-bold';
+                sectorTitle.innerText = 'Ítems de Seguridad: Andamios / Grúa';
+                document.querySelectorAll('.sector-construccion').forEach(item => item.classList.remove('hidden'));
+            } else {
+                btnVigilancia.className = 'flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-on-primary transition-all font-bold';
+                sectorTitle.innerText = 'Ítems de Seguridad: Armamento / Comunicaciones';
+                document.querySelectorAll('.sector-vigilancia').forEach(item => item.classList.remove('hidden'));
+            }
+        }
+
+        // Set dynamic simulation date
+        const dateEl = document.getElementById('current-date-sim');
+        if (dateEl) {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+            const timeStr = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: true });
+            dateEl.innerText = `${dateStr} | ${timeStr}`;
+        }
+    </script>
+</body></html>

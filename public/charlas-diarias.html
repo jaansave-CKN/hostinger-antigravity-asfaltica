@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HSEQ GESTIÓN - Charlas Diarias</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = { darkMode: "class", theme: { extend: {
+        "colors": {
+                "secondary": "#a04100", "tertiary-container": "#006722", "background": "#f7f9ff",
+                "on-secondary-fixed-variant": "#7a3000", "secondary-fixed": "#ffdbcc", "surface-dim": "#d7dadf",
+                "outline": "#727784", "surface-tint": "#115cb9", "outline-variant": "#c2c6d4",
+                "secondary-container": "#fe6b00", "inverse-primary": "#acc7ff", "tertiary-fixed-dim": "#66df75",
+                "on-secondary-fixed": "#351000", "on-primary-fixed-variant": "#004491", "on-secondary": "#ffffff",
+                "primary-fixed": "#d7e2ff", "on-tertiary-fixed": "#002106", "error-container": "#ffdad6",
+                "tertiary": "#004c17", "surface-container-highest": "#e0e3e8", "surface-bright": "#f7f9ff",
+                "on-primary": "#ffffff", "tertiary-fixed": "#83fc8e", "on-surface": "#181c20",
+                "on-error-container": "#93000a", "surface": "#f7f9ff", "primary": "#003f87",
+                "surface-container-low": "#f1f4f9", "error": "#ba1a1a", "surface-container": "#ebeef3",
+                "surface-container-lowest": "#ffffff", "on-tertiary": "#ffffff", "primary-container": "#0056b3",
+                "on-primary-fixed": "#001a40", "on-background": "#181c20", "surface-container-high": "#e5e8ee",
+                "primary-fixed-dim": "#acc7ff", "on-error": "#ffffff", "secondary-fixed-dim": "#ffb693",
+                "on-tertiary-fixed-variant": "#00531a", "on-tertiary-container": "#6fe87c", "on-secondary-container": "#572000",
+                "on-primary-container": "#bbd0ff", "inverse-on-surface": "#eef1f6", "on-surface-variant": "#424752",
+                "inverse-surface": "#2d3135", "surface-variant": "#e0e3e8"
+        },
+        "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        "spacing": { "xl": "32px", "xs": "4px", "base": "4px", "margin-desktop": "32px", "md": "16px", "lg": "24px", "sm": "8px", "margin-mobile": "16px", "gutter": "16px" },
+        "fontFamily": { "headline-lg-mobile": ["Inter"], "headline-lg": ["Inter"], "title-md": ["Inter"], "display-lg": ["Inter"], "body-lg": ["Inter"], "label-md": ["JetBrains Mono"], "label-sm": ["JetBrains Mono"], "body-md": ["Inter"], "headline-md": ["Inter"] },
+        "fontSize": {
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}], "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}], "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+        }
+      } } }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav-item .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
+        tbody tr:hover { background-color: #f1f4f9; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<aside class="hidden lg:flex flex-col h-screen w-72 left-0 top-0 fixed border-r border-outline-variant bg-surface py-xl z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">HSEQ GESTIÓN</h1>
+<p class="text-on-surface-variant font-label-md text-label-md mt-xs">Sistema Integrado</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1 overflow-y-auto">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/centro-mando.html"><span class="material-symbols-outlined">strategy</span><span class="font-label-md text-label-md">Planear (Estratégico)</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/inspecciones-rondas.html"><span class="material-symbols-outlined">construction</span><span class="font-label-md text-label-md">Hacer (Operativo)</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/bitacora.html"><span class="material-symbols-outlined">fact_check</span><span class="font-label-md text-label-md">Verificar (Auditoría)</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/charlas-diarias.html"><span class="material-symbols-outlined">published_with_changes</span><span class="font-label-md text-label-md">Actuar (Mejora)</span></a>
+<div class="mt-xl pt-lg border-t border-outline-variant mx-4">
+<p class="text-on-surface-variant font-label-sm text-label-sm px-2 uppercase mb-2">Herramientas</p>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Analítica Avanzada"><span class="material-symbols-outlined">analytics</span><span class="font-label-md text-label-md">Analítica Avanzada</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/usuarios-roles.html"><span class="material-symbols-outlined">manage_accounts</span><span class="font-label-md text-label-md">Usuarios y Roles</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/clientes.html"><span class="material-symbols-outlined">domain</span><span class="font-label-md text-label-md">Clientes</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proyectos.html"><span class="material-symbols-outlined">apartment</span><span class="font-label-md text-label-md">Proyectos</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/empleados.html"><span class="material-symbols-outlined">badge</span><span class="font-label-md text-label-md">Empleados</span></a>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-r-full font-bold transition-colors scale-[0.98] active-nav-item" href="/charlas-diarias.html"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">campaign</span><span class="font-label-md text-label-md">Charlas Diarias</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/bitacora.html"><span class="material-symbols-outlined">menu_book</span><span class="font-label-md text-label-md">Bitácora</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/roles-permisos.html"><span class="material-symbols-outlined">admin_panel_settings</span><span class="font-label-md text-label-md">Roles y Permisos</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Configuración"><span class="material-symbols-outlined">settings_suggest</span><span class="font-label-md text-label-md">Configuración</span></a>
+</div>
+</nav>
+<a class="px-lg py-md border-t border-outline-variant flex items-center gap-3 hover:bg-surface-container-high transition-colors" href="/seleccion-empresa.html" title="Cambiar de empresa">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">JD</div>
+<div><p class="font-title-md text-body-md font-bold">Juan Delgado</p><p class="font-label-sm text-label-sm text-on-surface-variant">Director HSEQ</p></div>
+</a>
+</aside>
+<main class="lg:pl-72 pt-lg px-margin-mobile md:px-margin-desktop pb-xl max-w-[1400px] mx-auto">
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-lg">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Charlas Diarias</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Charla de 5 minutos / toolbox talk, registrada por proyecto.</p>
+</div>
+<button class="flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container transition-all whitespace-nowrap" id="btn-new-charla">
+<span class="material-symbols-outlined">add_comment</span>Registrar Charla
+</button>
+</section>
+<section class="flex flex-wrap items-center gap-3 mb-lg p-md bg-surface-container-low rounded-xl border border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase flex items-center gap-2"><span class="material-symbols-outlined text-base">filter_list</span>Filtros:</span>
+<select class="px-4 py-2 rounded-lg bg-surface border border-outline-variant text-body-md font-body-md text-on-surface focus:ring-2 focus:ring-primary" id="filter-tenant"><option value="">Cliente (todos)</option></select>
+<select class="px-4 py-2 rounded-lg bg-surface border border-outline-variant text-body-md font-body-md text-on-surface focus:ring-2 focus:ring-primary" id="filter-project"><option value="">Proyecto (todos)</option></select>
+<input class="px-4 py-2 rounded-lg bg-surface border border-outline-variant text-body-md font-body-md text-on-surface focus:ring-2 focus:ring-primary" id="filter-fecha" type="date"/>
+<button class="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md" id="btn-clear-filters"><span class="material-symbols-outlined text-base">backspace</span>Limpiar filtros</button>
+</section>
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr class="font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-4 py-3">Fecha</th><th class="px-4 py-3">Proyecto</th><th class="px-4 py-3">Cliente</th><th class="px-4 py-3">Tema</th>
+<th class="px-4 py-3">Responsable</th><th class="px-4 py-3 text-right">Asistentes</th><th class="px-4 py-3 text-right">Duración</th><th class="px-4 py-3 text-right sticky right-0 bg-surface-container-low">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant font-body-md text-body-md" id="charlas-tbody"></tbody>
+</table>
+</div>
+<div class="flex items-center justify-between px-4 py-3 border-t border-outline-variant font-label-md text-label-md text-on-surface-variant">
+<span id="results-count">Mostrando 0 charlas</span>
+</div>
+</section>
+</main>
+
+<div class="fixed inset-0 bg-on-surface/40 z-[60] hidden items-center justify-center p-4" id="modal-form">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-lg p-lg">
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-title-md text-title-md text-on-surface">Registrar Charla Diaria</h3>
+<button class="p-2 rounded-lg hover:bg-surface-container-high" id="modal-form-close"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-4" onsubmit="event.preventDefault(); saveCharla();">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Proyecto</label>
+<select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-project" required=""></select>
+</div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Tema</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-tema" placeholder="Ej: Uso correcto de EPP" required="" type="text"/></div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Responsable</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-responsable" required="" type="text"/></div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Fecha</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-fecha" type="date"/></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">N.° Asistentes</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-asistentes" min="0" type="number"/></div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Duración (min)</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-duracion" min="1" type="number" value="5"/></div>
+</div>
+<div class="flex justify-end gap-3 pt-2">
+<button class="px-5 py-2 rounded-xl border border-outline text-on-surface-variant hover:bg-surface-container-high" type="button" id="modal-form-cancel">Cancelar</button>
+<button class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container" type="submit">Guardar</button>
+</div>
+</form>
+</div>
+</div>
+
+<script>
+    let allCharlas = [], allTenants = [], allProjects = [];
+
+    async function loadData() {
+      [allCharlas, allTenants, allProjects] = await Promise.all([
+        fetch('/api/charlas').then(r => r.json()),
+        fetch('/api/tenants').then(r => r.json()),
+        fetch('/api/projects').then(r => r.json())
+      ]);
+      const tenantFilter = document.getElementById('filter-tenant');
+      allTenants.forEach(t => tenantFilter.appendChild(new Option(t.razon_social, t.id)));
+      const projectFilter = document.getElementById('filter-project');
+      const formProject = document.getElementById('form-project');
+      allProjects.forEach(p => { projectFilter.appendChild(new Option(p.nombre, p.id)); formProject.appendChild(new Option(p.nombre, p.id)); });
+
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('project_id')) {
+        document.getElementById('filter-project').value = urlParams.get('project_id');
+      } else {
+        const scopedTenant = urlParams.get('tenant_id') || localStorage.getItem('empresa_actual_id');
+        if (scopedTenant) document.getElementById('filter-tenant').value = scopedTenant;
+      }
+
+      renderTable();
+    }
+
+    function renderTable() {
+      const tenant_id = document.getElementById('filter-tenant').value;
+      const project_id = document.getElementById('filter-project').value;
+      const fecha = document.getElementById('filter-fecha').value;
+      const filtered = allCharlas.filter(c =>
+        (!tenant_id || (c.tenant && c.tenant.id === tenant_id)) &&
+        (!project_id || c.project_id === project_id) &&
+        (!fecha || c.fecha === fecha)
+      ).sort((a, b) => (a.fecha < b.fecha ? 1 : -1));
+      document.getElementById('charlas-tbody').innerHTML = filtered.map(c => `
+        <tr>
+          <td class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant">${c.fecha}</td>
+          <td class="px-4 py-3 font-bold text-on-surface">${c.project ? c.project.nombre : '—'}</td>
+          <td class="px-4 py-3">${c.tenant ? c.tenant.razon_social : '—'}</td>
+          <td class="px-4 py-3">${c.tema}</td>
+          <td class="px-4 py-3">${c.responsable}</td>
+          <td class="px-4 py-3 text-right font-label-md text-label-md">${c.asistentes}</td>
+          <td class="px-4 py-3 text-right font-label-md text-label-md">${c.duracion_min} min</td>
+          <td class="px-4 py-3 text-right sticky right-0 bg-surface-container-lowest whitespace-nowrap">
+            <button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Imprimir" onclick="printCharla('${c.id}')"><span class="material-symbols-outlined text-lg">print</span></button>
+            <button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Eliminar" onclick="deleteCharla('${c.id}')"><span class="material-symbols-outlined text-lg">delete</span></button>
+          </td>
+        </tr>`).join('');
+      document.getElementById('results-count').textContent = `Mostrando ${filtered.length} de ${allCharlas.length} charlas`;
+    }
+
+    ['filter-tenant', 'filter-project'].forEach(id => document.getElementById(id).addEventListener('change', renderTable));
+    document.getElementById('filter-fecha').addEventListener('change', renderTable);
+    document.getElementById('btn-clear-filters').addEventListener('click', () => {
+      ['filter-tenant', 'filter-project', 'filter-fecha'].forEach(id => document.getElementById(id).value = '');
+      renderTable();
+    });
+
+    function openModal() { document.getElementById('modal-form').classList.remove('hidden'); document.getElementById('modal-form').classList.add('flex'); }
+    function closeModal() { document.getElementById('modal-form').classList.add('hidden'); document.getElementById('modal-form').classList.remove('flex'); }
+    document.getElementById('btn-new-charla').addEventListener('click', openModal);
+    document.getElementById('modal-form-close').addEventListener('click', closeModal);
+    document.getElementById('modal-form-cancel').addEventListener('click', closeModal);
+
+    async function saveCharla() {
+      const payload = {
+        project_id: document.getElementById('form-project').value,
+        tema: document.getElementById('form-tema').value,
+        responsable: document.getElementById('form-responsable').value,
+        fecha: document.getElementById('form-fecha').value,
+        asistentes: document.getElementById('form-asistentes').value,
+        duracion_min: document.getElementById('form-duracion').value
+      };
+      await fetch('/api/charlas', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      closeModal();
+      await loadData();
+    }
+
+    window.deleteCharla = async function (id) {
+      await fetch(`/api/charlas/${id}`, { method: 'DELETE' });
+      await loadData();
+    };
+
+    window.printCharla = function (id) {
+      const c = allCharlas.find(x => x.id === id);
+      const w = window.open('', '_blank');
+      w.document.write(`<html><head><title>Charla ${c.id}</title></head><body style="font-family: Inter, sans-serif; padding: 32px;">
+        <h2>Charla Diaria — ${c.tema}</h2>
+        <p><b>Proyecto:</b> ${c.project ? c.project.nombre : '—'} (${c.tenant ? c.tenant.razon_social : '—'})</p>
+        <p><b>Fecha:</b> ${c.fecha} · <b>Responsable:</b> ${c.responsable}</p>
+        <p><b>Asistentes:</b> ${c.asistentes} · <b>Duración:</b> ${c.duracion_min} min</p>
+      </body></html>`);
+      w.document.close();
+      w.print();
+    };
+
+    loadData();
+  </script>
+</body></html>

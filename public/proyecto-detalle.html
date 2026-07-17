@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HSEQ GESTIÓN - Proyecto</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = { darkMode: "class", theme: { extend: {
+        "colors": {
+                "secondary": "#a04100", "tertiary-container": "#006722", "background": "#f7f9ff",
+                "on-secondary-fixed-variant": "#7a3000", "secondary-fixed": "#ffdbcc", "surface-dim": "#d7dadf",
+                "outline": "#727784", "surface-tint": "#115cb9", "outline-variant": "#c2c6d4",
+                "secondary-container": "#fe6b00", "inverse-primary": "#acc7ff", "tertiary-fixed-dim": "#66df75",
+                "on-secondary-fixed": "#351000", "on-primary-fixed-variant": "#004491", "on-secondary": "#ffffff",
+                "primary-fixed": "#d7e2ff", "on-tertiary-fixed": "#002106", "error-container": "#ffdad6",
+                "tertiary": "#004c17", "surface-container-highest": "#e0e3e8", "surface-bright": "#f7f9ff",
+                "on-primary": "#ffffff", "tertiary-fixed": "#83fc8e", "on-surface": "#181c20",
+                "on-error-container": "#93000a", "surface": "#f7f9ff", "primary": "#003f87",
+                "surface-container-low": "#f1f4f9", "error": "#ba1a1a", "surface-container": "#ebeef3",
+                "surface-container-lowest": "#ffffff", "on-tertiary": "#ffffff", "primary-container": "#0056b3",
+                "on-primary-fixed": "#001a40", "on-background": "#181c20", "surface-container-high": "#e5e8ee",
+                "primary-fixed-dim": "#acc7ff", "on-error": "#ffffff", "secondary-fixed-dim": "#ffb693",
+                "on-tertiary-fixed-variant": "#00531a", "on-tertiary-container": "#6fe87c", "on-secondary-container": "#572000",
+                "on-primary-container": "#bbd0ff", "inverse-on-surface": "#eef1f6", "on-surface-variant": "#424752",
+                "inverse-surface": "#2d3135", "surface-variant": "#e0e3e8"
+        },
+        "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        "spacing": { "xl": "32px", "xs": "4px", "base": "4px", "margin-desktop": "32px", "md": "16px", "lg": "24px", "sm": "8px", "margin-mobile": "16px", "gutter": "16px" },
+        "fontFamily": { "headline-lg-mobile": ["Inter"], "headline-lg": ["Inter"], "title-md": ["Inter"], "display-lg": ["Inter"], "body-lg": ["Inter"], "label-md": ["JetBrains Mono"], "label-sm": ["JetBrains Mono"], "body-md": ["Inter"], "headline-md": ["Inter"] },
+        "fontSize": {
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}], "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}], "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+        }
+      } } }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .tab-btn.active { border-bottom: 2px solid #003f87; color: #003f87; font-weight: 700; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        tbody tr:hover { background-color: #f1f4f9; }
+        .timeline-item { position: relative; padding-left: 28px; }
+        .timeline-item::before { content: ''; position: absolute; left: 6px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: #003f87; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<main class="px-margin-mobile md:px-margin-desktop py-lg max-w-[1200px] mx-auto">
+<a class="inline-flex items-center gap-2 text-primary font-label-md text-label-md mb-md hover:underline" href="/proyectos.html"><span class="material-symbols-outlined text-base">arrow_back</span>Volver a Proyectos</a>
+
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg mb-lg">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant" id="p-tenant">—</p>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface" id="p-nombre">Cargando...</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1" id="p-ubicacion">—</p>
+</div>
+<div class="flex gap-6 text-right">
+<div><p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Tipo</p><p class="font-bold" id="p-tipo">—</p></div>
+<div><p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Inicio</p><p class="font-bold" id="p-inicio">—</p></div>
+<div><p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Horas-Hombre</p><p class="font-bold" id="p-horas">—</p></div>
+<div><p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Estado</p><p id="p-estado">—</p></div>
+</div>
+</div>
+</section>
+
+<nav class="flex flex-wrap gap-1 border-b border-outline-variant mb-lg overflow-x-auto">
+<button class="tab-btn active px-4 py-3 font-label-md text-label-md text-on-surface-variant whitespace-nowrap" data-tab="bitacora">Bitácora</button>
+<button class="tab-btn px-4 py-3 font-label-md text-label-md text-on-surface-variant whitespace-nowrap" data-tab="empleados">Empleados</button>
+<button class="tab-btn px-4 py-3 font-label-md text-label-md text-on-surface-variant whitespace-nowrap" data-tab="presupuesto">Presupuesto</button>
+<button class="tab-btn px-4 py-3 font-label-md text-label-md text-on-surface-variant whitespace-nowrap" data-tab="plan">Plan Anual de Trabajo</button>
+<button class="tab-btn px-4 py-3 font-label-md text-label-md text-on-surface-variant whitespace-nowrap" data-tab="documentos">Documentos</button>
+</nav>
+
+<!-- BITACORA -->
+<div class="tab-panel active" id="tab-bitacora">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-md text-title-md text-on-surface">Bitácora del Proyecto</h3>
+<button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container text-sm" id="btn-new-bitacora"><span class="material-symbols-outlined text-base">post_add</span>Nueva Entrada</button>
+</div>
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg space-y-6" id="bitacora-timeline"></div>
+</div>
+
+<!-- EMPLEADOS -->
+<div class="tab-panel" id="tab-empleados">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-md text-title-md text-on-surface">Empleados Asignados</h3>
+<button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container text-sm" id="btn-new-empleado"><span class="material-symbols-outlined text-base">person_add</span>Nuevo Empleado</button>
+</div>
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto"><table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant"><tr class="font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-4 py-3">Empleado</th><th class="px-4 py-3">Cédula</th><th class="px-4 py-3">Cargo</th><th class="px-4 py-3">Cuenta</th>
+</tr></thead>
+<tbody class="divide-y divide-outline-variant font-body-md text-body-md" id="empleados-tbody"></tbody>
+</table></div>
+</section>
+</div>
+
+<!-- PRESUPUESTO -->
+<div class="tab-panel" id="tab-presupuesto">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-md text-title-md text-on-surface">Presupuesto</h3>
+<button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container text-sm" id="btn-new-presupuesto"><span class="material-symbols-outlined text-base">add</span>Nueva Línea</button>
+</div>
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto"><table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant"><tr class="font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-4 py-3">Rubro</th><th class="px-4 py-3 text-right">Presupuestado</th><th class="px-4 py-3 text-right">Ejecutado</th><th class="px-4 py-3 text-right">Saldo</th><th class="px-4 py-3 text-right">% Ejec.</th>
+</tr></thead>
+<tbody class="divide-y divide-outline-variant font-body-md text-body-md" id="presupuesto-tbody"></tbody>
+<tfoot class="bg-surface-container-low font-bold border-t border-outline-variant" id="presupuesto-tfoot"></tfoot>
+</table></div>
+</section>
+</div>
+
+<!-- PLAN ANUAL -->
+<div class="tab-panel" id="tab-plan">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-md text-title-md text-on-surface">Plan Anual de Trabajo</h3>
+<button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container text-sm" id="btn-new-plan"><span class="material-symbols-outlined text-base">add_task</span>Nueva Actividad</button>
+</div>
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto"><table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant"><tr class="font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-4 py-3">Actividad</th><th class="px-4 py-3">Mes Objetivo</th><th class="px-4 py-3">Responsable</th><th class="px-4 py-3">Estado</th><th class="px-4 py-3 text-right">Acciones</th>
+</tr></thead>
+<tbody class="divide-y divide-outline-variant font-body-md text-body-md" id="plan-tbody"></tbody>
+</table></div>
+</section>
+</div>
+
+<!-- DOCUMENTOS -->
+<div class="tab-panel" id="tab-documentos">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-md text-title-md text-on-surface">Documentos del Proyecto</h3>
+<button class="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container text-sm" id="btn-new-doc"><span class="material-symbols-outlined text-base">upload_file</span>Adjuntar Documento</button>
+</div>
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto"><table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low border-b border-outline-variant"><tr class="font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-4 py-3">Nombre</th><th class="px-4 py-3">Tipo</th><th class="px-4 py-3">Subido</th><th class="px-4 py-3">Por</th><th class="px-4 py-3 text-right">Acciones</th>
+</tr></thead>
+<tbody class="divide-y divide-outline-variant font-body-md text-body-md" id="documentos-tbody"></tbody>
+</table></div>
+</section>
+</div>
+</main>
+
+<!-- Modales genéricos -->
+<div class="fixed inset-0 bg-on-surface/40 z-[60] hidden items-center justify-center p-4" id="modal-bitacora">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-lg p-lg">
+<div class="flex items-center justify-between mb-md"><h3 class="font-title-md text-title-md text-on-surface">Nueva Entrada de Bitácora</h3><button class="p-2 rounded-lg hover:bg-surface-container-high" onclick="closeModal('modal-bitacora')"><span class="material-symbols-outlined">close</span></button></div>
+<form class="space-y-4" onsubmit="event.preventDefault(); saveBitacora();">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Autor</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="bit-autor" required="" type="text"/></div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Tipo</label><select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="bit-tipo"><option value="Avance">Avance</option><option value="Incidente">Incidente</option><option value="Novedad">Novedad</option><option value="Clima">Clima</option></select></div>
+</div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Descripción</label><textarea class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="bit-descripcion" required="" rows="4"></textarea></div>
+<div class="flex justify-end gap-3 pt-2"><button class="px-5 py-2 rounded-xl border border-outline text-on-surface-variant" type="button" onclick="closeModal('modal-bitacora')">Cancelar</button><button class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold" type="submit">Guardar</button></div>
+</form>
+</div>
+</div>
+
+<div class="fixed inset-0 bg-on-surface/40 z-[60] hidden items-center justify-center p-4" id="modal-empleado">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-lg p-lg">
+<div class="flex items-center justify-between mb-md"><h3 class="font-title-md text-title-md text-on-surface">Nuevo Empleado</h3><button class="p-2 rounded-lg hover:bg-surface-container-high" onclick="closeModal('modal-empleado')"><span class="material-symbols-outlined">close</span></button></div>
+<form class="space-y-4" onsubmit="event.preventDefault(); saveEmpleado();">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Nombre</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="emp-nombre" required="" type="text"/></div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Cédula</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="emp-cedula" required="" type="text"/></div>
+</div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Cargo</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="emp-cargo" required="" type="text"/></div>
+<div class="flex justify-end gap-3 pt-2"><button class="px-5 py-2 rounded-xl border border-outline text-on-surface-variant" type="button" onclick="closeModal('modal-empleado')">Cancelar</button><button class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold" type="submit">Guardar</button></div>
+</form>
+</div>
+</div>
+
+<div class="fixed inset-0 bg-on-surface/40 z-[60] hidden items-center justify-center p-4" id="modal-presupuesto">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-lg p-lg">
+<div class="flex items-center justify-between mb-md"><h3 class="font-title-md text-title-md text-on-surface">Nueva Línea Presupuestal</h3><button class="p-2 rounded-lg hover:bg-surface-container-high" onclick="closeModal('modal-presupuesto')"><span class="material-symbols-outlined">close</span></button></div>
+<form class="space-y-4" onsubmit="event.preventDefault(); savePresupuesto();">
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Rubro</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="pre-rubro" required="" type="text"/></div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Presupuestado</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="pre-presupuestado" min="0" required="" type="number"/></div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Ejecutado</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="pre-ejecutado" min="0" type="number" value="0"/></div>
+</div>
+<div class="flex justify-end gap-3 pt-2"><button class="px-5 py-2 rounded-xl border border-outline text-on-surface-variant" type="button" onclick="closeModal('modal-presupuesto')">Cancelar</button><button class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold" type="submit">Guardar</button></div>
+</form>
+</div>
+</div>
+
+<div class="fixed inset-0 bg-on-surface/40 z-[60] hidden items-center justify-center p-4" id="modal-plan">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-lg p-lg">
+<div class="flex items-center justify-between mb-md"><h3 class="font-title-md text-title-md text-on-surface">Nueva Actividad del Plan Anual</h3><button class="p-2 rounded-lg hover:bg-surface-container-high" onclick="closeModal('modal-plan')"><span class="material-symbols-outlined">close</span></button></div>
+<form class="space-y-4" onsubmit="event.preventDefault(); savePlan();">
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Actividad</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="pln-actividad" required="" type="text"/></div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Mes Objetivo</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="pln-mes" type="month"/></div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Responsable</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="pln-responsable" required="" type="text"/></div>
+</div>
+<div class="flex justify-end gap-3 pt-2"><button class="px-5 py-2 rounded-xl border border-outline text-on-surface-variant" type="button" onclick="closeModal('modal-plan')">Cancelar</button><button class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold" type="submit">Guardar</button></div>
+</form>
+</div>
+</div>
+
+<div class="fixed inset-0 bg-on-surface/40 z-[60] hidden items-center justify-center p-4" id="modal-doc">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-lg p-lg">
+<div class="flex items-center justify-between mb-md"><h3 class="font-title-md text-title-md text-on-surface">Adjuntar Documento</h3><button class="p-2 rounded-lg hover:bg-surface-container-high" onclick="closeModal('modal-doc')"><span class="material-symbols-outlined">close</span></button></div>
+<form class="space-y-4" onsubmit="event.preventDefault(); saveDoc();">
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Archivo</label><input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="doc-file" type="file"/><p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Demo local: se guarda el nombre del archivo, no el contenido.</p></div>
+<div class="space-y-1"><label class="font-label-md text-label-md text-on-surface-variant uppercase">Tipo</label><select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant" id="doc-tipo"><option value="Permiso">Permiso</option><option value="Plano">Plano</option><option value="HSEQ">HSEQ</option><option value="Contrato">Contrato</option><option value="Otro">Otro</option></select></div>
+<div class="flex justify-end gap-3 pt-2"><button class="px-5 py-2 rounded-xl border border-outline text-on-surface-variant" type="button" onclick="closeModal('modal-doc')">Cancelar</button><button class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold" type="submit">Guardar</button></div>
+</form>
+</div>
+</div>
+
+<script>
+    const projectId = new URLSearchParams(window.location.search).get('id');
+    let currentProject = null;
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    function tipoBadge(tipo) {
+      const map = { Avance: ['bg-primary-container text-on-primary-container', 'trending_up'], Incidente: ['bg-error-container text-on-error-container', 'warning'], Novedad: ['bg-secondary-fixed text-on-secondary-fixed-variant', 'info'], Clima: ['bg-surface-container-high text-on-surface-variant', 'cloud'] };
+      const [cls, icon] = map[tipo] || ['bg-surface-container-high text-on-surface-variant', 'help'];
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${cls}"><span class="material-symbols-outlined text-sm">${icon}</span>${tipo}</span>`;
+    }
+    function estadoBadgeProyecto(estado) {
+      const map = { Activo: ['bg-tertiary-fixed text-on-tertiary-fixed-variant', 'check_circle'], Suspendido: ['bg-error-container text-on-error-container', 'block'], Finalizado: ['bg-surface-container-high text-on-surface-variant', 'task_alt'] };
+      const [cls, icon] = map[estado] || ['bg-surface-container-high text-on-surface-variant', 'help'];
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${cls}"><span class="material-symbols-outlined text-sm">${icon}</span>${estado}</span>`;
+    }
+    function planBadge(estado) {
+      const map = { Completado: 'bg-tertiary-fixed text-on-tertiary-fixed-variant', 'En Curso': 'bg-secondary-fixed text-on-secondary-fixed-variant', Pendiente: 'bg-surface-container-high text-on-surface-variant' };
+      return `<span class="px-2 py-0.5 rounded-full text-xs font-bold ${map[estado] || 'bg-surface-container-high text-on-surface-variant'}">${estado}</span>`;
+    }
+    function money(n) { return '$' + Number(n).toLocaleString('es-CO'); }
+
+    async function loadProject() {
+      currentProject = await fetch(`/api/projects/${projectId}`).then(r => r.json());
+      document.title = `HSEQ GESTIÓN - ${currentProject.nombre}`;
+      document.getElementById('p-tenant').textContent = currentProject.tenant ? currentProject.tenant.razon_social : '—';
+      document.getElementById('p-nombre').textContent = currentProject.nombre;
+      document.getElementById('p-ubicacion').textContent = currentProject.ubicacion;
+      document.getElementById('p-tipo').textContent = currentProject.tipo;
+      document.getElementById('p-inicio').textContent = currentProject.fecha_inicio;
+      document.getElementById('p-horas').textContent = currentProject.horas_hombre_acumuladas.toLocaleString('es-CO');
+      document.getElementById('p-estado').innerHTML = estadoBadgeProyecto(currentProject.estado);
+    }
+
+    async function loadBitacora() {
+      const entries = await fetch(`/api/bitacora?project_id=${projectId}`).then(r => r.json());
+      document.getElementById('bitacora-timeline').innerHTML = entries.length ? entries.map(b => `
+        <div class="timeline-item">
+          <div class="flex items-center justify-between mb-1"><p class="font-label-sm text-label-sm text-on-surface-variant">${b.fecha} — ${b.autor}</p>${tipoBadge(b.tipo)}</div>
+          <p class="font-body-md text-body-md text-on-surface">${b.descripcion}</p>
+        </div>`).join('') : '<p class="text-on-surface-variant font-label-md text-label-md">Sin entradas todavía.</p>';
+    }
+    document.getElementById('btn-new-bitacora').addEventListener('click', () => openModal('modal-bitacora'));
+    async function saveBitacora() {
+      await fetch('/api/bitacora', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+        project_id: projectId, autor: document.getElementById('bit-autor').value, tipo: document.getElementById('bit-tipo').value, descripcion: document.getElementById('bit-descripcion').value
+      }) });
+      closeModal('modal-bitacora');
+      document.getElementById('bit-autor').value = ''; document.getElementById('bit-descripcion').value = '';
+      await loadBitacora();
+    }
+
+    function initials(nombre) { return nombre.split(' ').filter(Boolean).slice(0, 2).map(p => p[0]).join('').toUpperCase(); }
+    function cuentaBadge(estado) {
+      const activo = estado === 'Activo';
+      const cls = activo ? 'bg-tertiary-fixed text-on-tertiary-fixed-variant' : 'bg-error-container text-on-error-container';
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${cls}"><span class="material-symbols-outlined text-sm">${activo ? 'check_circle' : 'block'}</span>${estado}</span>`;
+    }
+    async function loadEmpleados() {
+      const empleados = await fetch(`/api/empleados?project_id=${projectId}`).then(r => r.json());
+      document.getElementById('empleados-tbody').innerHTML = empleados.length ? empleados.map(e => `
+        <tr>
+          <td class="px-4 py-3 flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">${initials(e.nombre)}</div><span class="font-bold">${e.nombre}</span></td>
+          <td class="px-4 py-3 font-label-md text-label-md text-on-surface-variant">${e.cedula}</td>
+          <td class="px-4 py-3">${e.cargo}</td>
+          <td class="px-4 py-3">${cuentaBadge(e.estado_cuenta)}</td>
+        </tr>`).join('') : '<tr><td class="px-4 py-3 text-on-surface-variant" colspan="4">Sin empleados asignados todavía.</td></tr>';
+    }
+    document.getElementById('btn-new-empleado').addEventListener('click', () => openModal('modal-empleado'));
+    async function saveEmpleado() {
+      await fetch('/api/empleados', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+        tenant_id: currentProject.tenant_id, project_id: projectId,
+        nombre: document.getElementById('emp-nombre').value, cedula: document.getElementById('emp-cedula').value, cargo: document.getElementById('emp-cargo').value
+      }) });
+      closeModal('modal-empleado');
+      document.getElementById('emp-nombre').value = ''; document.getElementById('emp-cedula').value = ''; document.getElementById('emp-cargo').value = '';
+      await loadEmpleados();
+    }
+
+    async function loadPresupuesto() {
+      const lineas = await fetch(`/api/presupuesto?project_id=${projectId}`).then(r => r.json());
+      document.getElementById('presupuesto-tbody').innerHTML = lineas.map(p => {
+        const saldo = p.presupuestado - p.ejecutado;
+        const pct = p.presupuestado ? Math.round((p.ejecutado / p.presupuestado) * 100) : 0;
+        return `<tr><td class="px-4 py-3 font-bold">${p.rubro}</td><td class="px-4 py-3 text-right font-label-md text-label-md">${money(p.presupuestado)}</td><td class="px-4 py-3 text-right font-label-md text-label-md">${money(p.ejecutado)}</td><td class="px-4 py-3 text-right font-label-md text-label-md">${money(saldo)}</td><td class="px-4 py-3 text-right font-bold ${pct >= 90 ? 'text-error' : pct >= 60 ? 'text-secondary' : 'text-tertiary-container'}">${pct}%</td></tr>`;
+      }).join('') || '<tr><td class="px-4 py-3 text-on-surface-variant" colspan="5">Sin líneas presupuestales todavía.</td></tr>';
+      const totalPre = lineas.reduce((s, p) => s + p.presupuestado, 0);
+      const totalEje = lineas.reduce((s, p) => s + p.ejecutado, 0);
+      document.getElementById('presupuesto-tfoot').innerHTML = `<tr><td class="px-4 py-3">TOTAL</td><td class="px-4 py-3 text-right">${money(totalPre)}</td><td class="px-4 py-3 text-right">${money(totalEje)}</td><td class="px-4 py-3 text-right">${money(totalPre - totalEje)}</td><td class="px-4 py-3 text-right">${totalPre ? Math.round((totalEje / totalPre) * 100) : 0}%</td></tr>`;
+    }
+    document.getElementById('btn-new-presupuesto').addEventListener('click', () => openModal('modal-presupuesto'));
+    async function savePresupuesto() {
+      await fetch('/api/presupuesto', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+        project_id: projectId, rubro: document.getElementById('pre-rubro').value, presupuestado: document.getElementById('pre-presupuestado').value, ejecutado: document.getElementById('pre-ejecutado').value
+      }) });
+      closeModal('modal-presupuesto');
+      document.getElementById('pre-rubro').value = ''; document.getElementById('pre-presupuestado').value = ''; document.getElementById('pre-ejecutado').value = '0';
+      await loadPresupuesto();
+    }
+
+    async function loadPlan() {
+      const items = await fetch(`/api/plan-anual?project_id=${projectId}`).then(r => r.json());
+      document.getElementById('plan-tbody').innerHTML = items.length ? items.map(p => `
+        <tr>
+          <td class="px-4 py-3 font-bold">${p.actividad}</td>
+          <td class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant">${p.mes_objetivo || '—'}</td>
+          <td class="px-4 py-3">${p.responsable}</td>
+          <td class="px-4 py-3">${planBadge(p.estado)}</td>
+          <td class="px-4 py-3 text-right">
+            ${p.estado !== 'Completado' ? `<button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Avanzar estado" onclick="advancePlan('${p.id}','${p.estado}')"><span class="material-symbols-outlined text-lg">arrow_forward</span></button>` : ''}
+          </td>
+        </tr>`).join('') : '<tr><td class="px-4 py-3 text-on-surface-variant" colspan="5">Sin actividades todavía.</td></tr>';
+    }
+    document.getElementById('btn-new-plan').addEventListener('click', () => openModal('modal-plan'));
+    async function savePlan() {
+      await fetch('/api/plan-anual', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
+        project_id: projectId, actividad: document.getElementById('pln-actividad').value, mes_objetivo: document.getElementById('pln-mes').value, responsable: document.getElementById('pln-responsable').value
+      }) });
+      closeModal('modal-plan');
+      document.getElementById('pln-actividad').value = ''; document.getElementById('pln-responsable').value = '';
+      await loadPlan();
+    }
+    window.advancePlan = async function (id, estadoActual) {
+      const next = estadoActual === 'Pendiente' ? 'En Curso' : 'Completado';
+      await fetch(`/api/plan-anual/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado: next }) });
+      await loadPlan();
+    };
+
+    async function loadDocumentos() {
+      const docs = await fetch(`/api/documentos?project_id=${projectId}`).then(r => r.json());
+      document.getElementById('documentos-tbody').innerHTML = docs.length ? docs.map(d => `
+        <tr>
+          <td class="px-4 py-3 font-bold flex items-center gap-2"><span class="material-symbols-outlined text-on-surface-variant text-lg">description</span>${d.nombre}</td>
+          <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full text-xs font-bold bg-surface-container-high text-on-surface-variant">${d.tipo}</span></td>
+          <td class="px-4 py-3 font-label-sm text-label-sm text-on-surface-variant">${d.fecha_subida}</td>
+          <td class="px-4 py-3">${d.subido_por}</td>
+          <td class="px-4 py-3 text-right"><button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Eliminar" onclick="deleteDoc('${d.id}')"><span class="material-symbols-outlined text-lg">delete</span></button></td>
+        </tr>`).join('') : '<tr><td class="px-4 py-3 text-on-surface-variant" colspan="5">Sin documentos adjuntos todavía.</td></tr>';
+    }
+    document.getElementById('btn-new-doc').addEventListener('click', () => openModal('modal-doc'));
+    async function saveDoc() {
+      const fileInput = document.getElementById('doc-file');
+      const nombre = fileInput.files[0] ? fileInput.files[0].name : 'Documento sin nombre';
+      await fetch('/api/documentos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ project_id: projectId, nombre, tipo: document.getElementById('doc-tipo').value, subido_por: 'Juan Delgado' }) });
+      closeModal('modal-doc');
+      fileInput.value = '';
+      await loadDocumentos();
+    }
+    window.deleteDoc = async function (id) {
+      await fetch(`/api/documentos/${id}`, { method: 'DELETE' });
+      await loadDocumentos();
+    };
+
+    loadProject().then(() => {
+      loadBitacora(); loadEmpleados(); loadPresupuesto(); loadPlan(); loadDocumentos();
+    });
+  </script>
+</body></html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HSEQ GESTIÓN - Próximamente</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = { darkMode: "class", theme: { extend: {
+        "colors": {
+                "secondary": "#a04100", "tertiary-container": "#006722", "background": "#f7f9ff",
+                "on-secondary-fixed-variant": "#7a3000", "secondary-fixed": "#ffdbcc", "surface-dim": "#d7dadf",
+                "outline": "#727784", "surface-tint": "#115cb9", "outline-variant": "#c2c6d4",
+                "secondary-container": "#fe6b00", "inverse-primary": "#acc7ff", "tertiary-fixed-dim": "#66df75",
+                "on-secondary-fixed": "#351000", "on-primary-fixed-variant": "#004491", "on-secondary": "#ffffff",
+                "primary-fixed": "#d7e2ff", "on-tertiary-fixed": "#002106", "error-container": "#ffdad6",
+                "tertiary": "#004c17", "surface-container-highest": "#e0e3e8", "surface-bright": "#f7f9ff",
+                "on-primary": "#ffffff", "tertiary-fixed": "#83fc8e", "on-surface": "#181c20",
+                "on-error-container": "#93000a", "surface": "#f7f9ff", "primary": "#003f87",
+                "surface-container-low": "#f1f4f9", "error": "#ba1a1a", "surface-container": "#ebeef3",
+                "surface-container-lowest": "#ffffff", "on-tertiary": "#ffffff", "primary-container": "#0056b3",
+                "on-primary-fixed": "#001a40", "on-background": "#181c20", "surface-container-high": "#e5e8ee",
+                "primary-fixed-dim": "#acc7ff", "on-error": "#ffffff", "secondary-fixed-dim": "#ffb693",
+                "on-tertiary-fixed-variant": "#00531a", "on-tertiary-container": "#6fe87c", "on-secondary-container": "#572000",
+                "on-primary-container": "#bbd0ff", "inverse-on-surface": "#eef1f6", "on-surface-variant": "#424752",
+                "inverse-surface": "#2d3135", "surface-variant": "#e0e3e8"
+        },
+        "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+        "spacing": { "xl": "32px", "xs": "4px", "base": "4px", "margin-desktop": "32px", "md": "16px", "lg": "24px", "sm": "8px", "margin-mobile": "16px", "gutter": "16px" },
+        "fontFamily": { "headline-lg-mobile": ["Inter"], "headline-lg": ["Inter"], "title-md": ["Inter"], "display-lg": ["Inter"], "body-lg": ["Inter"], "label-md": ["JetBrains Mono"], "label-sm": ["JetBrains Mono"], "body-md": ["Inter"], "headline-md": ["Inter"] },
+        "fontSize": {
+                "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}], "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}], "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}], "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}], "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}], "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+        }
+      } } }
+    </script>
+<style>.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }</style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex items-center justify-center p-4">
+<div class="max-w-md text-center">
+<div class="w-20 h-20 mx-auto mb-lg rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-[40px]" id="modulo-icon">construction</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2" id="modulo-titulo">Próximamente</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mb-lg" id="modulo-desc">Este módulo está en desarrollo dentro del roadmap de la plataforma.</p>
+<a class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container" href="/centro-mando.html">
+<span class="material-symbols-outlined">arrow_back</span>Volver al Centro de Mando
+</a>
+</div>
+<script>
+    const modulo = new URLSearchParams(window.location.search).get('modulo') || 'Este módulo';
+    document.getElementById('modulo-titulo').textContent = modulo;
+    document.getElementById('modulo-desc').textContent = `"${modulo}" está planificado en el roadmap de la plataforma y aún no está activo en esta demo.`;
+  </script>
+</body></html>

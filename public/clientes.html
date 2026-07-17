@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HSEQ GESTIÓN - Clientes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#a04100",
+                    "tertiary-container": "#006722",
+                    "background": "#f7f9ff",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "secondary-fixed": "#ffdbcc",
+                    "surface-dim": "#d7dadf",
+                    "outline": "#727784",
+                    "surface-tint": "#115cb9",
+                    "outline-variant": "#c2c6d4",
+                    "secondary-container": "#fe6b00",
+                    "inverse-primary": "#acc7ff",
+                    "tertiary-fixed-dim": "#66df75",
+                    "on-secondary-fixed": "#351000",
+                    "on-primary-fixed-variant": "#004491",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#d7e2ff",
+                    "on-tertiary-fixed": "#002106",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#004c17",
+                    "surface-container-highest": "#e0e3e8",
+                    "surface-bright": "#f7f9ff",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#83fc8e",
+                    "on-surface": "#181c20",
+                    "on-error-container": "#93000a",
+                    "surface": "#f7f9ff",
+                    "primary": "#003f87",
+                    "surface-container-low": "#f1f4f9",
+                    "error": "#ba1a1a",
+                    "surface-container": "#ebeef3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#0056b3",
+                    "on-primary-fixed": "#001a40",
+                    "on-background": "#181c20",
+                    "surface-container-high": "#e5e8ee",
+                    "primary-fixed-dim": "#acc7ff",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#ffb693",
+                    "on-tertiary-fixed-variant": "#00531a",
+                    "on-tertiary-container": "#6fe87c",
+                    "on-secondary-container": "#572000",
+                    "on-primary-container": "#bbd0ff",
+                    "inverse-on-surface": "#eef1f6",
+                    "on-surface-variant": "#424752",
+                    "inverse-surface": "#2d3135",
+                    "surface-variant": "#e0e3e8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "margin-desktop": "32px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "label-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-item .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Data density: fila compacta tipo base de datos */
+        #clients-table td, #clients-table th { padding-top: 8px; padding-bottom: 8px; }
+        tbody tr:hover { background-color: #f1f4f9; }
+        tbody tr:nth-child(even) { background-color: #fbfcff; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col h-screen w-72 left-0 top-0 fixed border-r border-outline-variant bg-surface py-xl z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">HSEQ GESTIÓN</h1>
+<p class="text-on-surface-variant font-label-md text-label-md mt-xs">Sistema Integrado</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/centro-mando.html">
+<span class="material-symbols-outlined">strategy</span>
+<span class="font-label-md text-label-md">Planear (Estratégico)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/inspecciones-rondas.html">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Hacer (Operativo)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/bitacora.html">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Verificar (Auditoría)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">published_with_changes</span>
+<span class="font-label-md text-label-md">Actuar (Mejora)</span>
+</a>
+<div class="mt-xl pt-lg border-t border-outline-variant mx-4">
+<p class="text-on-surface-variant font-label-sm text-label-sm px-2 uppercase mb-2">Herramientas</p>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Analítica Avanzada">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analítica Avanzada</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/usuarios-roles.html">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="font-label-md text-label-md">Usuarios y Roles</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-r-full font-bold transition-colors scale-[0.98] active-nav-item" href="/clientes.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">domain</span>
+<span class="font-label-md text-label-md">Clientes</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proyectos.html">
+<span class="material-symbols-outlined">apartment</span>
+<span class="font-label-md text-label-md">Proyectos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/empleados.html">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-label-md text-label-md">Empleados</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">campaign</span>
+<span class="font-label-md text-label-md">Charlas Diarias</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/bitacora.html">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">Bitácora</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/roles-permisos.html">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="font-label-md text-label-md">Roles y Permisos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Configuración">
+<span class="material-symbols-outlined">settings_suggest</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+</nav>
+<a class="px-lg py-md border-t border-outline-variant flex items-center gap-3 hover:bg-surface-container-high transition-colors" href="/seleccion-empresa.html" title="Cambiar de empresa">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">JD</div>
+<div>
+<p class="font-title-md text-body-md font-bold">Juan Delgado</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Director HSEQ</p>
+</div>
+</a>
+</aside>
+<!-- Main -->
+<main class="lg:pl-72 pt-lg px-margin-mobile md:px-margin-desktop pb-xl max-w-[1600px] mx-auto">
+<!-- Header -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-lg">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Clientes</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 font-label-sm text-label-sm">Tenant_Organizations — vista de base de datos, 44 registros totales</p>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto">
+<div class="relative flex-1 md:w-80">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-12 pr-4 py-3 rounded-full bg-surface-container border-none focus:ring-2 focus:ring-primary font-body-md text-body-md text-on-surface" id="search-input" placeholder="Buscar por razón social o NIT..." type="text"/>
+</div>
+<button class="flex items-center gap-2 px-4 py-3 rounded-xl border border-outline text-on-surface-variant hover:bg-surface-container-high transition-all whitespace-nowrap">
+<span class="material-symbols-outlined">download</span>
+Exportar CSV
+</button>
+<button class="flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container transition-all whitespace-nowrap" id="btn-new-client">
+<span class="material-symbols-outlined">add_business</span>
+Nuevo Cliente
+</button>
+</div>
+</section>
+<!-- Filter Bar -->
+<section class="flex flex-wrap items-center gap-3 mb-lg p-md bg-surface-container-low rounded-xl border border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase flex items-center gap-2"><span class="material-symbols-outlined text-base">filter_list</span>Filtros:</span>
+<select class="px-4 py-2 rounded-lg bg-surface border border-outline-variant text-body-md font-body-md text-on-surface focus:ring-2 focus:ring-primary" id="filter-sector">
+<option value="">Sector (todos)</option>
+<option value="Construccion">Construcción</option>
+<option value="Vigilancia">Vigilancia</option>
+</select>
+<select class="px-4 py-2 rounded-lg bg-surface border border-outline-variant text-body-md font-body-md text-on-surface focus:ring-2 focus:ring-primary" id="filter-plan">
+<option value="">Plan SaaS (todos)</option>
+<option value="Starter">Starter</option>
+<option value="Business">Business</option>
+<option value="Enterprise">Enterprise</option>
+</select>
+<select class="px-4 py-2 rounded-lg bg-surface border border-outline-variant text-body-md font-body-md text-on-surface focus:ring-2 focus:ring-primary" id="filter-estado">
+<option value="">Estado (todos)</option>
+<option value="Activo">Activo</option>
+<option value="Trial">Trial</option>
+<option value="Suspendido">Suspendido</option>
+</select>
+<button class="ml-auto flex items-center gap-2 px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors font-label-md text-label-md" id="btn-clear-filters">
+<span class="material-symbols-outlined text-base">backspace</span>
+Limpiar filtros
+</button>
+</section>
+<!-- Table -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-sm" id="clients-table">
+<thead class="bg-surface-container-low border-b border-outline-variant sticky top-0 z-10">
+<tr class="font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-4">ID</th>
+<th class="px-4">NIT</th>
+<th class="px-4">Razón Social</th>
+<th class="px-4">Sector</th>
+<th class="px-4">Plan SaaS</th>
+<th class="px-4 text-right">Usuarios</th>
+<th class="px-4 text-right">Obras/Puestos</th>
+<th class="px-4 text-right">SGSST</th>
+<th class="px-4">Estado</th>
+<th class="px-4">Alta</th>
+<th class="px-4 text-right sticky right-0 bg-surface-container-low">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant" id="clients-tbody"></tbody>
+</table>
+</div>
+<div class="flex items-center justify-between px-4 py-3 border-t border-outline-variant font-label-md text-label-md text-on-surface-variant">
+<span id="results-count">Mostrando 5 de 44 clientes</span>
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-lg hover:bg-surface-container-high" disabled=""><span class="material-symbols-outlined text-lg">chevron_left</span></button>
+<span class="px-2">Página 1 de 9</span>
+<button class="p-2 rounded-lg hover:bg-surface-container-high"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
+</div>
+</div>
+</section>
+</main>
+
+<!-- Modal: Crear / Editar Cliente -->
+<div class="fixed inset-0 bg-on-surface/40 z-[60] hidden items-center justify-center p-4" id="modal-form">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-lg p-lg">
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-title-md text-title-md text-on-surface" id="modal-form-title">Nuevo Cliente</h3>
+<button class="p-2 rounded-lg hover:bg-surface-container-high" id="modal-form-close"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-4" id="form-client" onsubmit="event.preventDefault(); saveClient();">
+<input id="form-id" type="hidden"/>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Razón Social</label>
+<input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-razon-social" required="" type="text"/>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">NIT</label>
+<input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary font-label-md" id="form-nit" placeholder="900.123.456-1" required="" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Sector</label>
+<select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-sector" required="">
+<option value="Construccion">Construcción</option>
+<option value="Vigilancia">Vigilancia</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Plan SaaS</label>
+<select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-plan" required="">
+<option value="Starter">Starter</option>
+<option value="Business">Business</option>
+<option value="Enterprise">Enterprise</option>
+</select>
+</div>
+</div>
+<div class="space-y-1" id="form-estado-wrap" style="display:none;">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Estado</label>
+<select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-estado">
+<option value="Activo">Activo</option>
+<option value="Trial">Trial</option>
+<option value="Suspendido">Suspendido</option>
+</select>
+</div>
+<div class="flex justify-end gap-3 pt-2">
+<button class="px-5 py-2 rounded-xl border border-outline text-on-surface-variant hover:bg-surface-container-high" type="button" id="modal-form-cancel">Cancelar</button>
+<button class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container" type="submit">Guardar</button>
+</div>
+</form>
+</div>
+</div>
+
+<!-- Modal: Ver / Imprimir Cliente -->
+<div class="fixed inset-0 bg-on-surface/40 z-[60] hidden items-center justify-center p-4" id="modal-view">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-lg p-lg" id="printable-area">
+<div class="flex items-center justify-between mb-md print:hidden">
+<h3 class="font-title-md text-title-md text-on-surface">Ficha del Cliente</h3>
+<button class="p-2 rounded-lg hover:bg-surface-container-high" id="modal-view-close"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div id="view-content" class="space-y-3"></div>
+<div class="flex justify-end gap-3 pt-lg print:hidden">
+<button class="flex items-center gap-2 px-5 py-2 rounded-xl border border-outline text-on-surface-variant hover:bg-surface-container-high" id="btn-print">
+<span class="material-symbols-outlined">print</span>Imprimir
+</button>
+</div>
+</div>
+</div>
+
+<style media="print">
+  body * { visibility: hidden; }
+  #printable-area, #printable-area * { visibility: visible; }
+  #printable-area { position: fixed; top: 0; left: 0; width: 100%; border: none; }
+</style>
+
+<script>
+    let allTenants = [];
+
+    async function loadTenants() {
+      allTenants = await fetch('/api/tenants').then(r => r.json());
+      renderTable();
+    }
+
+    function sectorBadgeClass(sector) {
+      return sector === 'Construccion' ? 'bg-primary-container text-on-primary-container' : 'bg-secondary-fixed text-on-secondary-fixed-variant';
+    }
+    function estadoBadge(estado) {
+      const map = {
+        Activo: ['bg-tertiary-fixed text-on-tertiary-fixed-variant', 'check_circle'],
+        Trial: ['bg-secondary-fixed text-on-secondary-fixed-variant', 'schedule'],
+        Suspendido: ['bg-error-container text-on-error-container', 'block']
+      };
+      const [cls, icon] = map[estado] || ['bg-surface-container-high text-on-surface-variant', 'help'];
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${cls}"><span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">${icon}</span>${estado}</span>`;
+    }
+    function sgsstClass(v) {
+      if (v >= 80) return 'text-tertiary-container';
+      if (v >= 60) return 'text-secondary';
+      return 'text-error';
+    }
+
+    function renderTable() {
+      const sector = document.getElementById('filter-sector').value;
+      const plan = document.getElementById('filter-plan').value;
+      const estado = document.getElementById('filter-estado').value;
+      const search = document.getElementById('search-input').value.trim().toLowerCase();
+
+      const filtered = allTenants.filter(t =>
+        (!sector || t.sector === sector) &&
+        (!plan || t.plan_saas === plan) &&
+        (!estado || t.estado === estado) &&
+        (!search || (t.razon_social + ' ' + t.nit).toLowerCase().includes(search))
+      );
+
+      const tbody = document.getElementById('clients-tbody');
+      tbody.innerHTML = filtered.map(t => `
+        <tr>
+          <td class="px-4 font-label-sm text-label-sm text-on-surface-variant">${t.id}</td>
+          <td class="px-4 font-label-sm text-label-sm text-on-surface-variant">${t.nit}</td>
+          <td class="px-4 font-bold text-on-surface">${t.razon_social}</td>
+          <td class="px-4"><span class="px-2 py-0.5 rounded-full text-xs font-bold ${sectorBadgeClass(t.sector)}">${t.sector === 'Construccion' ? 'Construcción' : 'Vigilancia'}</span></td>
+          <td class="px-4"><span class="px-2 py-0.5 rounded-full text-xs font-bold bg-surface-container-high text-on-surface-variant">${t.plan_saas}</span></td>
+          <td class="px-4 text-right font-label-md text-label-md">${t.usuarios}</td>
+          <td class="px-4 text-right font-label-md text-label-md">${t.obras_puestos}</td>
+          <td class="px-4 text-right font-bold ${sgsstClass(t.cumplimiento_sgsst)}">${t.cumplimiento_sgsst}%</td>
+          <td class="px-4">${estadoBadge(t.estado)}</td>
+          <td class="px-4 font-label-sm text-label-sm text-on-surface-variant">${t.fecha_alta}</td>
+          <td class="px-4 text-right sticky right-0 bg-surface-container-lowest whitespace-nowrap">
+            <button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Ver" onclick="viewClient('${t.id}')"><span class="material-symbols-outlined text-lg">visibility</span></button>
+            <button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Editar" onclick="editClient('${t.id}')"><span class="material-symbols-outlined text-lg">edit</span></button>
+            <a class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant inline-block" title="Ver Proyectos" href="/proyectos.html?tenant_id=${t.id}"><span class="material-symbols-outlined text-lg">apartment</span></a>
+            <button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="${t.estado === 'Suspendido' ? 'Reactivar' : 'Suspender servicio'}" onclick="toggleEstado('${t.id}')"><span class="material-symbols-outlined text-lg">${t.estado === 'Suspendido' ? 'play_circle' : 'block'}</span></button>
+          </td>
+        </tr>
+      `).join('');
+      document.getElementById('results-count').textContent = `Mostrando ${filtered.length} de ${allTenants.length} clientes`;
+    }
+
+    ['filter-sector', 'filter-plan', 'filter-estado'].forEach(id => {
+      document.getElementById(id).addEventListener('change', renderTable);
+    });
+    document.getElementById('search-input').addEventListener('input', renderTable);
+    document.getElementById('btn-clear-filters').addEventListener('click', () => {
+      ['filter-sector', 'filter-plan', 'filter-estado'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('search-input').value = '';
+      renderTable();
+    });
+
+    // --- Modal Crear/Editar ---
+    function openFormModal() { document.getElementById('modal-form').classList.remove('hidden'); document.getElementById('modal-form').classList.add('flex'); }
+    function closeFormModal() { document.getElementById('modal-form').classList.add('hidden'); document.getElementById('modal-form').classList.remove('flex'); }
+
+    document.getElementById('btn-new-client').addEventListener('click', () => {
+      document.getElementById('modal-form-title').textContent = 'Nuevo Cliente';
+      document.getElementById('form-client').reset();
+      document.getElementById('form-id').value = '';
+      document.getElementById('form-estado-wrap').style.display = 'none';
+      openFormModal();
+    });
+    document.getElementById('modal-form-close').addEventListener('click', closeFormModal);
+    document.getElementById('modal-form-cancel').addEventListener('click', closeFormModal);
+
+    window.editClient = function (id) {
+      const t = allTenants.find(x => x.id === id);
+      document.getElementById('modal-form-title').textContent = `Editar Cliente — ${t.id}`;
+      document.getElementById('form-id').value = t.id;
+      document.getElementById('form-razon-social').value = t.razon_social;
+      document.getElementById('form-nit').value = t.nit;
+      document.getElementById('form-sector').value = t.sector;
+      document.getElementById('form-plan').value = t.plan_saas;
+      document.getElementById('form-estado').value = t.estado;
+      document.getElementById('form-estado-wrap').style.display = 'block';
+      openFormModal();
+    };
+
+    async function saveClient() {
+      const id = document.getElementById('form-id').value;
+      const payload = {
+        razon_social: document.getElementById('form-razon-social').value,
+        nit: document.getElementById('form-nit').value,
+        sector: document.getElementById('form-sector').value,
+        plan_saas: document.getElementById('form-plan').value
+      };
+      if (id) {
+        payload.estado = document.getElementById('form-estado').value;
+        await fetch(`/api/tenants/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      } else {
+        await fetch('/api/tenants', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      }
+      closeFormModal();
+      await loadTenants();
+    }
+
+    window.toggleEstado = async function (id) {
+      const t = allTenants.find(x => x.id === id);
+      const nuevoEstado = t.estado === 'Suspendido' ? 'Activo' : 'Suspendido';
+      await fetch(`/api/tenants/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado: nuevoEstado }) });
+      await loadTenants();
+    };
+
+    // --- Modal Ver / Imprimir ---
+    window.viewClient = function (id) {
+      const t = allTenants.find(x => x.id === id);
+      document.getElementById('view-content').innerHTML = `
+        <h2 class="font-headline-md text-headline-md text-on-surface">${t.razon_social}</h2>
+        <p class="font-label-md text-label-md text-on-surface-variant">${t.id} · NIT ${t.nit}</p>
+        <div class="grid grid-cols-2 gap-3 pt-md text-body-md font-body-md">
+          <div><span class="text-on-surface-variant">Sector:</span> ${t.sector === 'Construccion' ? 'Construcción' : 'Vigilancia'}</div>
+          <div><span class="text-on-surface-variant">Plan SaaS:</span> ${t.plan_saas}</div>
+          <div><span class="text-on-surface-variant">Usuarios:</span> ${t.usuarios}</div>
+          <div><span class="text-on-surface-variant">Obras/Puestos:</span> ${t.obras_puestos}</div>
+          <div><span class="text-on-surface-variant">Cumplimiento SGSST:</span> ${t.cumplimiento_sgsst}%</div>
+          <div><span class="text-on-surface-variant">Estado:</span> ${estadoBadge(t.estado)}</div>
+          <div class="col-span-2"><span class="text-on-surface-variant">Fecha de alta:</span> ${t.fecha_alta}</div>
+        </div>
+      `;
+      document.getElementById('modal-view').classList.remove('hidden');
+      document.getElementById('modal-view').classList.add('flex');
+    };
+    document.getElementById('modal-view-close').addEventListener('click', () => {
+      document.getElementById('modal-view').classList.add('hidden');
+      document.getElementById('modal-view').classList.remove('flex');
+    });
+    document.getElementById('btn-print').addEventListener('click', () => window.print());
+
+    loadTenants();
+  </script>
+</body></html>
