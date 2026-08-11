@@ -130,45 +130,52 @@ const SEED_ACCIDENTES = [
 async function initDb() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS roles (
-      id TEXT PRIMARY KEY, nombre TEXT NOT NULL, descripcion TEXT, permisos JSONB NOT NULL
+      id TEXT PRIMARY KEY, nombre TEXT NOT NULL, descripcion TEXT, permisos JSONB NOT NULL,
+      version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS tenants (
       id TEXT PRIMARY KEY, nit TEXT, razon_social TEXT, sector TEXT, plan_saas TEXT,
       usuarios INT DEFAULT 0, obras_puestos INT DEFAULT 0, cumplimiento_sgsst INT DEFAULT 0,
-      estado TEXT, fecha_alta TEXT
+      estado TEXT, fecha_alta TEXT, version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS users_app (
       id TEXT PRIMARY KEY, nombre TEXT, cedula TEXT, tenant_id TEXT, rol_id TEXT,
-      estado_arl TEXT, estado_alturas TEXT, estado_cuenta TEXT, ultimo_acceso TEXT
+      estado_arl TEXT, estado_alturas TEXT, estado_cuenta TEXT, ultimo_acceso TEXT,
+      version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS projects (
       id TEXT PRIMARY KEY, tenant_id TEXT, nombre TEXT, tipo TEXT, ubicacion TEXT,
-      fecha_inicio TEXT, estado TEXT, horas_hombre_acumuladas BIGINT DEFAULT 0
+      fecha_inicio TEXT, estado TEXT, horas_hombre_acumuladas BIGINT DEFAULT 0,
+      version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS empleados (
       id TEXT PRIMARY KEY, tenant_id TEXT, project_id TEXT, nombre TEXT, cedula TEXT, cargo TEXT,
       tipo_contrato TEXT, fecha_ingreso TEXT, eps TEXT,
-      estado_arl TEXT, estado_alturas TEXT, estado_cuenta TEXT
+      estado_arl TEXT, estado_alturas TEXT, estado_cuenta TEXT, version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS charlas (
       id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, fecha TEXT, tema TEXT, responsable TEXT,
-      asistentes INT DEFAULT 0, duracion_min INT DEFAULT 5
+      asistentes INT DEFAULT 0, duracion_min INT DEFAULT 5, version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS bitacora (
-      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, fecha TEXT, autor TEXT, tipo TEXT, descripcion TEXT
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, fecha TEXT, autor TEXT, tipo TEXT, descripcion TEXT,
+      version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS presupuesto (
-      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, rubro TEXT, presupuestado BIGINT DEFAULT 0, ejecutado BIGINT DEFAULT 0
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, rubro TEXT, presupuestado BIGINT DEFAULT 0, ejecutado BIGINT DEFAULT 0,
+      version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS plan_anual (
-      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, actividad TEXT, mes_objetivo TEXT, responsable TEXT, estado TEXT
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, actividad TEXT, mes_objetivo TEXT, responsable TEXT, estado TEXT,
+      version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS documentos (
       id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, nombre TEXT, tipo TEXT, fecha_subida TEXT, subido_por TEXT
     );
     CREATE TABLE IF NOT EXISTS legal_norms (
       id TEXT PRIMARY KEY, codigo_norma TEXT, nombre TEXT, version_year INT, sector_aplicable TEXT,
-      estado TEXT NOT NULL DEFAULT 'draft', fecha_publicacion TEXT, resumen_requisito TEXT
+      estado TEXT NOT NULL DEFAULT 'draft', fecha_publicacion TEXT, resumen_requisito TEXT,
+      version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS permisos_trabajo (
       id TEXT PRIMARY KEY, tenant_id TEXT, project_id TEXT, empleado_id TEXT, tipo TEXT,
@@ -180,9 +187,11 @@ async function initDb() {
     );
     -- Sprint 0 — auth real por usuario (ver migrations/001_sprint0_blindaje.sql para RLS/backfill
     -- sobre una base ya existente; este CREATE cubre instalaciones nuevas desde cero).
+    -- tenant_id es NULLABLE a propósito (Sprint 1, Frente B): un Super-Admin no pertenece
+    -- a un tenant real, y RLS depende de app.is_superadmin, no de este FK.
     CREATE TABLE IF NOT EXISTS auth_credentials (
       user_id TEXT PRIMARY KEY REFERENCES users_app(id),
-      tenant_id TEXT NOT NULL REFERENCES tenants(id),
+      tenant_id TEXT REFERENCES tenants(id),
       password_hash TEXT NOT NULL,
       must_change_password BOOLEAN NOT NULL DEFAULT true,
       last_login_at TIMESTAMPTZ,

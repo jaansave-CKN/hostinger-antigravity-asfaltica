@@ -263,7 +263,8 @@
     window.toggleCuenta = async function (id) {
       const e = allEmpleados.find(x => x.id === id);
       const nuevo = e.estado_cuenta === 'Activo' ? 'Suspendido' : 'Activo';
-      await fetch(`/api/empleados/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado_cuenta: nuevo }) });
+      const res = await fetch(`/api/empleados/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado_cuenta: nuevo, version: e.version }) });
+      if (res.status === 409) alert('Este empleado fue editado por otro usuario mientras tanto. Recarga e intenta de nuevo.');
       await loadData();
     };
 

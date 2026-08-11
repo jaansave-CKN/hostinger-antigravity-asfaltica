@@ -250,12 +250,15 @@ Guardar cambios
       const res = await fetch(`/api/roles/${role.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ permisos })
+        body: JSON.stringify({ permisos, version: role.version })
       });
       if (res.ok) {
         const updated = await res.json();
         role.permisos = updated.permisos;
+        role.version = updated.version;
         showToast(`Permisos de "${role.nombre}" actualizados`);
+      } else if (res.status === 409) {
+        showToast('Otro usuario cambió este rol mientras tanto — recarga antes de guardar');
       } else {
         showToast('Error al guardar');
       }

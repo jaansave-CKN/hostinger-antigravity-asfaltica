@@ -464,7 +464,9 @@ Limpiar filtros
       };
       if (id) {
         payload.estado = document.getElementById('form-estado').value;
-        await fetch(`/api/tenants/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        payload.version = allTenants.find(x => x.id === id)?.version;
+        const res = await fetch(`/api/tenants/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (res.status === 409) { alert('Este cliente fue editado por otro usuario mientras tanto. Recarga e intenta de nuevo.'); await loadTenants(); return; }
       } else {
         await fetch('/api/tenants', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       }
@@ -475,7 +477,8 @@ Limpiar filtros
     window.toggleEstado = async function (id) {
       const t = allTenants.find(x => x.id === id);
       const nuevoEstado = t.estado === 'Suspendido' ? 'Activo' : 'Suspendido';
-      await fetch(`/api/tenants/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado: nuevoEstado }) });
+      const res = await fetch(`/api/tenants/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado: nuevoEstado, version: t.version }) });
+      if (res.status === 409) alert('Este cliente fue editado por otro usuario mientras tanto. Recarga e intenta de nuevo.');
       await loadTenants();
     };
 

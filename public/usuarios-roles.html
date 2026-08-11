@@ -447,7 +447,9 @@ Limpiar filtros
     document.getElementById('modal-role-cancel').addEventListener('click', closeRoleModal);
     document.getElementById('btn-save-role').addEventListener('click', async () => {
       const nuevoRolId = document.getElementById('select-role').value;
-      await fetch(`/api/users/${editingUserId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ rol_id: nuevoRolId }) });
+      const user = allUsers.find(u => u.id === editingUserId);
+      const res = await fetch(`/api/users/${editingUserId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ rol_id: nuevoRolId, version: user.version }) });
+      if (res.status === 409) alert('Este usuario fue editado por otro usuario mientras tanto. Recarga e intenta de nuevo.');
       closeRoleModal();
       await loadData();
     });
@@ -455,7 +457,8 @@ Limpiar filtros
     window.toggleCuenta = async function (userId) {
       const user = allUsers.find(u => u.id === userId);
       const nuevoEstado = user.estado_cuenta === 'Activo' ? 'Suspendido' : 'Activo';
-      await fetch(`/api/users/${userId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado_cuenta: nuevoEstado }) });
+      const res = await fetch(`/api/users/${userId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado_cuenta: nuevoEstado, version: user.version }) });
+      if (res.status === 409) alert('Este usuario fue editado por otro usuario mientras tanto. Recarga e intenta de nuevo.');
       await loadData();
     };
 

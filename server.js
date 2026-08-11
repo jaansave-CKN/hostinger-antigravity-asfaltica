@@ -50,6 +50,29 @@ function asyncRoute(fn) {
   });
 }
 
+// Sprint 1 — Frente A: locking optimista, compartido por las 9 rutas PUT de edición
+// genérica (matriz-legal/:id/avanzar es una transición de estado, no un edit — resuelve
+// su propia concurrencia inline, ver esa ruta). `tabla` es siempre un literal fijo del
+// código, nunca un valor del cliente — seguro interpolarlo en la sentencia.
+async function actualizarConVersion(req, res, { tabla, campos, valores, entidad }) {
+  const version = Number(req.body.version);
+  if (!Number.isInteger(version)) {
+    return res.status(400).json({ error: `Falta "version" (entero) en el cuerpo — recarga ${entidad} y vuelve a intentar` });
+  }
+  const asignaciones = campos.map((c, i) => `${c}=$${i + 1}`).join(', ');
+  const { rows } = await req.db.query(
+    `UPDATE ${tabla} SET ${asignaciones}, version = version + 1 WHERE id=$${campos.length + 1} AND version=$${campos.length + 2} RETURNING *`,
+    [...valores, req.params.id, version]
+  );
+  if (rows.length) return res.json(rows[0]);
+  const existe = await req.db.query(`SELECT 1 FROM ${tabla} WHERE id=$1`, [req.params.id]);
+  return res.status(existe.rows.length ? 409 : 404).json({
+    error: existe.rows.length
+      ? `${entidad} fue editado por otro usuario mientras tanto — recarga antes de guardar`
+      : `${entidad} no encontrado`,
+  });
+}
+
 app.post('/api/login', asyncRoute(async (req, res) => {
   const { cedula, password } = req.body || {};
   if (!cedula || !password) return res.status(400).json({ error: 'cedula y password son obligatorios' });
@@ -160,9 +183,7 @@ app.get('/api/roles', asyncRoute(async (req, res) => {
 app.put('/api/roles/:id', requireSuperadmin, asyncRoute(async (req, res) => {
   const { permisos } = req.body;
   if (!permisos) return res.status(400).json({ error: 'Falta el objeto permisos' });
-  const { rows } = await req.db.query('UPDATE roles SET permisos = $1 WHERE id = $2 RETURNING *', [permisos, req.params.id]);
-  if (!rows.length) return res.status(404).json({ error: 'Rol no encontrado' });
-  res.json(rows[0]);
+  await actualizarConVersion(req, res, { tabla: 'roles', campos: ['permisos'], valores: [permisos], entidad: 'El rol' });
 }));
 
 // --- Clientes (Tenant_Organizations) — gestión de plataforma, solo Super-Admin ---
@@ -195,11 +216,12 @@ app.put('/api/tenants/:id', requireSuperadmin, asyncRoute(async (req, res) => {
   const current = await req.db.query('SELECT * FROM tenants WHERE id = $1', [req.params.id]);
   if (!current.rows.length) return res.status(404).json({ error: 'Cliente no encontrado' });
   const merged = { ...current.rows[0], ...req.body, id: req.params.id };
-  const { rows } = await req.db.query(
-    `UPDATE tenants SET nit=$1, razon_social=$2, sector=$3, plan_saas=$4, usuarios=$5, obras_puestos=$6, cumplimiento_sgsst=$7, estado=$8, fecha_alta=$9 WHERE id=$10 RETURNING *`,
-    [merged.nit, merged.razon_social, merged.sector, merged.plan_saas, merged.usuarios, merged.obras_puestos, merged.cumplimiento_sgsst, merged.estado, merged.fecha_alta, req.params.id]
-  );
-  res.json(rows[0]);
+  await actualizarConVersion(req, res, {
+    tabla: 'tenants',
+    campos: ['nit', 'razon_social', 'sector', 'plan_saas', 'usuarios', 'obras_puestos', 'cumplimiento_sgsst', 'estado', 'fecha_alta'],
+    valores: [merged.nit, merged.razon_social, merged.sector, merged.plan_saas, merged.usuarios, merged.obras_puestos, merged.cumplimiento_sgsst, merged.estado, merged.fecha_alta],
+    entidad: 'El cliente',
+  });
 }));
 
 app.delete('/api/tenants/:id', requireSuperadmin, asyncRoute(async (req, res) => {
@@ -246,11 +268,12 @@ app.put('/api/users/:id', asyncRoute(async (req, res) => {
   const current = await req.db.query('SELECT * FROM users_app WHERE id = $1', [req.params.id]);
   if (!current.rows.length) return res.status(404).json({ error: 'Usuario no encontrado' });
   const merged = { ...current.rows[0], ...req.body, id: req.params.id, tenant_id: current.rows[0].tenant_id };
-  const { rows } = await req.db.query(
-    `UPDATE users_app SET nombre=$1, cedula=$2, tenant_id=$3, rol_id=$4, estado_arl=$5, estado_alturas=$6, estado_cuenta=$7, ultimo_acceso=$8 WHERE id=$9 RETURNING *`,
-    [merged.nombre, merged.cedula, merged.tenant_id, merged.rol_id, merged.estado_arl, merged.estado_alturas, merged.estado_cuenta, merged.ultimo_acceso, req.params.id]
-  );
-  res.json(rows[0]);
+  await actualizarConVersion(req, res, {
+    tabla: 'users_app',
+    campos: ['nombre', 'cedula', 'tenant_id', 'rol_id', 'estado_arl', 'estado_alturas', 'estado_cuenta', 'ultimo_acceso'],
+    valores: [merged.nombre, merged.cedula, merged.tenant_id, merged.rol_id, merged.estado_arl, merged.estado_alturas, merged.estado_cuenta, merged.ultimo_acceso],
+    entidad: 'El usuario',
+  });
 }));
 
 app.delete('/api/users/:id', asyncRoute(async (req, res) => {
@@ -293,11 +316,12 @@ app.put('/api/projects/:id', asyncRoute(async (req, res) => {
   const current = await req.db.query('SELECT * FROM projects WHERE id = $1', [req.params.id]);
   if (!current.rows.length) return res.status(404).json({ error: 'Proyecto no encontrado' });
   const merged = { ...current.rows[0], ...req.body, id: req.params.id, tenant_id: current.rows[0].tenant_id };
-  const { rows } = await req.db.query(
-    `UPDATE projects SET tenant_id=$1, nombre=$2, tipo=$3, ubicacion=$4, fecha_inicio=$5, estado=$6, horas_hombre_acumuladas=$7 WHERE id=$8 RETURNING *`,
-    [merged.tenant_id, merged.nombre, merged.tipo, merged.ubicacion, merged.fecha_inicio, merged.estado, merged.horas_hombre_acumuladas, req.params.id]
-  );
-  res.json(rows[0]);
+  await actualizarConVersion(req, res, {
+    tabla: 'projects',
+    campos: ['tenant_id', 'nombre', 'tipo', 'ubicacion', 'fecha_inicio', 'estado', 'horas_hombre_acumuladas'],
+    valores: [merged.tenant_id, merged.nombre, merged.tipo, merged.ubicacion, merged.fecha_inicio, merged.estado, merged.horas_hombre_acumuladas],
+    entidad: 'El proyecto',
+  });
 }));
 
 app.delete('/api/projects/:id', asyncRoute(async (req, res) => {
@@ -340,11 +364,12 @@ app.put('/api/empleados/:id', asyncRoute(async (req, res) => {
   const current = await req.db.query('SELECT * FROM empleados WHERE id = $1', [req.params.id]);
   if (!current.rows.length) return res.status(404).json({ error: 'Empleado no encontrado' });
   const merged = { ...current.rows[0], ...req.body, id: req.params.id, tenant_id: current.rows[0].tenant_id };
-  const { rows } = await req.db.query(
-    `UPDATE empleados SET tenant_id=$1, project_id=$2, nombre=$3, cedula=$4, cargo=$5, tipo_contrato=$6, fecha_ingreso=$7, eps=$8, estado_arl=$9, estado_alturas=$10, estado_cuenta=$11 WHERE id=$12 RETURNING *`,
-    [merged.tenant_id, merged.project_id, merged.nombre, merged.cedula, merged.cargo, merged.tipo_contrato, merged.fecha_ingreso, merged.eps, merged.estado_arl, merged.estado_alturas, merged.estado_cuenta, req.params.id]
-  );
-  res.json(rows[0]);
+  await actualizarConVersion(req, res, {
+    tabla: 'empleados',
+    campos: ['tenant_id', 'project_id', 'nombre', 'cedula', 'cargo', 'tipo_contrato', 'fecha_ingreso', 'eps', 'estado_arl', 'estado_alturas', 'estado_cuenta'],
+    valores: [merged.tenant_id, merged.project_id, merged.nombre, merged.cedula, merged.cargo, merged.tipo_contrato, merged.fecha_ingreso, merged.eps, merged.estado_arl, merged.estado_alturas, merged.estado_cuenta],
+    entidad: 'El empleado',
+  });
 }));
 
 app.delete('/api/empleados/:id', asyncRoute(async (req, res) => {
@@ -384,11 +409,12 @@ app.put('/api/charlas/:id', asyncRoute(async (req, res) => {
   const current = await req.db.query('SELECT * FROM charlas WHERE id = $1', [req.params.id]);
   if (!current.rows.length) return res.status(404).json({ error: 'Charla no encontrada' });
   const merged = { ...current.rows[0], ...req.body, id: req.params.id, tenant_id: current.rows[0].tenant_id };
-  const { rows } = await req.db.query(
-    `UPDATE charlas SET project_id=$1, fecha=$2, tema=$3, responsable=$4, asistentes=$5, duracion_min=$6 WHERE id=$7 RETURNING *`,
-    [merged.project_id, merged.fecha, merged.tema, merged.responsable, merged.asistentes, merged.duracion_min, req.params.id]
-  );
-  res.json(rows[0]);
+  await actualizarConVersion(req, res, {
+    tabla: 'charlas',
+    campos: ['project_id', 'fecha', 'tema', 'responsable', 'asistentes', 'duracion_min'],
+    valores: [merged.project_id, merged.fecha, merged.tema, merged.responsable, merged.asistentes, merged.duracion_min],
+    entidad: 'La charla',
+  });
 }));
 
 app.delete('/api/charlas/:id', asyncRoute(async (req, res) => {
@@ -428,11 +454,12 @@ app.put('/api/bitacora/:id', asyncRoute(async (req, res) => {
   const current = await req.db.query('SELECT * FROM bitacora WHERE id = $1', [req.params.id]);
   if (!current.rows.length) return res.status(404).json({ error: 'Entrada no encontrada' });
   const merged = { ...current.rows[0], ...req.body, id: req.params.id, tenant_id: current.rows[0].tenant_id };
-  const { rows } = await req.db.query(
-    `UPDATE bitacora SET project_id=$1, fecha=$2, autor=$3, tipo=$4, descripcion=$5 WHERE id=$6 RETURNING *`,
-    [merged.project_id, merged.fecha, merged.autor, merged.tipo, merged.descripcion, req.params.id]
-  );
-  res.json(rows[0]);
+  await actualizarConVersion(req, res, {
+    tabla: 'bitacora',
+    campos: ['project_id', 'fecha', 'autor', 'tipo', 'descripcion'],
+    valores: [merged.project_id, merged.fecha, merged.autor, merged.tipo, merged.descripcion],
+    entidad: 'La entrada de bitácora',
+  });
 }));
 
 app.delete('/api/bitacora/:id', asyncRoute(async (req, res) => {
@@ -466,11 +493,12 @@ app.put('/api/presupuesto/:id', asyncRoute(async (req, res) => {
   const current = await req.db.query('SELECT * FROM presupuesto WHERE id = $1', [req.params.id]);
   if (!current.rows.length) return res.status(404).json({ error: 'Línea no encontrada' });
   const merged = { ...current.rows[0], ...req.body, id: req.params.id, tenant_id: current.rows[0].tenant_id };
-  const { rows } = await req.db.query(
-    `UPDATE presupuesto SET project_id=$1, rubro=$2, presupuestado=$3, ejecutado=$4 WHERE id=$5 RETURNING *`,
-    [merged.project_id, merged.rubro, merged.presupuestado, merged.ejecutado, req.params.id]
-  );
-  res.json(rows[0]);
+  await actualizarConVersion(req, res, {
+    tabla: 'presupuesto',
+    campos: ['project_id', 'rubro', 'presupuestado', 'ejecutado'],
+    valores: [merged.project_id, merged.rubro, merged.presupuestado, merged.ejecutado],
+    entidad: 'La línea de presupuesto',
+  });
 }));
 
 app.delete('/api/presupuesto/:id', asyncRoute(async (req, res) => {
@@ -504,11 +532,12 @@ app.put('/api/plan-anual/:id', asyncRoute(async (req, res) => {
   const current = await req.db.query('SELECT * FROM plan_anual WHERE id = $1', [req.params.id]);
   if (!current.rows.length) return res.status(404).json({ error: 'Actividad no encontrada' });
   const merged = { ...current.rows[0], ...req.body, id: req.params.id, tenant_id: current.rows[0].tenant_id };
-  const { rows } = await req.db.query(
-    `UPDATE plan_anual SET project_id=$1, actividad=$2, mes_objetivo=$3, responsable=$4, estado=$5 WHERE id=$6 RETURNING *`,
-    [merged.project_id, merged.actividad, merged.mes_objetivo, merged.responsable, merged.estado, req.params.id]
-  );
-  res.json(rows[0]);
+  await actualizarConVersion(req, res, {
+    tabla: 'plan_anual',
+    campos: ['project_id', 'actividad', 'mes_objetivo', 'responsable', 'estado'],
+    valores: [merged.project_id, merged.actividad, merged.mes_objetivo, merged.responsable, merged.estado],
+    entidad: 'La actividad del plan anual',
+  });
 }));
 
 app.delete('/api/plan-anual/:id', asyncRoute(async (req, res) => {
@@ -581,7 +610,15 @@ app.put('/api/matriz-legal/:id/avanzar', requireSuperadmin, asyncRoute(async (re
   }
   const nuevoEstado = LEGAL_ESTADOS[idx + 1];
   const fecha_publicacion = nuevoEstado === 'publicado_a_tenants' ? new Date().toISOString().slice(0, 10) : current.rows[0].fecha_publicacion;
-  const { rows } = await req.db.query('UPDATE legal_norms SET estado=$1, fecha_publicacion=$2 WHERE id=$3 RETURNING *', [nuevoEstado, fecha_publicacion, req.params.id]);
+  // Concurrencia inline: usa el version que esta misma request acaba de leer arriba,
+  // no uno enviado por el cliente — la ventana de riesgo es SELECT→UPDATE de esta
+  // request, no el ciclo GET-luego-PUT de un formulario (por eso no pasa por
+  // actualizarConVersion, que asume ese segundo patrón).
+  const { rows } = await req.db.query(
+    'UPDATE legal_norms SET estado=$1, fecha_publicacion=$2, version=version+1 WHERE id=$3 AND version=$4 RETURNING *',
+    [nuevoEstado, fecha_publicacion, req.params.id, current.rows[0].version]
+  );
+  if (!rows.length) return res.status(409).json({ error: 'La norma cambió de estado justo antes de esta solicitud — vuelve a intentar' });
   res.json(rows[0]);
 }));
 
