@@ -88,6 +88,63 @@ async function actualizarConVersion(req, res, { tabla, campos, valores, entidad 
   return null;
 }
 
+// Sprint 6 — WORM técnico: hash-chain SHA-256. Esto prueba matemáticamente que un
+// registro no fue alterado después de creado — NO es certificación ONAC (eso exige
+// un prestador acreditado bajo Ley 527/1999, sin contratar todavía). sello_tiempo_estado
+// queda en 'sin_proveedor' hasta entonces, nunca se marca como si lo tuviera.
+function calcularHash(camposContenido, hashAnterior) {
+  const base = JSON.stringify(camposContenido) + '|' + (hashAnterior || '');
+  return crypto.createHash('sha256').update(base).digest('hex');
+}
+
+const WORM_TABLAS = {
+  'ai-audit-findings': {
+    tabla: 'ai_audit_findings',
+    ordenPor: 'created_at',
+    extraer: r => ({ id: r.id, tenant_id: r.tenant_id, fuente: r.fuente, fuente_id: r.fuente_id, hallazgo: r.hallazgo, norma_citada: r.norma_citada, severidad: r.severidad, confianza_modelo: r.confianza_modelo }),
+  },
+  'legal-norms': {
+    tabla: 'legal_norms',
+    ordenPor: 'fecha_publicacion',
+    extraer: r => ({ id: r.id, codigo_norma: r.codigo_norma, nombre: r.nombre, version_year: r.version_year, sector_aplicable: r.sector_aplicable, resumen_requisito: r.resumen_requisito }),
+  },
+  'accidentes': {
+    tabla: 'accidentes',
+    ordenPor: 'created_at',
+    extraer: r => ({ id: r.id, tenant_id: r.tenant_id, project_id: r.project_id, fecha: r.fecha, tipo: r.tipo, dias_perdidos: r.dias_perdidos }),
+  },
+};
+
+// tenantId es null para tablas globales no particionadas por tenant (ej. legal_norms,
+// que es el catálogo único del Super-Admin, sin columna tenant_id) — la cadena de
+// hashes de esas tablas es una sola para toda la plataforma, no una por tenant.
+async function obtenerUltimoHash(db, tabla, tenantId, ordenPor) {
+  const where = tenantId ? 'WHERE tenant_id = $1 AND contenido_hash IS NOT NULL' : 'WHERE contenido_hash IS NOT NULL';
+  const params = tenantId ? [tenantId] : [];
+  const { rows } = await db.query(
+    `SELECT contenido_hash FROM ${tabla} ${where} ORDER BY ${ordenPor} DESC NULLS LAST LIMIT 1`,
+    params
+  );
+  return rows[0]?.contenido_hash || null;
+}
+
+app.get('/api/integridad/:tabla/:id', asyncRoute(async (req, res) => {
+  const def = WORM_TABLAS[req.params.tabla];
+  if (!def) return res.status(400).json({ error: 'Tabla no reconocida para verificación de integridad' });
+  const { rows } = await req.db.query(`SELECT * FROM ${def.tabla} WHERE id = $1`, [req.params.id]);
+  if (!rows.length) return res.status(404).json({ error: 'Registro no encontrado' });
+  const row = rows[0];
+  if (!row.contenido_hash) {
+    return res.json({ integro: null, mensaje: 'Este registro todavía no tiene hash (no aplica WORM en su estado actual).' });
+  }
+  const hashRecalculado = calcularHash(def.extraer(row), row.hash_anterior);
+  res.json({
+    integro: hashRecalculado === row.contenido_hash,
+    contenido_hash: row.contenido_hash,
+    sello_tiempo_estado: row.sello_tiempo_estado,
+  });
+}));
+
 app.post('/api/login', asyncRoute(async (req, res) => {
   const { cedula, password } = req.body || {};
   if (!cedula || !password) return res.status(400).json({ error: 'cedula y password son obligatorios' });
@@ -651,13 +708,24 @@ app.put('/api/matriz-legal/:id/avanzar', requireSuperadmin, asyncRoute(async (re
   }
   const nuevoEstado = LEGAL_ESTADOS[idx + 1];
   const fecha_publicacion = nuevoEstado === 'publicado_a_tenants' ? new Date().toISOString().slice(0, 10) : current.rows[0].fecha_publicacion;
+
+  // Sprint 6 — WORM: al llegar a publicado_a_tenants, la norma queda inmutable (el
+  // trigger de BD lo hace cumplir); el hash se calcula justo en este momento, es la
+  // última oportunidad de "fotografiar" el contenido antes de que se congele.
+  let contenidoHash = current.rows[0].contenido_hash;
+  let hashAnterior = current.rows[0].hash_anterior;
+  if (nuevoEstado === 'publicado_a_tenants') {
+    hashAnterior = await obtenerUltimoHash(req.db, 'legal_norms', null, 'fecha_publicacion');
+    contenidoHash = calcularHash(WORM_TABLAS['legal-norms'].extraer(current.rows[0]), hashAnterior);
+  }
+
   // Concurrencia inline: usa el version que esta misma request acaba de leer arriba,
   // no uno enviado por el cliente — la ventana de riesgo es SELECT→UPDATE de esta
   // request, no el ciclo GET-luego-PUT de un formulario (por eso no pasa por
   // actualizarConVersion, que asume ese segundo patrón).
   const { rows } = await req.db.query(
-    'UPDATE legal_norms SET estado=$1, fecha_publicacion=$2, version=version+1 WHERE id=$3 AND version=$4 RETURNING *',
-    [nuevoEstado, fecha_publicacion, req.params.id, current.rows[0].version]
+    'UPDATE legal_norms SET estado=$1, fecha_publicacion=$2, contenido_hash=$3, hash_anterior=$4, version=version+1 WHERE id=$5 AND version=$6 RETURNING *',
+    [nuevoEstado, fecha_publicacion, contenidoHash, hashAnterior, req.params.id, current.rows[0].version]
   );
   if (!rows.length) return res.status(409).json({ error: 'La norma cambió de estado justo antes de esta solicitud — vuelve a intentar' });
   res.json(rows[0]);
@@ -829,6 +897,7 @@ app.post('/api/auditoria-ia/ejecutar', requireSuperadmin, asyncRoute(async (req,
 
   let totalEvaluados = 0;
   let totalHallazgos = 0;
+  let ultimoHashFindings = await obtenerUltimoHash(req.db, 'ai_audit_findings', project.tenant_id, 'created_at');
 
   for (const f of FUENTES) {
     const { rows: yaAuditados } = await req.db.query('SELECT fuente_id FROM ai_audit_findings WHERE fuente = $1', [f.fuente]);
@@ -871,11 +940,16 @@ app.post('/api/auditoria-ia/ejecutar', requireSuperadmin, asyncRoute(async (req,
     for (const h of hallazgos) {
       if (!h.fuente_id || !h.hallazgo || !h.severidad) continue;
       const id = await nextId('ai_audit_findings', 'AIF', 4);
-      await req.db.query(
-        `INSERT INTO ai_audit_findings (id, tenant_id, project_id, fuente, fuente_id, hallazgo, norma_citada, severidad, confianza_modelo)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-        [id, project.tenant_id, project_id, f.fuente, h.fuente_id, h.hallazgo, h.norma_citada || null, h.severidad, h.confianza ?? null]
+      const contenidoHash = calcularHash(
+        { id, tenant_id: project.tenant_id, fuente: f.fuente, fuente_id: h.fuente_id, hallazgo: h.hallazgo, norma_citada: h.norma_citada || null, severidad: h.severidad, confianza_modelo: h.confianza ?? null },
+        ultimoHashFindings
       );
+      await req.db.query(
+        `INSERT INTO ai_audit_findings (id, tenant_id, project_id, fuente, fuente_id, hallazgo, norma_citada, severidad, confianza_modelo, contenido_hash, hash_anterior)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+        [id, project.tenant_id, project_id, f.fuente, h.fuente_id, h.hallazgo, h.norma_citada || null, h.severidad, h.confianza ?? null, contenidoHash, ultimoHashFindings]
+      );
+      ultimoHashFindings = contenidoHash;
       totalHallazgos++;
     }
   }
@@ -907,6 +981,38 @@ app.put('/api/ai-audit-findings/:id', asyncRoute(async (req, res) => {
     });
   }
   res.json(rows[0]);
+}));
+
+// --- Accidentes (WORM desde el día uno — nunca existió ruta de API antes de Sprint 6) ---
+const TIPOS_ACCIDENTE_VALIDOS = new Set(['Leve', 'Incapacitante', 'Fatal']);
+
+app.get('/api/accidentes', asyncRoute(async (req, res) => {
+  const { project_id } = req.query;
+  let { rows } = await req.db.query('SELECT * FROM accidentes ORDER BY created_at DESC');
+  if (project_id) rows = rows.filter(a => a.project_id === project_id);
+  res.json(rows);
+}));
+
+app.post('/api/accidentes', asyncRoute(async (req, res) => {
+  const { project_id, fecha, tipo, dias_perdidos } = req.body;
+  if (!project_id || !fecha || !TIPOS_ACCIDENTE_VALIDOS.has(tipo)) {
+    return res.status(400).json({ error: `project_id, fecha y tipo (uno de: ${[...TIPOS_ACCIDENTE_VALIDOS].join(', ')}) son obligatorios` });
+  }
+  const tenant_id = req.session.rol_id === 'super-admin' && req.body.tenant_id ? req.body.tenant_id : req.session.tenant_id;
+  const id = await nextId('accidentes', 'ACC', 3);
+  const diasPerdidos = Number(dias_perdidos) || 0;
+  const hashAnterior = await obtenerUltimoHash(req.db, 'accidentes', tenant_id, 'created_at');
+  const contenidoHash = calcularHash(
+    { id, tenant_id, project_id, fecha, tipo, dias_perdidos: diasPerdidos },
+    hashAnterior
+  );
+  const { rows } = await req.db.query(
+    `INSERT INTO accidentes (id, project_id, tenant_id, fecha, tipo, dias_perdidos, contenido_hash, hash_anterior)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
+    [id, project_id, tenant_id, fecha, tipo, diasPerdidos, contenidoHash, hashAnterior]
+  );
+  res.status(201).json(rows[0]);
+  // Sin PUT ni DELETE a propósito — es WORM, y el trigger de BD los bloquearía de todas formas.
 }));
 
 // --- Reportes Ejecutivos (Motor de Indicadores BI) ---

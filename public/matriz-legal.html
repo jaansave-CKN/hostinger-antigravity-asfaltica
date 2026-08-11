@@ -337,8 +337,9 @@ Nueva Norma
           <td class="px-4">${estadoBadge(n.estado)}</td>
           <td class="px-4 font-label-sm text-label-sm text-on-surface-variant">${n.fecha_publicacion || '—'}</td>
           <td class="px-4 text-right sticky right-0 bg-surface-container-lowest whitespace-nowrap">
+            ${n.estado === 'publicado_a_tenants' ? `<button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Verificar integridad (WORM)" onclick="verificarIntegridad('${n.id}')"><span class="material-symbols-outlined text-lg">verified_user</span></button>` : ''}
             ${SIGUIENTE_LABEL[n.estado] ? `<button class="px-3 py-1.5 rounded-lg bg-primary-container text-on-primary-container text-xs font-bold hover:opacity-90" onclick="avanzarNorma('${n.id}')">${SIGUIENTE_LABEL[n.estado]}</button>` : ''}
-            <button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Eliminar" onclick="deleteNorma('${n.id}')"><span class="material-symbols-outlined text-lg">delete</span></button>
+            ${n.estado === 'publicado_a_tenants' ? `<span class="font-label-sm text-label-sm text-on-surface-variant" title="Norma publicada — inmutable, no se puede eliminar">🔒</span>` : `<button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Eliminar" onclick="deleteNorma('${n.id}')"><span class="material-symbols-outlined text-lg">delete</span></button>`}
           </td>
         </tr>
       `).join('');
@@ -365,6 +366,14 @@ Nueva Norma
       closeFormModal();
       await loadNorms();
     }
+
+    window.verificarIntegridad = async function (id) {
+      const data = await fetch(`/api/integridad/legal-norms/${id}`).then(r => r.json());
+      if (data.integro === null) { alert(data.mensaje); return; }
+      alert(data.integro
+        ? `✅ Íntegro — el hash coincide, esta norma no fue alterada desde su publicación.\nSello de tiempo: ${data.sello_tiempo_estado} (WORM técnico, no es certificación ONAC).`
+        : `⚠️ ALERTA — el hash NO coincide con el contenido actual. Esta norma pudo haber sido alterada fuera de la aplicación.`);
+    };
 
     window.avanzarNorma = async function (id) {
       await fetch(`/api/matriz-legal/${id}/avanzar`, { method: 'PUT' });

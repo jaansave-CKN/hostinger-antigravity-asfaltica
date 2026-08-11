@@ -175,15 +175,20 @@ async function initDb() {
     CREATE TABLE IF NOT EXISTS legal_norms (
       id TEXT PRIMARY KEY, codigo_norma TEXT, nombre TEXT, version_year INT, sector_aplicable TEXT,
       estado TEXT NOT NULL DEFAULT 'draft', fecha_publicacion TEXT, resumen_requisito TEXT,
-      version INT NOT NULL DEFAULT 1
+      version INT NOT NULL DEFAULT 1, contenido_hash TEXT, hash_anterior TEXT,
+      sello_tiempo_estado TEXT NOT NULL DEFAULT 'sin_proveedor'
     );
     CREATE TABLE IF NOT EXISTS permisos_trabajo (
       id TEXT PRIMARY KEY, tenant_id TEXT, project_id TEXT, empleado_id TEXT, tipo TEXT,
       validez_inicio TEXT, validez_fin TEXT, estado TEXT NOT NULL, motivo_rechazo TEXT,
       creado_por TEXT, fecha_creacion TEXT
     );
+    -- Sprint 6 — WORM desde el día uno: nunca existió una ruta de API para esta tabla
+    -- antes, así que nace ya inmutable (ver migrations/008_sprint6_worm.sql para el trigger).
     CREATE TABLE IF NOT EXISTS accidentes (
-      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, fecha TEXT, tipo TEXT, dias_perdidos INT DEFAULT 0
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, fecha TEXT, tipo TEXT, dias_perdidos INT DEFAULT 0,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(), contenido_hash TEXT, hash_anterior TEXT,
+      sello_tiempo_estado TEXT NOT NULL DEFAULT 'sin_proveedor'
     );
     -- Sprint 0 — auth real por usuario (ver migrations/001_sprint0_blindaje.sql para RLS/backfill
     -- sobre una base ya existente; este CREATE cubre instalaciones nuevas desde cero).
@@ -219,7 +224,8 @@ async function initDb() {
       severidad TEXT NOT NULL CHECK (severidad IN ('Baja','Media','Alta','Critica')),
       confianza_modelo NUMERIC(3,2) CHECK (confianza_modelo BETWEEN 0 AND 1),
       estado TEXT NOT NULL DEFAULT 'Nuevo' CHECK (estado IN ('Nuevo','Revisado','Descartado','Escalado')),
-      revisado_por TEXT, version INT NOT NULL DEFAULT 1, created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      revisado_por TEXT, version INT NOT NULL DEFAULT 1, created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      contenido_hash TEXT, hash_anterior TEXT, sello_tiempo_estado TEXT NOT NULL DEFAULT 'sin_proveedor'
     );
     -- Sprint 5 — patrón adaptador ARL. Solo 'manual' implementado (formaliza el flujo
     -- humano existente) — el CHECK se amplía cuando exista un proveedor real contratado.

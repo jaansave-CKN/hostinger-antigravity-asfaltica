@@ -238,6 +238,7 @@
           <td class="px-4 font-label-sm text-label-sm">${f.confianza_modelo != null ? Math.round(f.confianza_modelo * 100) + '%' : '—'}</td>
           <td class="px-4"><span class="inline-flex px-2 py-0.5 rounded-full text-xs font-bold ${ESTADO_CLS[f.estado] || ''}">${f.estado}</span></td>
           <td class="px-4 text-right sticky right-0 bg-surface-container-lowest whitespace-nowrap">
+            <button class="px-2 py-1 rounded-lg border border-outline-variant text-on-surface-variant text-xs font-bold hover:bg-surface-container-high" title="Verificar integridad (WORM)" onclick="verificarIntegridad('ai-audit-findings', '${f.id}')"><span class="material-symbols-outlined text-sm align-middle">verified_user</span></button>
             ${f.estado === 'Nuevo' ? `
               <button class="px-2 py-1 rounded-lg bg-primary-container text-on-primary-container text-xs font-bold hover:opacity-90" onclick="cambiarEstado('${f.id}', ${f.version}, 'Revisado')">Revisar</button>
               <button class="px-2 py-1 rounded-lg bg-surface-container-high text-on-surface-variant text-xs font-bold hover:opacity-90" onclick="cambiarEstado('${f.id}', ${f.version}, 'Descartado')">Descartar</button>
@@ -252,6 +253,14 @@
       const res = await fetch(`/api/ai-audit-findings/${id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ estado, version }) });
       if (res.status === 409) alert('Otro usuario ya actualizó este hallazgo.');
       await loadFindings();
+    };
+
+    window.verificarIntegridad = async function (tabla, id) {
+      const data = await fetch(`/api/integridad/${tabla}/${id}`).then(r => r.json());
+      if (data.integro === null) { alert(data.mensaje); return; }
+      alert(data.integro
+        ? `✅ Íntegro — el hash coincide, este registro no fue alterado.\nSello de tiempo: ${data.sello_tiempo_estado} (WORM técnico, no es certificación ONAC).`
+        : `⚠️ ALERTA — el hash NO coincide con el contenido actual. Este registro pudo haber sido alterado fuera de la aplicación.`);
     };
 
     window.ejecutarAuditoria = async function () {
