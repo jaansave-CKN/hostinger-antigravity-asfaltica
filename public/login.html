@@ -171,13 +171,14 @@
 <h2 class="font-headline-lg text-headline-lg text-on-surface">Ingreso al Sistema</h2>
 <p class="font-body-md text-body-md text-on-surface-variant mt-2">Acceda a su tablero de gestión operativa.</p>
 </div>
-<form class="space-y-6" onsubmit="event.preventDefault(); window.location.href='/seleccion-empresa.html';">
-<!-- User/Email Field -->
+<form class="space-y-6" id="login-form">
+<p id="login-error" class="hidden font-body-md text-body-md text-error bg-error-container/20 border border-error/30 rounded-lg px-4 py-3"></p>
+<!-- Cédula Field -->
 <div class="space-y-2">
-<label class="font-label-md text-label-md text-on-surface uppercase tracking-wider block" for="username">Usuario o Correo Electrónico</label>
+<label class="font-label-md text-label-md text-on-surface uppercase tracking-wider block" for="username">Cédula</label>
 <div class="relative group">
 <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">person</span>
-<input class="w-full pl-12 pr-4 py-4 bg-surface border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body-md" id="username" placeholder="ejemplo@empresa.com" type="text"/>
+<input class="w-full pl-12 pr-4 py-4 bg-surface border border-outline-variant rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-body-md" id="username" placeholder="Número de cédula" type="text"/>
 </div>
 </div>
 <!-- Password Field -->
@@ -196,7 +197,7 @@
 </div>
 <!-- Biometrics & 2FA Info -->
 <div class="flex flex-col gap-4">
-<button class="flex items-center justify-center gap-3 w-full py-3 border border-primary text-primary rounded-xl hover:bg-primary-fixed transition-colors font-title-md" onclick="window.location.href='/seleccion-empresa.html';" type="button">
+<button class="flex items-center justify-center gap-3 w-full py-3 border border-primary text-primary rounded-xl hover:bg-primary-fixed transition-colors font-title-md" onclick="alert('Ingreso con biometría disponible en una fase posterior — hoy requiere cédula y contraseña.');" type="button">
 <span class="material-symbols-outlined">fingerprint</span>
                         Ingreso con Biometría
                     </button>
@@ -257,5 +258,36 @@
                 }
             });
         }
+
+        // Login real contra /api/login (Sprint 0 — reemplaza el portón de contraseña única).
+        document.getElementById('login-form').addEventListener('submit', async (evt) => {
+            evt.preventDefault();
+            const errorEl = document.getElementById('login-error');
+            errorEl.classList.add('hidden');
+            const cedula = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            if (!cedula || !password) {
+                errorEl.textContent = 'Ingresa cédula y contraseña.';
+                errorEl.classList.remove('hidden');
+                return;
+            }
+            try {
+                const res = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cedula, password }),
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    errorEl.textContent = data.error || 'No se pudo iniciar sesión.';
+                    errorEl.classList.remove('hidden');
+                    return;
+                }
+                window.location.href = data.user.rol_id === 'super-admin' ? '/seleccion-empresa.html' : '/centro-mando.html';
+            } catch (err) {
+                errorEl.textContent = 'Error de conexión con el servidor. Intenta de nuevo.';
+                errorEl.classList.remove('hidden');
+            }
+        });
     </script>
 </body></html>

@@ -70,35 +70,61 @@ const SEED_EMPLEADOS = [
 ];
 
 const SEED_CHARLAS = [
-  { id: 'CHD-001', project_id: 'PRY-001', fecha: '2026-07-16', tema: 'Uso correcto de arnés y línea de vida', responsable: 'Juan Delgado', asistentes: 18, duracion_min: 10 },
-  { id: 'CHD-002', project_id: 'PRY-002', fecha: '2026-07-16', tema: 'Manejo defensivo de maquinaria pesada', responsable: 'Juan Delgado', asistentes: 24, duracion_min: 15 },
-  { id: 'CHD-003', project_id: 'PRY-003', fecha: '2026-07-17', tema: 'Protocolo de reacción ante intrusión', responsable: 'Ricardo Salazar', asistentes: 6, duracion_min: 8 }
+  { id: 'CHD-001', project_id: 'PRY-001', tenant_id: 'TEN-0001', fecha: '2026-07-16', tema: 'Uso correcto de arnés y línea de vida', responsable: 'Juan Delgado', asistentes: 18, duracion_min: 10 },
+  { id: 'CHD-002', project_id: 'PRY-002', tenant_id: 'TEN-0001', fecha: '2026-07-16', tema: 'Manejo defensivo de maquinaria pesada', responsable: 'Juan Delgado', asistentes: 24, duracion_min: 15 },
+  { id: 'CHD-003', project_id: 'PRY-003', tenant_id: 'TEN-0002', fecha: '2026-07-17', tema: 'Protocolo de reacción ante intrusión', responsable: 'Ricardo Salazar', asistentes: 6, duracion_min: 8 }
 ];
 
 const SEED_BITACORA = [
-  { id: 'BIT-001', project_id: 'PRY-001', fecha: '2026-07-16', autor: 'Juan Delgado', tipo: 'Avance', descripcion: 'Fundida de placa nivel 4 completada sin novedad.' },
-  { id: 'BIT-002', project_id: 'PRY-001', fecha: '2026-07-15', autor: 'Juan Delgado', tipo: 'Incidente', descripcion: 'Casi-accidente: caída de material menor desde andamio, sin heridos. Se refuerza señalización.' },
-  { id: 'BIT-003', project_id: 'PRY-003', fecha: '2026-07-17', autor: 'Ricardo Salazar', tipo: 'Novedad', descripcion: 'Cambio de turno sin novedad. Rondas nocturnas completadas.' }
+  { id: 'BIT-001', project_id: 'PRY-001', tenant_id: 'TEN-0001', fecha: '2026-07-16', autor: 'Juan Delgado', tipo: 'Avance', descripcion: 'Fundida de placa nivel 4 completada sin novedad.' },
+  { id: 'BIT-002', project_id: 'PRY-001', tenant_id: 'TEN-0001', fecha: '2026-07-15', autor: 'Juan Delgado', tipo: 'Incidente', descripcion: 'Casi-accidente: caída de material menor desde andamio, sin heridos. Se refuerza señalización.' },
+  { id: 'BIT-003', project_id: 'PRY-003', tenant_id: 'TEN-0002', fecha: '2026-07-17', autor: 'Ricardo Salazar', tipo: 'Novedad', descripcion: 'Cambio de turno sin novedad. Rondas nocturnas completadas.' }
 ];
 
 const SEED_PRESUPUESTO = [
-  { id: 'PRE-001', project_id: 'PRY-001', rubro: 'Mano de obra', presupuestado: 850000000, ejecutado: 512000000 },
-  { id: 'PRE-002', project_id: 'PRY-001', rubro: 'Materiales', presupuestado: 620000000, ejecutado: 401000000 },
-  { id: 'PRE-003', project_id: 'PRY-001', rubro: 'Maquinaria y equipos', presupuestado: 210000000, ejecutado: 98000000 },
-  { id: 'PRE-004', project_id: 'PRY-001', rubro: 'HSEQ (EPP, capacitación)', presupuestado: 45000000, ejecutado: 31000000 }
+  { id: 'PRE-001', project_id: 'PRY-001', tenant_id: 'TEN-0001', rubro: 'Mano de obra', presupuestado: 850000000, ejecutado: 512000000 },
+  { id: 'PRE-002', project_id: 'PRY-001', tenant_id: 'TEN-0001', rubro: 'Materiales', presupuestado: 620000000, ejecutado: 401000000 },
+  { id: 'PRE-003', project_id: 'PRY-001', tenant_id: 'TEN-0001', rubro: 'Maquinaria y equipos', presupuestado: 210000000, ejecutado: 98000000 },
+  { id: 'PRE-004', project_id: 'PRY-001', tenant_id: 'TEN-0001', rubro: 'HSEQ (EPP, capacitación)', presupuestado: 45000000, ejecutado: 31000000 }
 ];
 
 const SEED_PLAN = [
-  { id: 'PLN-001', project_id: 'PRY-001', actividad: 'Cimentación y estructura nivel 1-4', mes_objetivo: '2026-03', responsable: 'Juan Delgado', estado: 'Completado' },
-  { id: 'PLN-002', project_id: 'PRY-001', actividad: 'Mampostería y fachada', mes_objetivo: '2026-07', responsable: 'Juan Delgado', estado: 'En Curso' },
-  { id: 'PLN-003', project_id: 'PRY-001', actividad: 'Instalaciones eléctricas e hidráulicas', mes_objetivo: '2026-09', responsable: 'Carlos Pérez', estado: 'Pendiente' },
-  { id: 'PLN-004', project_id: 'PRY-001', actividad: 'Entrega y cierre de obra', mes_objetivo: '2026-12', responsable: 'Juan Delgado', estado: 'Pendiente' }
+  { id: 'PLN-001', project_id: 'PRY-001', tenant_id: 'TEN-0001', actividad: 'Cimentación y estructura nivel 1-4', mes_objetivo: '2026-03', responsable: 'Juan Delgado', estado: 'Completado' },
+  { id: 'PLN-002', project_id: 'PRY-001', tenant_id: 'TEN-0001', actividad: 'Mampostería y fachada', mes_objetivo: '2026-07', responsable: 'Juan Delgado', estado: 'En Curso' },
+  { id: 'PLN-003', project_id: 'PRY-001', tenant_id: 'TEN-0001', actividad: 'Instalaciones eléctricas e hidráulicas', mes_objetivo: '2026-09', responsable: 'Carlos Pérez', estado: 'Pendiente' },
+  { id: 'PLN-004', project_id: 'PRY-001', tenant_id: 'TEN-0001', actividad: 'Entrega y cierre de obra', mes_objetivo: '2026-12', responsable: 'Juan Delgado', estado: 'Pendiente' }
 ];
 
 const SEED_DOCUMENTOS = [
-  { id: 'DOC-001', project_id: 'PRY-001', nombre: 'Licencia de Construcción.pdf', tipo: 'Permiso', fecha_subida: '2025-02-20', subido_por: 'Juan Delgado' },
-  { id: 'DOC-002', project_id: 'PRY-001', nombre: 'Matriz de Riesgos SST.xlsx', tipo: 'HSEQ', fecha_subida: '2025-03-05', subido_por: 'Juan Delgado' },
-  { id: 'DOC-003', project_id: 'PRY-001', nombre: 'Planos Estructurales Rev3.dwg', tipo: 'Plano', fecha_subida: '2026-01-10', subido_por: 'Carlos Pérez' }
+  { id: 'DOC-001', project_id: 'PRY-001', tenant_id: 'TEN-0001', nombre: 'Licencia de Construcción.pdf', tipo: 'Permiso', fecha_subida: '2025-02-20', subido_por: 'Juan Delgado' },
+  { id: 'DOC-002', project_id: 'PRY-001', tenant_id: 'TEN-0001', nombre: 'Matriz de Riesgos SST.xlsx', tipo: 'HSEQ', fecha_subida: '2025-03-05', subido_por: 'Juan Delgado' },
+  { id: 'DOC-003', project_id: 'PRY-001', tenant_id: 'TEN-0001', nombre: 'Planos Estructurales Rev3.dwg', tipo: 'Plano', fecha_subida: '2026-01-10', subido_por: 'Carlos Pérez' }
+];
+
+// Legal_Norms_Master_Catalog — estado sigue el flujo de gobernanza decidido por el usuario
+// 2026-07-17 (ver docs/analisis_gaps_v1.md): draft -> pendiente_revision -> aprobado_super_admin
+// -> publicado_a_tenants. La propagación nunca es automática ni global.
+const SEED_LEGAL_NORMS = [
+  { id: 'NRM-001', codigo_norma: 'Decreto 1072 de 2015', nombre: 'Decreto Único Reglamentario del Sector Trabajo (SG-SST)', version_year: 2015, sector_aplicable: 'Ambas', estado: 'publicado_a_tenants', fecha_publicacion: '2015-05-26', resumen_requisito: 'Implementación obligatoria del Sistema de Gestión de Seguridad y Salud en el Trabajo.' },
+  { id: 'NRM-002', codigo_norma: 'Resolución 0312 de 2019', nombre: 'Estándares Mínimos del SG-SST', version_year: 2019, sector_aplicable: 'Ambas', estado: 'publicado_a_tenants', fecha_publicacion: '2019-02-13', resumen_requisito: 'Define estándares mínimos según número de trabajadores y nivel de riesgo.' },
+  { id: 'NRM-003', codigo_norma: 'Resolución 4272 de 2021', nombre: 'Reglamento Técnico de Trabajo Seguro en Alturas', version_year: 2021, sector_aplicable: 'Construccion', estado: 'publicado_a_tenants', fecha_publicacion: '2021-11-25', resumen_requisito: 'Certificación obligatoria de curso de alturas, reentrenamiento cada 2 años. Alimenta el motor de exclusión de Permisos de Trabajo.' },
+  { id: 'NRM-004', codigo_norma: 'Resolución 2764 de 2022', nombre: 'Jornadas de Trabajo en Vigilancia y Seguridad Privada', version_year: 2022, sector_aplicable: 'Vigilancia', estado: 'publicado_a_tenants', fecha_publicacion: '2022-11-14', resumen_requisito: 'Límites de jornada y descanso obligatorio para guardas — riesgo de fatiga.' },
+  { id: 'NRM-005', codigo_norma: 'Resolución 2404 de 2019', nombre: 'Batería de Riesgo Psicosocial', version_year: 2019, sector_aplicable: 'Ambas', estado: 'aprobado_super_admin', fecha_publicacion: '2019-07-22', resumen_requisito: 'Evaluación obligatoria de factores de riesgo psicosocial cada 2 años.' },
+  { id: 'NRM-006', codigo_norma: 'Ajuste tarifario ARL Construcción 2026 (borrador)', nombre: 'Ajuste de tarifas ARL por clase de riesgo', version_year: 2026, sector_aplicable: 'Construccion', estado: 'pendiente_revision', fecha_publicacion: null, resumen_requisito: 'Norma en borrador — pendiente de revisión del Super-Admin antes de publicarse a los tenants del sector.' }
+];
+
+// High_Risk_Work_Permits — el estado se decide en el backend (motor de exclusión real
+// contra empleados.estado_arl / estado_alturas), nunca se acepta "Activo" desde el cliente.
+const SEED_PERMISOS_TRABAJO = [
+  { id: 'PMT-001', tenant_id: 'TEN-0001', project_id: 'PRY-001', empleado_id: 'EMP-001', tipo: 'Trabajo en Alturas', validez_inicio: '2026-07-10', validez_fin: '2026-07-24', estado: 'Activo', motivo_rechazo: null, creado_por: 'Juan Delgado' },
+  { id: 'PMT-002', tenant_id: 'TEN-0001', project_id: 'PRY-002', empleado_id: 'EMP-002', tipo: 'Trabajo en Alturas', validez_inicio: '2026-07-15', validez_fin: '2026-07-15', estado: 'Rechazado', motivo_rechazo: 'Curso de alturas vencido para EMP-002 (Luisa Fernanda Ortiz).', creado_por: 'Juan Delgado' }
+];
+
+// Base para IF/IS (Motor de Indicadores BI): IF = (accidentes incapacitantes / horas-hombre) * 240000
+const SEED_ACCIDENTES = [
+  { id: 'ACC-001', project_id: 'PRY-001', fecha: '2026-05-14', tipo: 'Leve', dias_perdidos: 0 },
+  { id: 'ACC-002', project_id: 'PRY-002', fecha: '2026-06-02', tipo: 'Incapacitante', dias_perdidos: 12 },
+  { id: 'ACC-003', project_id: 'PRY-003', fecha: '2026-04-20', tipo: 'Incapacitante', dias_perdidos: 5 }
 ];
 
 async function initDb() {
@@ -125,20 +151,42 @@ async function initDb() {
       estado_arl TEXT, estado_alturas TEXT, estado_cuenta TEXT
     );
     CREATE TABLE IF NOT EXISTS charlas (
-      id TEXT PRIMARY KEY, project_id TEXT, fecha TEXT, tema TEXT, responsable TEXT,
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, fecha TEXT, tema TEXT, responsable TEXT,
       asistentes INT DEFAULT 0, duracion_min INT DEFAULT 5
     );
     CREATE TABLE IF NOT EXISTS bitacora (
-      id TEXT PRIMARY KEY, project_id TEXT, fecha TEXT, autor TEXT, tipo TEXT, descripcion TEXT
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, fecha TEXT, autor TEXT, tipo TEXT, descripcion TEXT
     );
     CREATE TABLE IF NOT EXISTS presupuesto (
-      id TEXT PRIMARY KEY, project_id TEXT, rubro TEXT, presupuestado BIGINT DEFAULT 0, ejecutado BIGINT DEFAULT 0
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, rubro TEXT, presupuestado BIGINT DEFAULT 0, ejecutado BIGINT DEFAULT 0
     );
     CREATE TABLE IF NOT EXISTS plan_anual (
-      id TEXT PRIMARY KEY, project_id TEXT, actividad TEXT, mes_objetivo TEXT, responsable TEXT, estado TEXT
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, actividad TEXT, mes_objetivo TEXT, responsable TEXT, estado TEXT
     );
     CREATE TABLE IF NOT EXISTS documentos (
-      id TEXT PRIMARY KEY, project_id TEXT, nombre TEXT, tipo TEXT, fecha_subida TEXT, subido_por TEXT
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, nombre TEXT, tipo TEXT, fecha_subida TEXT, subido_por TEXT
+    );
+    CREATE TABLE IF NOT EXISTS legal_norms (
+      id TEXT PRIMARY KEY, codigo_norma TEXT, nombre TEXT, version_year INT, sector_aplicable TEXT,
+      estado TEXT NOT NULL DEFAULT 'draft', fecha_publicacion TEXT, resumen_requisito TEXT
+    );
+    CREATE TABLE IF NOT EXISTS permisos_trabajo (
+      id TEXT PRIMARY KEY, tenant_id TEXT, project_id TEXT, empleado_id TEXT, tipo TEXT,
+      validez_inicio TEXT, validez_fin TEXT, estado TEXT NOT NULL, motivo_rechazo TEXT,
+      creado_por TEXT, fecha_creacion TEXT
+    );
+    CREATE TABLE IF NOT EXISTS accidentes (
+      id TEXT PRIMARY KEY, project_id TEXT, tenant_id TEXT, fecha TEXT, tipo TEXT, dias_perdidos INT DEFAULT 0
+    );
+    -- Sprint 0 — auth real por usuario (ver migrations/001_sprint0_blindaje.sql para RLS/backfill
+    -- sobre una base ya existente; este CREATE cubre instalaciones nuevas desde cero).
+    CREATE TABLE IF NOT EXISTS auth_credentials (
+      user_id TEXT PRIMARY KEY REFERENCES users_app(id),
+      tenant_id TEXT NOT NULL REFERENCES tenants(id),
+      password_hash TEXT NOT NULL,
+      must_change_password BOOLEAN NOT NULL DEFAULT true,
+      last_login_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
   `);
 
@@ -172,24 +220,36 @@ async function seedAll() {
       [e.id, e.tenant_id, e.project_id, e.nombre, e.cedula, e.cargo, e.tipo_contrato, e.fecha_ingreso, e.eps, e.estado_arl, e.estado_alturas, e.estado_cuenta]);
   }
   for (const c of SEED_CHARLAS) {
-    await pool.query('INSERT INTO charlas (id, project_id, fecha, tema, responsable, asistentes, duracion_min) VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO NOTHING',
-      [c.id, c.project_id, c.fecha, c.tema, c.responsable, c.asistentes, c.duracion_min]);
+    await pool.query('INSERT INTO charlas (id, project_id, tenant_id, fecha, tema, responsable, asistentes, duracion_min) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (id) DO NOTHING',
+      [c.id, c.project_id, c.tenant_id, c.fecha, c.tema, c.responsable, c.asistentes, c.duracion_min]);
   }
   for (const b of SEED_BITACORA) {
-    await pool.query('INSERT INTO bitacora (id, project_id, fecha, autor, tipo, descripcion) VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (id) DO NOTHING',
-      [b.id, b.project_id, b.fecha, b.autor, b.tipo, b.descripcion]);
+    await pool.query('INSERT INTO bitacora (id, project_id, tenant_id, fecha, autor, tipo, descripcion) VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO NOTHING',
+      [b.id, b.project_id, b.tenant_id, b.fecha, b.autor, b.tipo, b.descripcion]);
   }
   for (const p of SEED_PRESUPUESTO) {
-    await pool.query('INSERT INTO presupuesto (id, project_id, rubro, presupuestado, ejecutado) VALUES ($1,$2,$3,$4,$5) ON CONFLICT (id) DO NOTHING',
-      [p.id, p.project_id, p.rubro, p.presupuestado, p.ejecutado]);
+    await pool.query('INSERT INTO presupuesto (id, project_id, tenant_id, rubro, presupuestado, ejecutado) VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (id) DO NOTHING',
+      [p.id, p.project_id, p.tenant_id, p.rubro, p.presupuestado, p.ejecutado]);
   }
   for (const p of SEED_PLAN) {
-    await pool.query('INSERT INTO plan_anual (id, project_id, actividad, mes_objetivo, responsable, estado) VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (id) DO NOTHING',
-      [p.id, p.project_id, p.actividad, p.mes_objetivo, p.responsable, p.estado]);
+    await pool.query('INSERT INTO plan_anual (id, project_id, tenant_id, actividad, mes_objetivo, responsable, estado) VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO NOTHING',
+      [p.id, p.project_id, p.tenant_id, p.actividad, p.mes_objetivo, p.responsable, p.estado]);
   }
   for (const d of SEED_DOCUMENTOS) {
-    await pool.query('INSERT INTO documentos (id, project_id, nombre, tipo, fecha_subida, subido_por) VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (id) DO NOTHING',
-      [d.id, d.project_id, d.nombre, d.tipo, d.fecha_subida, d.subido_por]);
+    await pool.query('INSERT INTO documentos (id, project_id, tenant_id, nombre, tipo, fecha_subida, subido_por) VALUES ($1,$2,$3,$4,$5,$6,$7) ON CONFLICT (id) DO NOTHING',
+      [d.id, d.project_id, d.tenant_id, d.nombre, d.tipo, d.fecha_subida, d.subido_por]);
+  }
+  for (const n of SEED_LEGAL_NORMS) {
+    await pool.query('INSERT INTO legal_norms (id, codigo_norma, nombre, version_year, sector_aplicable, estado, fecha_publicacion, resumen_requisito) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT (id) DO NOTHING',
+      [n.id, n.codigo_norma, n.nombre, n.version_year, n.sector_aplicable, n.estado, n.fecha_publicacion, n.resumen_requisito]);
+  }
+  for (const p of SEED_PERMISOS_TRABAJO) {
+    await pool.query('INSERT INTO permisos_trabajo (id, tenant_id, project_id, empleado_id, tipo, validez_inicio, validez_fin, estado, motivo_rechazo, creado_por, fecha_creacion) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) ON CONFLICT (id) DO NOTHING',
+      [p.id, p.tenant_id, p.project_id, p.empleado_id, p.tipo, p.validez_inicio, p.validez_fin, p.estado, p.motivo_rechazo, p.creado_por, p.validez_inicio]);
+  }
+  for (const a of SEED_ACCIDENTES) {
+    await pool.query('INSERT INTO accidentes (id, project_id, fecha, tipo, dias_perdidos) VALUES ($1,$2,$3,$4,$5) ON CONFLICT (id) DO NOTHING',
+      [a.id, a.project_id, a.fecha, a.tipo, a.dias_perdidos]);
   }
 }
 
