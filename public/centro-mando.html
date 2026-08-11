@@ -255,6 +255,14 @@
 </header>
 <!-- Dashboard Content -->
 <div class="p-margin-mobile md:p-margin-desktop">
+<!-- Alertas Activas (SOS) — solo visible si hay alertas sin atender -->
+<div class="hidden mb-lg bg-error-container border border-error rounded-xl p-lg" id="panel-alertas-activas">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-error">emergency</span>
+<h3 class="font-title-md text-title-md text-on-error-container font-bold">Alertas SOS Activas</h3>
+</div>
+<div id="lista-alertas-activas" class="space-y-2"></div>
+</div>
 <!-- Hero Bento Section: KPIs -->
 <div class="bento-grid mb-lg">
 <!-- KPI 1: Resolución 0312 -->
@@ -577,6 +585,32 @@
         }
         cargarDatosReales();
 
+        async function cargarAlertasActivas() {
+          try {
+            const activas = await fetch('/api/emergencias?estado=Activa').then(r => r.json());
+            const panel = document.getElementById('panel-alertas-activas');
+            if (!activas.length) { panel.classList.add('hidden'); return; }
+            panel.classList.remove('hidden');
+            document.getElementById('lista-alertas-activas').innerHTML = activas.map(a => `
+              <div class="flex items-center justify-between bg-surface-container-lowest rounded-lg p-3">
+                <div>
+                  <p class="font-body-md text-body-md font-bold">${a.tipo} — ${new Date(a.created_at).toLocaleString('es-CO')}</p>
+                  <p class="font-label-sm text-label-sm text-on-surface-variant">${a.lat != null ? `GPS: ${a.lat.toFixed(4)}, ${a.lng.toFixed(4)}` : 'Sin ubicación GPS'}</p>
+                </div>
+                <button class="px-3 py-2 bg-primary text-on-primary rounded-lg font-label-sm text-label-sm font-bold" onclick="atenderAlerta('${a.id}', ${a.version})">Marcar Atendida</button>
+              </div>`).join('');
+          } catch { /* si falla, el panel simplemente no se actualiza esta vez */ }
+        }
+        window.atenderAlerta = async function (id, version) {
+          const res = await fetch(`/api/emergencias/${id}`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: 'Atendida', version }),
+          });
+          if (res.status === 409) alert('Otro usuario ya actualizó esta alerta.');
+          await cargarAlertasActivas();
+        };
+        cargarAlertasActivas();
+
         // Notificaciones (dropdown)
         const btnNotif = document.getElementById('btn-notifications');
         const panelNotif = document.getElementById('notifications-panel');
@@ -602,13 +636,40 @@
         }
         document.getElementById('btn-sos-mobile').addEventListener('click', openSos);
         document.getElementById('btn-sos-cancel').addEventListener('click', closeSos);
-        document.getElementById('btn-sos-confirm').addEventListener('click', () => {
-            document.getElementById('sos-content').innerHTML = `
+
+        function obtenerUbicacion() {
+          return new Promise(resolve => {
+            if (!navigator.geolocation) return resolve({ lat: null, lng: null });
+            navigator.geolocation.getCurrentPosition(
+              pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+              () => resolve({ lat: null, lng: null }),
+              { timeout: 5000 }
+            );
+          });
+        }
+
+        document.getElementById('btn-sos-confirm').addEventListener('click', async () => {
+            const { lat, lng } = await obtenerUbicacion();
+            let ok = false;
+            try {
+              const res = await fetch('/api/emergencias', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tipo: 'Panico', lat, lng }),
+              });
+              ok = res.ok;
+            } catch { ok = false; }
+            document.getElementById('sos-content').innerHTML = ok ? `
               <div class="w-16 h-16 mx-auto mb-md rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed-variant">
                 <span class="material-symbols-outlined text-[32px]">check_circle</span>
               </div>
-              <h3 class="font-title-md text-title-md text-on-surface mb-2">Alerta enviada</h3>
-              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">Juan Delgado (Director HSEQ) fue notificado. Demo local: en producción esto dispara push/SMS y registra la entrada en la bitácora del proyecto.</p>
+              <h3 class="font-title-md text-title-md text-on-surface mb-2">Alerta SOS transmitida al Centro de Mando</h3>
+              <button class="w-full px-4 py-3 rounded-xl bg-primary text-on-primary font-bold" onclick="document.getElementById('modal-sos').classList.add('hidden'); document.getElementById('modal-sos').classList.remove('flex'); cargarAlertasActivas();">Cerrar</button>
+            ` : `
+              <div class="w-16 h-16 mx-auto mb-md rounded-full bg-error-container flex items-center justify-center text-error">
+                <span class="material-symbols-outlined text-[32px]">error</span>
+              </div>
+              <h3 class="font-title-md text-title-md text-on-surface mb-2">No se pudo enviar la alerta</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant mb-lg">Verifica tu conexión e intenta de nuevo.</p>
               <button class="w-full px-4 py-3 rounded-xl bg-primary text-on-primary font-bold" onclick="document.getElementById('modal-sos').classList.add('hidden'); document.getElementById('modal-sos').classList.remove('flex');">Cerrar</button>
             `;
         });

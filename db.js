@@ -206,6 +206,20 @@ async function initDb() {
       realizado_por TEXT NOT NULL, version INT NOT NULL DEFAULT 1,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
+    -- Sprint 3 — Botón de Pánico / SOS. canal_notificacion/notificacion_estado son
+    -- arquitectura abierta para el futuro proveedor de SMS/WhatsApp (sin implementar).
+    CREATE TABLE IF NOT EXISTS emergency_alerts (
+      id TEXT PRIMARY KEY, tenant_id TEXT REFERENCES tenants(id),
+      project_id TEXT REFERENCES projects(id), user_id TEXT NOT NULL REFERENCES users_app(id),
+      tipo TEXT NOT NULL CHECK (tipo IN ('Panico','Medica','Incendio','Intrusion')),
+      lat DOUBLE PRECISION, lng DOUBLE PRECISION,
+      estado TEXT NOT NULL DEFAULT 'Activa' CHECK (estado IN ('Activa','Atendida','Falsa_Alarma')),
+      atendido_por TEXT, canal_notificacion TEXT,
+      notificacion_estado TEXT NOT NULL DEFAULT 'sin_proveedor'
+        CHECK (notificacion_estado IN ('sin_proveedor', 'pendiente_envio', 'enviado', 'fallido')),
+      version INT NOT NULL DEFAULT 1, created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      atendido_en TIMESTAMPTZ
+    );
   `);
 
   const { rows } = await pool.query('SELECT COUNT(*)::int AS n FROM tenants');

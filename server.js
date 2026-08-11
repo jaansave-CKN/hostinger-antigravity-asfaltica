@@ -704,6 +704,49 @@ app.post('/api/inspecciones', asyncRoute(async (req, res) => {
   res.status(201).json(rows[0]);
 }));
 
+// --- Botón de Pánico / SOS (emergency_alerts) ---
+// Sin gate de permisos de módulo: cualquier sesión autenticada puede disparar o ver
+// alertas de su tenant — un botón de pánico no debe poder bloquearse por rol.
+app.post('/api/emergencias', asyncRoute(async (req, res) => {
+  const { tipo, project_id, lat, lng } = req.body;
+  const tiposValidos = new Set(['Panico', 'Medica', 'Incendio', 'Intrusion']);
+  if (!tiposValidos.has(tipo)) return res.status(400).json({ error: `tipo inválido — debe ser uno de: ${[...tiposValidos].join(', ')}` });
+  const id = await nextId('emergency_alerts', 'EMR', 4);
+  const { rows } = await req.db.query(
+    `INSERT INTO emergency_alerts (id, tenant_id, project_id, user_id, tipo, lat, lng)
+     VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+    [id, req.session.tenant_id, project_id || null, req.session.user_id, tipo, lat ?? null, lng ?? null]
+  );
+  res.status(201).json(rows[0]);
+}));
+
+app.get('/api/emergencias', asyncRoute(async (req, res) => {
+  const { estado } = req.query;
+  let { rows } = await req.db.query('SELECT * FROM emergency_alerts ORDER BY created_at DESC');
+  if (estado) rows = rows.filter(r => r.estado === estado);
+  res.json(rows);
+}));
+
+app.put('/api/emergencias/:id', asyncRoute(async (req, res) => {
+  const { estado, version } = req.body;
+  const estadosValidos = new Set(['Activa', 'Atendida', 'Falsa_Alarma']);
+  if (!estadosValidos.has(estado)) return res.status(400).json({ error: `estado inválido — debe ser uno de: ${[...estadosValidos].join(', ')}` });
+  if (!Number.isInteger(Number(version))) return res.status(400).json({ error: 'Falta "version" (entero) en el cuerpo' });
+  const atendido_en = estado === 'Activa' ? null : new Date().toISOString();
+  const { rows } = await req.db.query(
+    `UPDATE emergency_alerts SET estado=$1, atendido_por=$2, atendido_en=$3, version=version+1
+     WHERE id=$4 AND version=$5 RETURNING *`,
+    [estado, req.session.nombre || 'Usuario Actual', atendido_en, req.params.id, version]
+  );
+  if (!rows.length) {
+    const existe = await req.db.query('SELECT 1 FROM emergency_alerts WHERE id=$1', [req.params.id]);
+    return res.status(existe.rows.length ? 409 : 404).json({
+      error: existe.rows.length ? 'La alerta fue actualizada por otro usuario mientras tanto' : 'Alerta no encontrada',
+    });
+  }
+  res.json(rows[0]);
+}));
+
 // --- Reportes Ejecutivos (Motor de Indicadores BI) ---
 app.get('/api/reportes/resumen', asyncRoute(async (req, res) => {
   const [projects, tenants, accidentes, presupuesto, charlas, permisos, normas] = await Promise.all([

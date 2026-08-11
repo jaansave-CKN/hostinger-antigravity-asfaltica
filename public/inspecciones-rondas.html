@@ -349,13 +349,41 @@
       document.getElementById('modal-sos').classList.add('flex');
     });
     document.getElementById('btn-sos-cancel').addEventListener('click', closeSos);
-    document.getElementById('btn-sos-confirm').addEventListener('click', () => {
-      document.getElementById('sos-content').innerHTML = `
+
+    function obtenerUbicacion() {
+      return new Promise(resolve => {
+        if (!navigator.geolocation) return resolve({ lat: null, lng: null });
+        navigator.geolocation.getCurrentPosition(
+          pos => resolve({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+          () => resolve({ lat: null, lng: null }),
+          { timeout: 5000 }
+        );
+      });
+    }
+
+    document.getElementById('btn-sos-confirm').addEventListener('click', async () => {
+      const { lat, lng } = await obtenerUbicacion();
+      const project_id = document.getElementById('select-project').value || null;
+      let ok = false;
+      try {
+        const res = await fetch('/api/emergencias', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tipo: 'Panico', project_id, lat, lng }),
+        });
+        ok = res.ok;
+      } catch { ok = false; }
+      document.getElementById('sos-content').innerHTML = ok ? `
         <div class="w-16 h-16 mx-auto mb-md rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed-variant">
           <span class="material-symbols-outlined text-[32px]">check_circle</span>
         </div>
-        <h3 class="font-title-md text-title-md text-on-surface mb-2">Alerta enviada</h3>
-        <p class="font-body-md text-body-md text-on-surface-variant mb-lg">Se notificó al supervisor de turno. Demo local: en producción esto dispara push/SMS y registra la entrada en la bitácora.</p>
+        <h3 class="font-title-md text-title-md text-on-surface mb-2">Alerta SOS transmitida al Centro de Mando</h3>
+        <button class="w-full px-4 py-3 rounded-xl bg-primary text-on-primary font-bold" onclick="document.getElementById('modal-sos').classList.add('hidden'); document.getElementById('modal-sos').classList.remove('flex');">Cerrar</button>
+      ` : `
+        <div class="w-16 h-16 mx-auto mb-md rounded-full bg-error-container flex items-center justify-center text-error">
+          <span class="material-symbols-outlined text-[32px]">error</span>
+        </div>
+        <h3 class="font-title-md text-title-md text-on-surface mb-2">No se pudo enviar la alerta</h3>
+        <p class="font-body-md text-body-md text-on-surface-variant mb-lg">Verifica tu conexión e intenta de nuevo.</p>
         <button class="w-full px-4 py-3 rounded-xl bg-primary text-on-primary font-bold" onclick="document.getElementById('modal-sos').classList.add('hidden'); document.getElementById('modal-sos').classList.remove('flex');">Cerrar</button>
       `;
     });
