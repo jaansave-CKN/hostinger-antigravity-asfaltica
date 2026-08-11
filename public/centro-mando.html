@@ -248,9 +248,7 @@
 </button>
 <div class="hidden absolute right-0 mt-2 w-80 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-lg z-50 p-2" id="notifications-panel">
 <div class="px-3 py-2 font-label-md text-label-md text-on-surface-variant uppercase">Notificaciones</div>
-<a class="block p-3 rounded-lg hover:bg-surface-container-high" href="/empleados.html"><p class="font-body-md text-body-md font-bold">Curso de alturas vencido</p><p class="font-label-sm text-label-sm text-on-surface-variant">Luisa Fernanda Ortiz — Urbanización Los Álamos</p></a>
-<a class="block p-3 rounded-lg hover:bg-surface-container-high" href="/clientes.html"><p class="font-body-md text-body-md font-bold">Cliente en Trial por vencer</p><p class="font-label-sm text-label-sm text-on-surface-variant">Logística &amp; Vías del Caribe</p></a>
-<a class="block p-3 rounded-lg hover:bg-surface-container-high" href="/bitacora.html"><p class="font-body-md text-body-md font-bold">Nuevo incidente registrado</p><p class="font-label-sm text-label-sm text-on-surface-variant">Torre Norte - Etapa 2</p></a>
+<div id="notifications-list"><p class="px-3 py-2 text-on-surface-variant font-body-md text-body-md">Cargando…</p></div>
 </div>
 </div>
 </div>
@@ -268,14 +266,14 @@
 <div class="gauge-container my-md">
 <svg class="gauge-svg w-full h-full" viewbox="0 0 100 100">
 <circle class="gauge-circle-bg" cx="50" cy="50" r="45"></circle>
-<circle class="gauge-circle-val" cx="50" cy="50" r="45" style="stroke-dashoffset: 56.5;"></circle>
+<circle class="gauge-circle-val" cx="50" cy="50" r="45" id="gauge-sgsst" style="stroke-dashoffset: 141.3;"></circle>
 </svg>
 <div class="absolute inset-0 flex items-center justify-center">
-<span class="font-headline-md text-headline-md font-extrabold text-primary">85%</span>
+<span class="font-headline-md text-headline-md font-extrabold text-primary" id="kpi-sgsst">—</span>
 </div>
 </div>
 <div class="bg-primary-container/10 px-3 py-1 rounded-full">
-<span class="text-primary font-label-sm text-label-sm font-bold">+2.4% vs mes anterior</span>
+<span class="text-primary font-label-sm text-label-sm font-bold">Promedio en vivo, todos los tenants</span>
 </div>
 </div>
 <!-- KPI 2: Accidentes -->
@@ -285,36 +283,30 @@
 <span class="material-symbols-outlined text-secondary">safety_check</span>
 </div>
 <div class="py-md text-center">
-<h3 class="text-[64px] font-black text-on-surface leading-tight">142</h3>
-<p class="font-body-md text-body-md text-on-surface-variant">Récord histórico: 210 días</p>
-</div>
-<div class="w-full bg-secondary-fixed h-2 rounded-full overflow-hidden">
-<div class="bg-secondary h-full w-[67%]"></div>
+<h3 class="text-[64px] font-black text-on-surface leading-tight" id="kpi-dias-sin-accidentes">—</h3>
+<p class="font-body-md text-body-md text-on-surface-variant" id="kpi-dias-sin-accidentes-nota">Calculando…</p>
 </div>
 </div>
-<!-- KPI 3: Satisfacción ISO 9001 -->
+<!-- KPI 3: Permisos de Trabajo (reemplaza "Satisfacción ISO 9001" — sin fuente de datos real) -->
 <div class="col-span-1 bg-surface-container-lowest border border-outline-variant rounded-xl p-lg flex flex-col justify-between card-hover">
 <div class="w-full flex justify-between items-start">
-<span class="font-label-md text-label-md text-on-surface-variant uppercase font-bold tracking-wider">Satisfacción ISO 9001</span>
-<span class="material-symbols-outlined text-tertiary">sentiment_satisfied</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase font-bold tracking-wider">Permisos de Trabajo</span>
+<span class="material-symbols-outlined text-tertiary">fingerprint</span>
 </div>
 <div class="py-md">
 <div class="flex items-baseline gap-2">
-<h3 class="font-headline-lg text-headline-lg font-extrabold">4.8</h3>
-<span class="text-on-surface-variant">/ 5.0</span>
+<h3 class="font-headline-lg text-headline-lg font-extrabold text-tertiary" id="kpi-permisos-activos">—</h3>
+<span class="text-on-surface-variant">activos</span>
 </div>
-<div class="flex gap-1 text-secondary mt-2">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
-<span class="material-symbols-outlined">star_half</span>
+<div class="flex items-baseline gap-2 mt-1">
+<h3 class="font-title-md text-title-md font-bold text-error" id="kpi-permisos-rechazados">—</h3>
+<span class="text-on-surface-variant text-body-md">rechazados por ARL/alturas vencidos</span>
 </div>
 </div>
-<div class="text-tertiary-container font-label-md text-label-md flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px]">trending_up</span>
-                        Satisfacción Óptima
-                    </div>
+<a class="text-tertiary-container font-label-md text-label-md flex items-center gap-1" href="/permisos-trabajo.html">
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                        Ver Portería Digital
+                    </a>
 </div>
 <!-- KPI 4: ISO 14001 Huella -->
 <div class="col-span-1 bg-tertiary-container text-on-tertiary border border-tertiary rounded-xl p-lg flex flex-col justify-between card-hover overflow-hidden relative">
@@ -540,14 +532,51 @@
 </div>
 
 <script>
-        // Micro-interaction for the compliance gauge animation
-        window.addEventListener('DOMContentLoaded', () => {
-            const circle = document.querySelector('.gauge-circle-val');
-            // Animate after load
-            setTimeout(() => {
-                circle.style.strokeDashoffset = '42.4'; // Target 85%
-            }, 500);
-        });
+        // Datos reales del Centro de Mando (Sprint 2) — reemplaza los valores hardcodeados
+        // de la maqueta Stitch. Nada aquí se inventa: lo que no tiene fuente real en el
+        // esquema no se muestra como si la tuviera (ver docs/04_sprint2_plan_ataque.md).
+        const CIRCUNFERENCIA_GAUGE = 2 * Math.PI * 45; // r=45
+
+        async function cargarDatosReales() {
+          try {
+            const [resumen, alertas] = await Promise.all([
+              fetch('/api/reportes/resumen').then(r => r.json()),
+              fetch('/api/reportes/alertas').then(r => r.json()),
+            ]);
+
+            const pct = resumen.cumplimiento_promedio_sgsst || 0;
+            document.getElementById('kpi-sgsst').textContent = `${pct}%`;
+            document.getElementById('gauge-sgsst').style.strokeDashoffset = String(CIRCUNFERENCIA_GAUGE * (1 - pct / 100));
+
+            const dias = resumen.dias_sin_accidentes;
+            document.getElementById('kpi-dias-sin-accidentes').textContent = dias === null ? '—' : dias;
+            document.getElementById('kpi-dias-sin-accidentes-nota').textContent =
+              dias === null ? 'Sin accidentes registrados todavía' : 'Desde el último accidente registrado';
+
+            document.getElementById('kpi-permisos-activos').textContent = resumen.permisos.activos;
+            document.getElementById('kpi-permisos-rechazados').textContent = resumen.permisos.rechazados;
+
+            const items = [
+              ...alertas.alturas_vencidas.map(e => ({
+                href: '/empleados.html', titulo: 'Curso de alturas vencido',
+                detalle: `${e.nombre}${e.project_nombre ? ' — ' + e.project_nombre : ''}`,
+              })),
+              ...alertas.tenants_trial.map(t => ({
+                href: '/clientes.html', titulo: 'Cliente en plan Trial', detalle: t.razon_social,
+              })),
+              ...(alertas.ultimo_incidente ? [{
+                href: '/bitacora.html', titulo: 'Último incidente registrado',
+                detalle: `${alertas.ultimo_incidente.project_nombre || ''} — ${alertas.ultimo_incidente.descripcion}`,
+              }] : []),
+            ];
+            document.getElementById('notifications-list').innerHTML = items.length
+              ? items.map(i => `<a class="block p-3 rounded-lg hover:bg-surface-container-high" href="${i.href}"><p class="font-body-md text-body-md font-bold">${i.titulo}</p><p class="font-label-sm text-label-sm text-on-surface-variant">${i.detalle}</p></a>`).join('')
+              : '<p class="px-3 py-2 text-on-surface-variant font-body-md text-body-md">Sin alertas activas.</p>';
+          } catch (err) {
+            document.getElementById('notifications-list').innerHTML = '<p class="px-3 py-2 text-error font-body-md text-body-md">No se pudieron cargar los datos en vivo.</p>';
+          }
+        }
+        cargarDatosReales();
 
         // Notificaciones (dropdown)
         const btnNotif = document.getElementById('btn-notifications');

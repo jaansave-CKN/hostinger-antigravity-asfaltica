@@ -197,6 +197,15 @@ async function initDb() {
       last_login_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
+    -- Sprint 2 — Inspecciones y Rondas (snapshot de checklist, no CAPA/causa raíz — ver
+    -- migrations/004_sprint2_inspecciones.sql para el porqué).
+    CREATE TABLE IF NOT EXISTS inspecciones_rondas (
+      id TEXT PRIMARY KEY, tenant_id TEXT NOT NULL REFERENCES tenants(id),
+      project_id TEXT NOT NULL REFERENCES projects(id), sector TEXT NOT NULL,
+      items JSONB NOT NULL, porcentaje_cumplimiento NUMERIC(5,2) NOT NULL,
+      realizado_por TEXT NOT NULL, version INT NOT NULL DEFAULT 1,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
   `);
 
   const { rows } = await pool.query('SELECT COUNT(*)::int AS n FROM tenants');

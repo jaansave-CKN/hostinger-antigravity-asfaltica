@@ -678,6 +678,32 @@ app.delete('/api/permisos-trabajo/:id', asyncRoute(async (req, res) => {
   res.status(204).end();
 }));
 
+// --- Inspecciones y Rondas (checklist de ronda, snapshot — no CAPA/causa raíz) ---
+app.get('/api/inspecciones', asyncRoute(async (req, res) => {
+  const { project_id, sector } = req.query;
+  let { rows } = await req.db.query('SELECT * FROM inspecciones_rondas ORDER BY created_at DESC');
+  if (project_id) rows = rows.filter(r => r.project_id === project_id);
+  if (sector) rows = rows.filter(r => r.sector === sector);
+  res.json(rows);
+}));
+
+app.post('/api/inspecciones', asyncRoute(async (req, res) => {
+  const { project_id, sector, items } = req.body;
+  if (!project_id || !sector || !Array.isArray(items) || !items.length) {
+    return res.status(400).json({ error: 'project_id, sector e items (array no vacío) son obligatorios' });
+  }
+  const tenant_id = req.session.rol_id === 'super-admin' && req.body.tenant_id ? req.body.tenant_id : req.session.tenant_id;
+  const cumplen = items.filter(i => i.cumple === true).length;
+  const porcentaje = +((cumplen / items.length) * 100).toFixed(2);
+  const id = await nextId('inspecciones_rondas', 'INS', 4);
+  const { rows } = await req.db.query(
+    `INSERT INTO inspecciones_rondas (id, tenant_id, project_id, sector, items, porcentaje_cumplimiento, realizado_por)
+     VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
+    [id, tenant_id, project_id, sector, JSON.stringify(items), porcentaje, req.session.nombre || 'Usuario Actual']
+  );
+  res.status(201).json(rows[0]);
+}));
+
 // --- Reportes Ejecutivos (Motor de Indicadores BI) ---
 app.get('/api/reportes/resumen', asyncRoute(async (req, res) => {
   const [projects, tenants, accidentes, presupuesto, charlas, permisos, normas] = await Promise.all([
@@ -708,13 +734,40 @@ app.get('/api/reportes/resumen', asyncRoute(async (req, res) => {
     ? +(tenants.reduce((s, t) => s + (Number(t.cumplimiento_sgsst) || 0), 0) / tenants.length).toFixed(1)
     : 0;
 
+  // dias_sin_accidentes: real, calculado desde la fecha del accidente más reciente — no inventado.
+  // null si nunca hubo un accidente registrado (el frontend debe mostrar "sin registros", no un número.
+  const fechaUltimoAccidente = accidentes.length
+    ? accidentes.map(a => a.fecha).sort().slice(-1)[0]
+    : null;
+  const diasSinAccidentes = fechaUltimoAccidente
+    ? Math.floor((Date.now() - new Date(fechaUltimoAccidente).getTime()) / 86400000)
+    : null;
+
   res.json({
     por_proyecto: porProyecto,
     presupuesto_totales: presupuestoTotales,
     cumplimiento_promedio_sgsst: cumplimientoPromedioSgsst,
+    dias_sin_accidentes: diasSinAccidentes,
     total_charlas: charlas.length,
     permisos: { activos: permisos.filter(p => p.estado === 'Activo').length, rechazados: permisos.filter(p => p.estado === 'Rechazado').length },
     normas_legales: { total: normas.length, pendientes_revision: normas.filter(n => n.estado === 'pendiente_revision').length, publicadas: normas.filter(n => n.estado === 'publicado_a_tenants').length },
+  });
+}));
+
+// Alertas del Centro de Mando — 3 categorías, todas derivadas de datos reales existentes,
+// ninguna inventada. Reemplaza las 3 tarjetas hardcodeadas de centro-mando.html.
+app.get('/api/reportes/alertas', asyncRoute(async (req, res) => {
+  const [empleadosVencidos, tenantsTrial, ultimoIncidente, projects] = await Promise.all([
+    req.db.query("SELECT id, nombre, project_id, tenant_id FROM empleados WHERE estado_alturas = 'Vencido' ORDER BY nombre").then(r => r.rows),
+    req.db.query("SELECT id, razon_social FROM tenants WHERE estado = 'Trial' ORDER BY razon_social").then(r => r.rows),
+    req.db.query("SELECT id, project_id, descripcion, fecha FROM bitacora WHERE tipo = 'Incidente' ORDER BY fecha DESC, id DESC LIMIT 1").then(r => r.rows),
+    req.db.query('SELECT id, nombre FROM projects').then(r => r.rows),
+  ]);
+  const nombreProyecto = (id) => projects.find(p => p.id === id)?.nombre || null;
+  res.json({
+    alturas_vencidas: empleadosVencidos.map(e => ({ ...e, project_nombre: nombreProyecto(e.project_id) })),
+    tenants_trial: tenantsTrial,
+    ultimo_incidente: ultimoIncidente[0] ? { ...ultimoIncidente[0], project_nombre: nombreProyecto(ultimoIncidente[0].project_id) } : null,
   });
 }));
 

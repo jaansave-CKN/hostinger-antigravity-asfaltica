@@ -227,6 +227,14 @@
 <h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Inspecciones y Rondas</h1>
 <p class="text-on-surface-variant font-body-lg text-body-lg max-w-2xl mt-2">Cumplimiento técnico de seguridad para infraestructuras de alto riesgo y servicios de protección privada.</p>
 </div>
+<!-- Selector de Proyecto (obligatorio — la ronda pertenece a un proyecto real) -->
+<div class="mb-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex items-center gap-4 shadow-sm">
+<span class="material-symbols-outlined text-primary">apartment</span>
+<label class="font-label-md text-label-md text-on-surface-variant uppercase" for="select-project">Proyecto</label>
+<select class="flex-1 max-w-sm px-3 py-2 border border-outline-variant rounded-lg bg-surface font-body-md" id="select-project">
+<option value="">Selecciona un proyecto…</option>
+</select>
+</div>
 <!-- Bento Layout Container -->
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
 <!-- Sector Tabs (Bento Card 1) -->
@@ -245,71 +253,12 @@
 <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-sm">
 <div class="bg-surface-container-low px-6 py-4 border-b border-outline-variant flex justify-between items-center">
 <h3 class="font-title-md text-title-md text-on-surface" id="sector-title">Ítems de Seguridad: Andamios / Grúa</h3>
-<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface rounded px-2 py-1">PASO 1 DE 2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface rounded px-2 py-1" id="paso-indicador">0 DE 2 MARCADOS</span>
 </div>
-<div class="divide-y divide-outline-variant" id="checklist-container">
-<!-- Construction Items -->
-<div class="checklist-item p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 sector-content sector-construccion">
-<div class="flex-1">
-<h4 class="font-title-md text-body-lg font-bold text-on-surface">Nivelación de bases de andamio</h4>
-<p class="text-on-surface-variant text-body-md mt-1">Verificar que los husillos de nivelación no excedan el 75% de su longitud.</p>
-</div>
-<div class="flex items-center gap-2">
-<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-tertiary-container hover:text-on-tertiary hover:border-transparent transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-[18px]">check_circle</span> CUMPLE
-                                    </button>
-<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-error hover:text-on-error hover:border-transparent transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-[18px]">cancel</span> NO CUMPLE
-                                    </button>
-</div>
-</div>
-<div class="checklist-item p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 sector-content sector-construccion">
-<div class="flex-1">
-<h4 class="font-title-md text-body-lg font-bold text-on-surface">Estado de cables y poleas (Grúa)</h4>
-<p class="text-on-surface-variant text-body-md mt-1">Inspección visual de hilos rotos o corrosión excesiva en el cable principal.</p>
-</div>
-<div class="flex items-center gap-2">
-<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-tertiary-container hover:text-on-tertiary hover:border-transparent transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-[18px]">check_circle</span> CUMPLE
-                                    </button>
-<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-error hover:text-on-error hover:border-transparent transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-[18px]">cancel</span> NO CUMPLE
-                                    </button>
-</div>
-</div>
-<!-- Security Items (Hidden by default) -->
-<div class="checklist-item p-4 md:p-6 hidden flex flex-col md:flex-row md:items-center justify-between gap-4 sector-content sector-vigilancia">
-<div class="flex-1">
-<h4 class="font-title-md text-body-lg font-bold text-on-surface">Estado y carga de armamento</h4>
-<p class="text-on-surface-variant text-body-md mt-1">Verificación de número de serie y munición reglamentaria completa.</p>
-</div>
-<div class="flex items-center gap-2">
-<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-tertiary-container hover:text-on-tertiary hover:border-transparent transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-[18px]">check_circle</span> CUMPLE
-                                    </button>
-<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-error hover:text-on-error hover:border-transparent transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-[18px]">cancel</span> NO CUMPLE
-                                    </button>
-</div>
-</div>
-<div class="checklist-item p-4 md:p-6 hidden flex flex-col md:flex-row md:items-center justify-between gap-4 sector-content sector-vigilancia">
-<div class="flex-1">
-<h4 class="font-title-md text-body-lg font-bold text-on-surface">Prueba de radiofrecuencia</h4>
-<p class="text-on-surface-variant text-body-md mt-1">Conectividad directa con el centro de control (CAD) y nivel de batería.</p>
-</div>
-<div class="flex items-center gap-2">
-<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-tertiary-container hover:text-on-tertiary hover:border-transparent transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-[18px]">check_circle</span> CUMPLE
-                                    </button>
-<button class="flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-error hover:text-on-error hover:border-transparent transition-colors flex items-center justify-center gap-1">
-<span class="material-symbols-outlined text-[18px]">cancel</span> NO CUMPLE
-                                    </button>
-</div>
-</div>
-</div>
+<div class="divide-y divide-outline-variant" id="checklist-container"></div>
 </div>
 <!-- Finish Button (Large Action) -->
-<button class="w-full py-5 bg-primary text-on-primary rounded-xl font-headline-md text-headline-md shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-transform">
+<button class="w-full py-5 bg-primary text-on-primary rounded-xl font-headline-md text-headline-md shadow-lg flex items-center justify-center gap-3 active:scale-95 transition-transform disabled:opacity-40 disabled:cursor-not-allowed" id="btn-finalizar" onclick="finalizarInspeccion()">
 <span class="material-symbols-outlined">assignment_turned_in</span>
                         FINALIZAR INSPECCIÓN
                     </button>
@@ -352,11 +301,11 @@
 <p class="font-label-sm text-label-sm text-on-surface-variant uppercase">Resumen de Inspección</p>
 <div class="mt-2 flex items-end justify-between">
 <div>
-<span class="text-3xl font-black text-primary">02/14</span>
+<span class="text-3xl font-black text-primary" id="resumen-marcados">0/0</span>
 <span class="text-on-surface-variant text-body-md ml-1">ítems marcados</span>
 </div>
 <div class="h-2 w-24 bg-surface-container-high rounded-full overflow-hidden">
-<div class="h-full bg-primary w-1/6"></div>
+<div class="h-full bg-primary" id="resumen-barra" style="width: 0%"></div>
 </div>
 </div>
 </div>
@@ -414,31 +363,106 @@
 <!-- Floating SOS (Mobile Only Contextual Action) - Hidden because it's not the primary screen, but defined in JSON components logic sometimes -->
 </main>
 <script>
+        // Catálogo de ítems por sector — fijo en el cliente (no hay tabla de catálogo
+        // configurable todavía, sigue siendo decisión pendiente, ver docs/analisis_gaps_v2.md).
+        const CHECKLIST_ITEMS = {
+          construccion: [
+            { id: 'andamio-nivelacion', titulo: 'Nivelación de bases de andamio', desc: 'Verificar que los husillos de nivelación no excedan el 75% de su longitud.' },
+            { id: 'grua-cables', titulo: 'Estado de cables y poleas (Grúa)', desc: 'Inspección visual de hilos rotos o corrosión excesiva en el cable principal.' },
+          ],
+          vigilancia: [
+            { id: 'armamento-estado', titulo: 'Estado y carga de armamento', desc: 'Verificación de número de serie y munición reglamentaria completa.' },
+            { id: 'radio-frecuencia', titulo: 'Prueba de radiofrecuencia', desc: 'Conectividad directa con el centro de control (CAD) y nivel de batería.' },
+          ],
+        };
+
+        let sectorActual = 'construccion';
+        let resultados = {}; // { itemId: true|false }
+
+        function renderChecklist() {
+          resultados = {};
+          const items = CHECKLIST_ITEMS[sectorActual];
+          document.getElementById('checklist-container').innerHTML = items.map(it => `
+            <div class="checklist-item p-4 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div class="flex-1">
+                <h4 class="font-title-md text-body-lg font-bold text-on-surface">${it.titulo}</h4>
+                <p class="text-on-surface-variant text-body-md mt-1">${it.desc}</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="btn-cumple flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-tertiary-container hover:text-on-tertiary hover:border-transparent transition-colors flex items-center justify-center gap-1" data-item="${it.id}" onclick="marcarItem('${it.id}', true)">
+                  <span class="material-symbols-outlined text-[18px]">check_circle</span> CUMPLE
+                </button>
+                <button class="btn-no-cumple flex-1 md:flex-none px-4 py-2 border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-error hover:text-on-error hover:border-transparent transition-colors flex items-center justify-center gap-1" data-item="${it.id}" onclick="marcarItem('${it.id}', false)">
+                  <span class="material-symbols-outlined text-[18px]">cancel</span> NO CUMPLE
+                </button>
+              </div>
+            </div>`).join('');
+          actualizarResumen();
+        }
+
+        window.marcarItem = function (itemId, cumple) {
+          resultados[itemId] = cumple;
+          const wrap = document.querySelector(`.btn-cumple[data-item="${itemId}"]`).closest('.checklist-item');
+          wrap.querySelector('.btn-cumple').className = 'btn-cumple flex-1 md:flex-none px-4 py-2 rounded-lg font-label-md text-label-md flex items-center justify-center gap-1 transition-colors ' + (cumple ? 'bg-tertiary-container text-on-tertiary' : 'border border-outline-variant hover:bg-tertiary-container hover:text-on-tertiary');
+          wrap.querySelector('.btn-no-cumple').className = 'btn-no-cumple flex-1 md:flex-none px-4 py-2 rounded-lg font-label-md text-label-md flex items-center justify-center gap-1 transition-colors ' + (cumple === false ? 'bg-error text-on-error' : 'border border-outline-variant hover:bg-error hover:text-on-error');
+          actualizarResumen();
+        };
+
+        function actualizarResumen() {
+          const total = CHECKLIST_ITEMS[sectorActual].length;
+          const marcados = Object.keys(resultados).length;
+          document.getElementById('resumen-marcados').textContent = `${marcados}/${total}`;
+          document.getElementById('resumen-barra').style.width = total ? `${(marcados / total) * 100}%` : '0%';
+          document.getElementById('paso-indicador').textContent = `${marcados} DE ${total} MARCADOS`;
+          document.getElementById('btn-finalizar').disabled = marcados < total || !document.getElementById('select-project').value;
+        }
+
         function switchSector(sector) {
+            sectorActual = sector;
             const btnConstruccion = document.getElementById('btn-construccion');
             const btnVigilancia = document.getElementById('btn-vigilancia');
             const sectorTitle = document.getElementById('sector-title');
-            const items = document.querySelectorAll('.sector-content');
 
-            // Reset buttons
             btnConstruccion.className = 'flex items-center gap-2 px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-all';
             btnVigilancia.className = 'flex items-center gap-2 px-6 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:bg-surface-variant transition-all';
-
-            // Hide all items
-            items.forEach(item => item.classList.add('hidden'));
 
             if (sector === 'construccion') {
                 btnConstruccion.className = 'flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-on-primary transition-all font-bold';
                 sectorTitle.innerText = 'Ítems de Seguridad: Andamios / Grúa';
-                document.querySelectorAll('.sector-construccion').forEach(item => item.classList.remove('hidden'));
             } else {
                 btnVigilancia.className = 'flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-on-primary transition-all font-bold';
                 sectorTitle.innerText = 'Ítems de Seguridad: Armamento / Comunicaciones';
-                document.querySelectorAll('.sector-vigilancia').forEach(item => item.classList.remove('hidden'));
             }
+            renderChecklist();
         }
 
-        // Set dynamic simulation date
+        window.finalizarInspeccion = async function () {
+          const project_id = document.getElementById('select-project').value;
+          const items = CHECKLIST_ITEMS[sectorActual].map(it => ({ item: it.titulo, cumple: !!resultados[it.id] }));
+          const res = await fetch('/api/inspecciones', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ project_id, sector: sectorActual, items }),
+          });
+          if (!res.ok) { alert('No se pudo guardar la inspección. Intenta de nuevo.'); return; }
+          alert('Inspección registrada correctamente.');
+          renderChecklist();
+        };
+
+        async function cargarProyectos() {
+          const select = document.getElementById('select-project');
+          try {
+            const projects = await fetch('/api/projects').then(r => r.json());
+            select.innerHTML = '<option value="">Selecciona un proyecto…</option>' +
+              projects.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
+            const params = new URLSearchParams(window.location.search);
+            const preset = params.get('project');
+            if (preset && projects.some(p => p.id === preset)) select.value = preset;
+          } catch { /* si falla, el selector queda vacío y el botón de finalizar sigue deshabilitado */ }
+          actualizarResumen();
+        }
+        document.getElementById('select-project').addEventListener('change', actualizarResumen);
+
+        // Set dynamic simulation date (solo la marca de agua de la foto — sigue siendo simulación visual)
         const dateEl = document.getElementById('current-date-sim');
         if (dateEl) {
             const now = new Date();
@@ -446,5 +470,8 @@
             const timeStr = now.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit', hour12: true });
             dateEl.innerText = `${dateStr} | ${timeStr}`;
         }
+
+        renderChecklist();
+        cargarProyectos();
     </script>
 </body></html>
