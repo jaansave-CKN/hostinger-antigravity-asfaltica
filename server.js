@@ -5,10 +5,19 @@ const rateLimit = require('express-rate-limit');
 const session = require('express-session');
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
+const Anthropic = require('@anthropic-ai/sdk');
 const { pool, initDb, nextId, MODULES, ACTIONS } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 5180;
+
+// Sprint 4 — Auditor de Cumplimiento por IA. Sin ANTHROPIC_API_KEY el endpoint
+// responde 503 con mensaje claro — nunca genera hallazgos simulados.
+const AI_MODEL = process.env.AI_MODEL || 'claude-sonnet-4-6';
+const anthropic = process.env.ANTHROPIC_API_KEY ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }) : null;
+if (!anthropic) {
+  console.warn('[ia] ANTHROPIC_API_KEY no está definida — /api/auditoria-ia/ejecutar responderá 503 hasta que se configure.');
+}
 
 // SESSION_SECRET debe fijarse como variable de entorno real en el hosting
 // (nunca commitear el valor real). El fallback de abajo es SOLO para
@@ -742,6 +751,127 @@ app.put('/api/emergencias/:id', asyncRoute(async (req, res) => {
     const existe = await req.db.query('SELECT 1 FROM emergency_alerts WHERE id=$1', [req.params.id]);
     return res.status(existe.rows.length ? 409 : 404).json({
       error: existe.rows.length ? 'La alerta fue actualizada por otro usuario mientras tanto' : 'Alerta no encontrada',
+    });
+  }
+  res.json(rows[0]);
+}));
+
+// --- Auditor de Cumplimiento por IA (ai_audit_findings) ---
+// 'documentos' NO se evalúa: son solo metadatos (nombre/tipo/fecha), sin extracción
+// real de contenido de archivo — no hay nada que un modelo pueda auditar ahí todavía.
+const TOPE_REGISTROS_POR_FUENTE = 20;
+
+function formatearCharla(r) { return `[${r.id}] ${r.fecha} — "${r.tema}" (responsable: ${r.responsable}, ${r.asistentes} asistentes)`; }
+function formatearBitacora(r) { return `[${r.id}] ${r.fecha} — ${r.tipo}: ${r.descripcion}`; }
+function formatearPermiso(r) { return `[${r.id}] ${r.tipo} — estado: ${r.estado}${r.motivo_rechazo ? ` (${r.motivo_rechazo})` : ''}`; }
+function formatearInspeccion(r) {
+  const items = (r.items || []).map(it => `${it.item}: ${it.cumple ? 'CUMPLE' : 'NO CUMPLE'}`).join('; ');
+  return `[${r.id}] ${r.fecha_creacion || r.created_at} — sector ${r.sector}, ${r.porcentaje_cumplimiento}% cumplimiento. Ítems: ${items}`;
+}
+
+app.post('/api/auditoria-ia/ejecutar', requireSuperadmin, asyncRoute(async (req, res) => {
+  if (!anthropic) return res.status(503).json({ error: 'IA no configurada — falta ANTHROPIC_API_KEY en el entorno.' });
+  const { project_id } = req.body;
+  if (!project_id) return res.status(400).json({ error: 'project_id es obligatorio — se audita un proyecto a la vez.' });
+
+  const { rows: projectRows } = await req.db.query('SELECT * FROM projects WHERE id = $1', [project_id]);
+  if (!projectRows.length) return res.status(404).json({ error: 'Proyecto no encontrado' });
+  const project = projectRows[0];
+  const { rows: tenantRows } = await req.db.query('SELECT sector FROM tenants WHERE id = $1', [project.tenant_id]);
+  const sector = tenantRows[0]?.sector || 'Ambas';
+
+  const { rows: normas } = await req.db.query(
+    `SELECT codigo_norma, nombre, resumen_requisito FROM legal_norms
+     WHERE estado = 'publicado_a_tenants' AND (sector_aplicable = $1 OR sector_aplicable = 'Ambas')`,
+    [sector]
+  );
+  if (!normas.length) return res.status(422).json({ error: 'No hay normas publicado_a_tenants aplicables al sector de este tenant — no hay contra qué auditar.' });
+  const bloqueNormas = normas.map(n => `- ${n.codigo_norma} (${n.nombre}): ${n.resumen_requisito}`).join('\n');
+
+  const FUENTES = [
+    { fuente: 'charlas', query: 'SELECT * FROM charlas WHERE project_id = $1 ORDER BY fecha DESC', formatear: formatearCharla },
+    { fuente: 'bitacora', query: 'SELECT * FROM bitacora WHERE project_id = $1 ORDER BY fecha DESC', formatear: formatearBitacora },
+    { fuente: 'permisos_trabajo', query: 'SELECT * FROM permisos_trabajo WHERE project_id = $1 ORDER BY fecha_creacion DESC', formatear: formatearPermiso },
+    { fuente: 'inspecciones_rondas', query: 'SELECT * FROM inspecciones_rondas WHERE project_id = $1 ORDER BY created_at DESC', formatear: formatearInspeccion },
+  ];
+
+  let totalEvaluados = 0;
+  let totalHallazgos = 0;
+
+  for (const f of FUENTES) {
+    const { rows: yaAuditados } = await req.db.query('SELECT fuente_id FROM ai_audit_findings WHERE fuente = $1', [f.fuente]);
+    const idsAuditados = new Set(yaAuditados.map(r => r.fuente_id));
+    const { rows: candidatos } = await req.db.query(f.query, [project_id]);
+    const pendientes = candidatos.filter(r => !idsAuditados.has(r.id)).slice(0, TOPE_REGISTROS_POR_FUENTE);
+    if (!pendientes.length) continue;
+    totalEvaluados += pendientes.length;
+
+    const bloqueRegistros = pendientes.map(f.formatear).join('\n');
+    let respuesta;
+    try {
+      respuesta = await anthropic.messages.create({
+        model: AI_MODEL,
+        max_tokens: 2048,
+        system: [
+          {
+            type: 'text',
+            text: 'Eres un auditor de cumplimiento HSEQ para Colombia. Evalúa los registros contra las normas dadas. Responde ÚNICAMENTE con un array JSON (sin markdown, sin texto adicional): [{"fuente_id": "...", "hallazgo": "...", "norma_citada": "...", "severidad": "Baja"|"Media"|"Alta"|"Critica", "confianza": 0.0-1.0}]. Si un registro no presenta ningún problema de cumplimiento real, NO lo incluyas — el array puede quedar vacío. No inventes normas que no estén en la lista dada.',
+          },
+          { type: 'text', text: `Normas vigentes aplicables:\n${bloqueNormas}`, cache_control: { type: 'ephemeral' } },
+        ],
+        messages: [{ role: 'user', content: `Fuente: ${f.fuente}\n\n${bloqueRegistros}` }],
+      });
+    } catch (err) {
+      console.error(`[ia] Error llamando a Claude para fuente ${f.fuente}:`, err.message);
+      continue; // una fuente fallando no debe tumbar las demás
+    }
+
+    let hallazgos = [];
+    try {
+      const texto = respuesta.content.find(b => b.type === 'text')?.text || '[]';
+      hallazgos = JSON.parse(texto.trim());
+      if (!Array.isArray(hallazgos)) hallazgos = [];
+    } catch {
+      console.error(`[ia] Respuesta no parseable como JSON para fuente ${f.fuente}`);
+      continue;
+    }
+
+    for (const h of hallazgos) {
+      if (!h.fuente_id || !h.hallazgo || !h.severidad) continue;
+      const id = await nextId('ai_audit_findings', 'AIF', 4);
+      await req.db.query(
+        `INSERT INTO ai_audit_findings (id, tenant_id, project_id, fuente, fuente_id, hallazgo, norma_citada, severidad, confianza_modelo)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+        [id, project.tenant_id, project_id, f.fuente, h.fuente_id, h.hallazgo, h.norma_citada || null, h.severidad, h.confianza ?? null]
+      );
+      totalHallazgos++;
+    }
+  }
+
+  res.json({ evaluados: totalEvaluados, hallazgos_creados: totalHallazgos });
+}));
+
+app.get('/api/ai-audit-findings', asyncRoute(async (req, res) => {
+  const { estado, project_id } = req.query;
+  let { rows } = await req.db.query('SELECT * FROM ai_audit_findings ORDER BY created_at DESC');
+  if (estado) rows = rows.filter(r => r.estado === estado);
+  if (project_id) rows = rows.filter(r => r.project_id === project_id);
+  res.json(rows);
+}));
+
+app.put('/api/ai-audit-findings/:id', asyncRoute(async (req, res) => {
+  const { estado, version } = req.body;
+  const estadosValidos = new Set(['Nuevo', 'Revisado', 'Descartado', 'Escalado']);
+  if (!estadosValidos.has(estado)) return res.status(400).json({ error: `estado inválido — debe ser uno de: ${[...estadosValidos].join(', ')}` });
+  if (!Number.isInteger(Number(version))) return res.status(400).json({ error: 'Falta "version" (entero) en el cuerpo' });
+  const { rows } = await req.db.query(
+    'UPDATE ai_audit_findings SET estado=$1, revisado_por=$2, version=version+1 WHERE id=$3 AND version=$4 RETURNING *',
+    [estado, req.session.nombre || 'Usuario Actual', req.params.id, version]
+  );
+  if (!rows.length) {
+    const existe = await req.db.query('SELECT 1 FROM ai_audit_findings WHERE id=$1', [req.params.id]);
+    return res.status(existe.rows.length ? 409 : 404).json({
+      error: existe.rows.length ? 'El hallazgo fue actualizado por otro usuario mientras tanto' : 'Hallazgo no encontrado',
     });
   }
   res.json(rows[0]);

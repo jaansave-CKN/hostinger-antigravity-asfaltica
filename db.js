@@ -208,6 +208,19 @@ async function initDb() {
     );
     -- Sprint 3 — Botón de Pánico / SOS. canal_notificacion/notificacion_estado son
     -- arquitectura abierta para el futuro proveedor de SMS/WhatsApp (sin implementar).
+    -- Sprint 4 — Auditor de Cumplimiento por IA. 'documentos' está en el CHECK por
+    -- compatibilidad futura pero no se evalúa hoy (ver server.js) — sin extracción
+    -- real de contenido de archivo.
+    CREATE TABLE IF NOT EXISTS ai_audit_findings (
+      id TEXT PRIMARY KEY, tenant_id TEXT NOT NULL REFERENCES tenants(id),
+      project_id TEXT REFERENCES projects(id),
+      fuente TEXT NOT NULL CHECK (fuente IN ('charlas','bitacora','permisos_trabajo','documentos','inspecciones_rondas')),
+      fuente_id TEXT NOT NULL, hallazgo TEXT NOT NULL, norma_citada TEXT,
+      severidad TEXT NOT NULL CHECK (severidad IN ('Baja','Media','Alta','Critica')),
+      confianza_modelo NUMERIC(3,2) CHECK (confianza_modelo BETWEEN 0 AND 1),
+      estado TEXT NOT NULL DEFAULT 'Nuevo' CHECK (estado IN ('Nuevo','Revisado','Descartado','Escalado')),
+      revisado_por TEXT, version INT NOT NULL DEFAULT 1, created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
     CREATE TABLE IF NOT EXISTS emergency_alerts (
       id TEXT PRIMARY KEY, tenant_id TEXT REFERENCES tenants(id),
       project_id TEXT REFERENCES projects(id), user_id TEXT NOT NULL REFERENCES users_app(id),

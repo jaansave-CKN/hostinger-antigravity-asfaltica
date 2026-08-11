@@ -8,6 +8,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
     "bcryptjs": "^2.4.3",
     "express": "^4.19.2",
     "express-rate-limit": "^8.6.0",
