@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HSEQ GESTIÓN - Portería Digital</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#a04100",
+                    "tertiary-container": "#006722",
+                    "background": "#f7f9ff",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "secondary-fixed": "#ffdbcc",
+                    "surface-dim": "#d7dadf",
+                    "outline": "#727784",
+                    "surface-tint": "#115cb9",
+                    "outline-variant": "#c2c6d4",
+                    "secondary-container": "#fe6b00",
+                    "inverse-primary": "#acc7ff",
+                    "tertiary-fixed-dim": "#66df75",
+                    "on-secondary-fixed": "#351000",
+                    "on-primary-fixed-variant": "#004491",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#d7e2ff",
+                    "on-tertiary-fixed": "#002106",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#004c17",
+                    "surface-container-highest": "#e0e3e8",
+                    "surface-bright": "#f7f9ff",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#83fc8e",
+                    "on-surface": "#181c20",
+                    "on-error-container": "#93000a",
+                    "surface": "#f7f9ff",
+                    "primary": "#003f87",
+                    "surface-container-low": "#f1f4f9",
+                    "error": "#ba1a1a",
+                    "surface-container": "#ebeef3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#0056b3",
+                    "on-primary-fixed": "#001a40",
+                    "on-background": "#181c20",
+                    "surface-container-high": "#e5e8ee",
+                    "primary-fixed-dim": "#acc7ff",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#ffb693",
+                    "on-tertiary-fixed-variant": "#00531a",
+                    "on-tertiary-container": "#6fe87c",
+                    "on-secondary-container": "#572000",
+                    "on-primary-container": "#bbd0ff",
+                    "inverse-on-surface": "#eef1f6",
+                    "on-surface-variant": "#424752",
+                    "inverse-surface": "#2d3135",
+                    "surface-variant": "#e0e3e8"
+            },
+            "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+            "spacing": { "xl": "32px", "xs": "4px", "base": "4px", "margin-desktop": "32px", "md": "16px", "lg": "24px", "sm": "8px", "margin-mobile": "16px", "gutter": "16px" },
+            "fontFamily": { "headline-lg-mobile": ["Inter"], "headline-lg": ["Inter"], "title-md": ["Inter"], "display-lg": ["Inter"], "body-lg": ["Inter"], "label-md": ["JetBrains Mono"], "label-sm": ["JetBrains Mono"], "body-md": ["Inter"], "headline-md": ["Inter"] },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-nav-item .material-symbols-outlined { font-variation-settings: 'FILL' 1; }
+        tbody tr:hover { background-color: #f1f4f9; }
+        tbody tr:nth-child(even) { background-color: #fbfcff; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col h-screen w-72 left-0 top-0 fixed border-r border-outline-variant bg-surface py-xl z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">HSEQ GESTIÓN</h1>
+<p class="text-on-surface-variant font-label-md text-label-md mt-xs">Sistema Integrado</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/centro-mando.html"><span class="material-symbols-outlined">strategy</span><span class="font-label-md text-label-md">Planear (Estratégico)</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/inspecciones-rondas.html"><span class="material-symbols-outlined">construction</span><span class="font-label-md text-label-md">Hacer (Operativo)</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/bitacora.html"><span class="material-symbols-outlined">fact_check</span><span class="font-label-md text-label-md">Verificar (Auditoría)</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/charlas-diarias.html"><span class="material-symbols-outlined">published_with_changes</span><span class="font-label-md text-label-md">Actuar (Mejora)</span></a>
+<div class="mt-xl pt-lg border-t border-outline-variant mx-4">
+<p class="text-on-surface-variant font-label-sm text-label-sm px-2 uppercase mb-2">Herramientas</p>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Analítica Avanzada"><span class="material-symbols-outlined">analytics</span><span class="font-label-md text-label-md">Analítica Avanzada</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/matriz-legal.html"><span class="material-symbols-outlined">gavel</span><span class="font-label-md text-label-md">Matriz Legal</span></a>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-r-full font-bold transition-colors scale-[0.98] active-nav-item" href="/permisos-trabajo.html"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">fingerprint</span><span class="font-label-md text-label-md">Portería Digital</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/reportes.html"><span class="material-symbols-outlined">monitoring</span><span class="font-label-md text-label-md">Reportes Ejecutivos</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/usuarios-roles.html"><span class="material-symbols-outlined">manage_accounts</span><span class="font-label-md text-label-md">Usuarios y Roles</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/clientes.html"><span class="material-symbols-outlined">domain</span><span class="font-label-md text-label-md">Clientes</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proyectos.html"><span class="material-symbols-outlined">apartment</span><span class="font-label-md text-label-md">Proyectos</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/empleados.html"><span class="material-symbols-outlined">badge</span><span class="font-label-md text-label-md">Empleados</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/charlas-diarias.html"><span class="material-symbols-outlined">campaign</span><span class="font-label-md text-label-md">Charlas Diarias</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/bitacora.html"><span class="material-symbols-outlined">menu_book</span><span class="font-label-md text-label-md">Bitácora</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/roles-permisos.html"><span class="material-symbols-outlined">admin_panel_settings</span><span class="font-label-md text-label-md">Roles y Permisos</span></a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Configuración"><span class="material-symbols-outlined">settings_suggest</span><span class="font-label-md text-label-md">Configuración</span></a>
+</div>
+</nav>
+<a class="px-lg py-md border-t border-outline-variant flex items-center gap-3 hover:bg-surface-container-high transition-colors" href="/seleccion-empresa.html" title="Cambiar de empresa">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">JD</div>
+<div><p class="font-title-md text-body-md font-bold">Juan Delgado</p><p class="font-label-sm text-label-sm text-on-surface-variant">Director HSEQ</p></div>
+</a>
+</aside>
+<!-- Main -->
+<main class="lg:pl-72 pt-lg px-margin-mobile md:px-margin-desktop pb-xl max-w-[1600px] mx-auto">
+<section class="mb-lg">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Portería Digital</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 font-label-sm text-label-sm">High_Risk_Work_Permits — Motor de Exclusión Automática (Res. 4272 de 2021). Bloquea la emisión si ARL o curso de alturas están vencidos. La decisión la toma el servidor, nunca el navegador.</p>
+</section>
+
+<!-- Emisor -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant p-lg mb-lg">
+<h3 class="font-title-md text-title-md text-on-surface mb-md flex items-center gap-2"><span class="material-symbols-outlined">fingerprint</span>Verificar y Emitir Permiso</h3>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Cliente</label>
+<select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="sel-tenant"><option value="">Seleccionar…</option></select>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Proyecto</label>
+<select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="sel-project" disabled><option value="">Seleccionar cliente primero</option></select>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Empleado</label>
+<select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="sel-empleado" disabled><option value="">Seleccionar proyecto primero</option></select>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Tipo de Permiso</label>
+<select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="sel-tipo">
+<option value="Trabajo en Alturas">Trabajo en Alturas</option>
+<option value="Espacios Confinados">Espacios Confinados</option>
+<option value="Excavaciones">Excavaciones</option>
+<option value="Trabajo en Caliente">Trabajo en Caliente</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Válido Hasta</label>
+<input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="inp-validez-fin" type="date"/>
+</div>
+</div>
+<div id="empleado-preview" class="hidden mt-md p-3 rounded-lg bg-surface-container-low border border-outline-variant text-sm"></div>
+<div class="mt-md flex items-center gap-3">
+<button class="flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container transition-all disabled:opacity-40" id="btn-emitir" disabled>
+<span class="material-symbols-outlined">verified_user</span>Verificar y Emitir
+</button>
+<span id="resultado-emision" class="font-body-md text-body-md"></span>
+</div>
+</section>
+
+<!-- Historial -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="px-lg py-md border-b border-outline-variant"><h3 class="font-title-md text-title-md text-on-surface">Historial de Permisos</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-sm">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr class="font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-4 py-2">ID</th><th class="px-4 py-2">Empleado</th><th class="px-4 py-2">Tipo</th><th class="px-4 py-2">Vigencia</th><th class="px-4 py-2">Estado</th><th class="px-4 py-2">Motivo (si rechazado)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant" id="permisos-tbody"></tbody>
+</table>
+</div>
+</section>
+</main>
+
+<script>
+    let tenants = [], allProjects = [], allEmpleados = [];
+
+    function estadoBadge(estado) {
+      if (estado === 'Activo') return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-tertiary-fixed text-on-tertiary-fixed-variant"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">check_circle</span>Activo</span>`;
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-error-container text-on-error-container"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">block</span>Rechazado</span>`;
+    }
+
+    async function loadPermisos() {
+      const permisos = await fetch('/api/permisos-trabajo').then(r => r.json());
+      document.getElementById('permisos-tbody').innerHTML = permisos.map(p => `
+        <tr>
+          <td class="px-4 py-2 font-label-sm text-label-sm text-on-surface-variant">${p.id}</td>
+          <td class="px-4 py-2 font-bold">${p.empleado ? p.empleado.nombre : p.empleado_id}</td>
+          <td class="px-4 py-2">${p.tipo}</td>
+          <td class="px-4 py-2 font-label-sm text-label-sm">${p.validez_inicio} → ${p.validez_fin}</td>
+          <td class="px-4 py-2">${estadoBadge(p.estado)}</td>
+          <td class="px-4 py-2 text-on-surface-variant">${p.motivo_rechazo || '—'}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function init() {
+      tenants = await fetch('/api/tenants').then(r => r.json());
+      document.getElementById('sel-tenant').innerHTML += tenants.map(t => `<option value="${t.id}">${t.razon_social}</option>`).join('');
+      await loadPermisos();
+    }
+
+    document.getElementById('sel-tenant').addEventListener('change', async (e) => {
+      const tenantId = e.target.value;
+      const projSel = document.getElementById('sel-project');
+      const empSel = document.getElementById('sel-empleado');
+      empSel.innerHTML = '<option value="">Seleccionar proyecto primero</option>'; empSel.disabled = true;
+      document.getElementById('empleado-preview').classList.add('hidden');
+      document.getElementById('btn-emitir').disabled = true;
+      if (!tenantId) { projSel.innerHTML = '<option value="">Seleccionar cliente primero</option>'; projSel.disabled = true; return; }
+      allProjects = await fetch(`/api/projects?tenant_id=${tenantId}`).then(r => r.json());
+      projSel.disabled = false;
+      projSel.innerHTML = '<option value="">Seleccionar…</option>' + allProjects.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
+    });
+
+    document.getElementById('sel-project').addEventListener('change', async (e) => {
+      const projectId = e.target.value;
+      const empSel = document.getElementById('sel-empleado');
+      document.getElementById('empleado-preview').classList.add('hidden');
+      document.getElementById('btn-emitir').disabled = true;
+      if (!projectId) { empSel.innerHTML = '<option value="">Seleccionar proyecto primero</option>'; empSel.disabled = true; return; }
+      allEmpleados = await fetch(`/api/empleados?project_id=${projectId}`).then(r => r.json());
+      empSel.disabled = false;
+      empSel.innerHTML = '<option value="">Seleccionar…</option>' + allEmpleados.map(e => `<option value="${e.id}">${e.nombre}</option>`).join('');
+    });
+
+    document.getElementById('sel-empleado').addEventListener('change', (e) => {
+      const emp = allEmpleados.find(x => x.id === e.target.value);
+      const preview = document.getElementById('empleado-preview');
+      document.getElementById('btn-emitir').disabled = !emp;
+      if (!emp) { preview.classList.add('hidden'); return; }
+      const chip = (label, v) => `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold mr-2 ${v === 'Cumple' ? 'bg-tertiary-fixed text-on-tertiary-fixed-variant' : 'bg-error-container text-on-error-container'}">${label}: ${v || 'Sin registro'}</span>`;
+      preview.innerHTML = `${chip('ARL', emp.estado_arl)}${chip('Alturas', emp.estado_alturas)}`;
+      preview.classList.remove('hidden');
+    });
+
+    document.getElementById('btn-emitir').addEventListener('click', async () => {
+      const payload = {
+        tenant_id: document.getElementById('sel-tenant').value,
+        project_id: document.getElementById('sel-project').value,
+        empleado_id: document.getElementById('sel-empleado').value,
+        tipo: document.getElementById('sel-tipo').value,
+        validez_inicio: new Date().toISOString().slice(0, 10),
+        validez_fin: document.getElementById('inp-validez-fin').value || new Date().toISOString().slice(0, 10),
+        creado_por: 'Juan Delgado',
+      };
+      const res = await fetch('/api/permisos-trabajo', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      const data = await res.json();
+      const out = document.getElementById('resultado-emision');
+      if (res.status === 201) {
+        out.innerHTML = `<span class="text-tertiary-container font-bold">✓ Permiso ${data.id} emitido — Activo.</span>`;
+      } else {
+        out.innerHTML = `<span class="text-error font-bold">✗ Rechazado: ${data.motivo_rechazo}</span>`;
+      }
+      await loadPermisos();
+    });
+
+    init();
+  </script>
+</body></html>

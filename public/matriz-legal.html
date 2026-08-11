@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HSEQ GESTIÓN - Matriz de Requisitos Legales</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary": "#a04100",
+                    "tertiary-container": "#006722",
+                    "background": "#f7f9ff",
+                    "on-secondary-fixed-variant": "#7a3000",
+                    "secondary-fixed": "#ffdbcc",
+                    "surface-dim": "#d7dadf",
+                    "outline": "#727784",
+                    "surface-tint": "#115cb9",
+                    "outline-variant": "#c2c6d4",
+                    "secondary-container": "#fe6b00",
+                    "inverse-primary": "#acc7ff",
+                    "tertiary-fixed-dim": "#66df75",
+                    "on-secondary-fixed": "#351000",
+                    "on-primary-fixed-variant": "#004491",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#d7e2ff",
+                    "on-tertiary-fixed": "#002106",
+                    "error-container": "#ffdad6",
+                    "tertiary": "#004c17",
+                    "surface-container-highest": "#e0e3e8",
+                    "surface-bright": "#f7f9ff",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#83fc8e",
+                    "on-surface": "#181c20",
+                    "on-error-container": "#93000a",
+                    "surface": "#f7f9ff",
+                    "primary": "#003f87",
+                    "surface-container-low": "#f1f4f9",
+                    "error": "#ba1a1a",
+                    "surface-container": "#ebeef3",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "primary-container": "#0056b3",
+                    "on-primary-fixed": "#001a40",
+                    "on-background": "#181c20",
+                    "surface-container-high": "#e5e8ee",
+                    "primary-fixed-dim": "#acc7ff",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#ffb693",
+                    "on-tertiary-fixed-variant": "#00531a",
+                    "on-tertiary-container": "#6fe87c",
+                    "on-secondary-container": "#572000",
+                    "on-primary-container": "#bbd0ff",
+                    "inverse-on-surface": "#eef1f6",
+                    "on-surface-variant": "#424752",
+                    "inverse-surface": "#2d3135",
+                    "surface-variant": "#e0e3e8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "margin-desktop": "32px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "title-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "label-sm": ["JetBrains Mono"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-item .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        #norms-table td, #norms-table th { padding-top: 8px; padding-bottom: 8px; }
+        tbody tr:hover { background-color: #f1f4f9; }
+        tbody tr:nth-child(even) { background-color: #fbfcff; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Sidebar -->
+<aside class="hidden lg:flex flex-col h-screen w-72 left-0 top-0 fixed border-r border-outline-variant bg-surface py-xl z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-md text-headline-md font-bold text-primary">HSEQ GESTIÓN</h1>
+<p class="text-on-surface-variant font-label-md text-label-md mt-xs">Sistema Integrado</p>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/centro-mando.html">
+<span class="material-symbols-outlined">strategy</span>
+<span class="font-label-md text-label-md">Planear (Estratégico)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/inspecciones-rondas.html">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Hacer (Operativo)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/bitacora.html">
+<span class="material-symbols-outlined">fact_check</span>
+<span class="font-label-md text-label-md">Verificar (Auditoría)</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">published_with_changes</span>
+<span class="font-label-md text-label-md">Actuar (Mejora)</span>
+</a>
+<div class="mt-xl pt-lg border-t border-outline-variant mx-4">
+<p class="text-on-surface-variant font-label-sm text-label-sm px-2 uppercase mb-2">Herramientas</p>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Analítica Avanzada">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analítica Avanzada</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container rounded-r-full font-bold transition-colors scale-[0.98] active-nav-item" href="/matriz-legal.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<span class="font-label-md text-label-md">Matriz Legal</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/permisos-trabajo.html">
+<span class="material-symbols-outlined">fingerprint</span>
+<span class="font-label-md text-label-md">Portería Digital</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/reportes.html">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-label-md text-label-md">Reportes Ejecutivos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/usuarios-roles.html">
+<span class="material-symbols-outlined">manage_accounts</span>
+<span class="font-label-md text-label-md">Usuarios y Roles</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/clientes.html">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md text-label-md">Clientes</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proyectos.html">
+<span class="material-symbols-outlined">apartment</span>
+<span class="font-label-md text-label-md">Proyectos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/empleados.html">
+<span class="material-symbols-outlined">badge</span>
+<span class="font-label-md text-label-md">Empleados</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/charlas-diarias.html">
+<span class="material-symbols-outlined">campaign</span>
+<span class="font-label-md text-label-md">Charlas Diarias</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/bitacora.html">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">Bitácora</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/roles-permisos.html">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="font-label-md text-label-md">Roles y Permisos</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-lg" href="/proximamente.html?modulo=Configuración">
+<span class="material-symbols-outlined">settings_suggest</span>
+<span class="font-label-md text-label-md">Configuración</span>
+</a>
+</div>
+</nav>
+<a class="px-lg py-md border-t border-outline-variant flex items-center gap-3 hover:bg-surface-container-high transition-colors" href="/seleccion-empresa.html" title="Cambiar de empresa">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">JD</div>
+<div>
+<p class="font-title-md text-body-md font-bold">Juan Delgado</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Director HSEQ</p>
+</div>
+</a>
+</aside>
+<!-- Main -->
+<main class="lg:pl-72 pt-lg px-margin-mobile md:px-margin-desktop pb-xl max-w-[1600px] mx-auto">
+<!-- Header -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-lg">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Matriz de Requisitos Legales</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 font-label-sm text-label-sm">Legal_Norms_Master_Catalog — Motor de Reglas Normativas Desacoplado. Las normas nunca se codifican: viven aquí como metadatos versionados.</p>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto">
+<select class="px-4 py-2 rounded-lg bg-surface border border-outline-variant text-body-md font-body-md text-on-surface focus:ring-2 focus:ring-primary" id="filter-sector">
+<option value="">Sector (todos)</option>
+<option value="Construccion">Construcción</option>
+<option value="Vigilancia">Vigilancia</option>
+</select>
+<select class="px-4 py-2 rounded-lg bg-surface border border-outline-variant text-body-md font-body-md text-on-surface focus:ring-2 focus:ring-primary" id="filter-estado">
+<option value="">Estado (todos)</option>
+<option value="draft">Borrador</option>
+<option value="pendiente_revision">Pendiente de revisión</option>
+<option value="aprobado_super_admin">Aprobado Super-Admin</option>
+<option value="publicado_a_tenants">Publicado a tenants</option>
+</select>
+<button class="flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container transition-all whitespace-nowrap" id="btn-new-norm">
+<span class="material-symbols-outlined">post_add</span>
+Nueva Norma
+</button>
+</div>
+</section>
+<!-- Governance banner -->
+<section class="flex items-start gap-3 mb-lg p-md bg-primary-container/10 border border-primary-container rounded-xl">
+<span class="material-symbols-outlined text-primary mt-0.5">workflow</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Flujo de gobernanza (decisión del usuario, 2026-07-17): <b class="text-on-surface">Borrador → Pendiente de revisión → Aprobado Super-Admin → Publicado a tenants</b>. La propagación a los tenants nunca es automática ni global — cada norma se segmenta por sector y requiere aprobación explícita antes de publicarse.</p>
+</section>
+<!-- Table -->
+<section class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-sm" id="norms-table">
+<thead class="bg-surface-container-low border-b border-outline-variant sticky top-0 z-10">
+<tr class="font-label-md text-label-md text-on-surface-variant uppercase">
+<th class="px-4">Código</th>
+<th class="px-4">Nombre</th>
+<th class="px-4">Sector</th>
+<th class="px-4">Año</th>
+<th class="px-4">Estado</th>
+<th class="px-4">Publicación</th>
+<th class="px-4 text-right sticky right-0 bg-surface-container-low">Acciones</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant" id="norms-tbody"></tbody>
+</table>
+</div>
+<div class="flex items-center justify-between px-4 py-3 border-t border-outline-variant font-label-md text-label-md text-on-surface-variant">
+<span id="results-count"></span>
+</div>
+</section>
+</main>
+
+<!-- Modal: Nueva Norma -->
+<div class="fixed inset-0 bg-on-surface/40 z-[60] hidden items-center justify-center p-4" id="modal-form">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant w-full max-w-lg p-lg">
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-title-md text-title-md text-on-surface">Nueva Norma (entra como Borrador)</h3>
+<button class="p-2 rounded-lg hover:bg-surface-container-high" id="modal-form-close"><span class="material-symbols-outlined">close</span></button>
+</div>
+<form class="space-y-4" id="form-norm" onsubmit="event.preventDefault(); saveNorm();">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Código de Norma</label>
+<input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-codigo" placeholder="Resolución 0000 de AAAA" required type="text"/>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Nombre</label>
+<input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-nombre" required type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Sector Aplicable</label>
+<select class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-sector" required>
+<option value="Ambas">Ambas</option>
+<option value="Construccion">Construcción</option>
+<option value="Vigilancia">Vigilancia</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Año</label>
+<input class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-year" type="number"/>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant uppercase">Resumen del Requisito</label>
+<textarea class="w-full px-4 py-2 rounded-lg bg-surface border border-outline-variant focus:ring-2 focus:ring-primary" id="form-resumen" rows="3"></textarea>
+</div>
+<div class="flex justify-end gap-3 pt-2">
+<button class="px-5 py-2 rounded-xl border border-outline text-on-surface-variant hover:bg-surface-container-high" type="button" id="modal-form-cancel">Cancelar</button>
+<button class="px-5 py-2 rounded-xl bg-primary text-on-primary font-bold hover:bg-primary-container" type="submit">Guardar como Borrador</button>
+</div>
+</form>
+</div>
+</div>
+
+<script>
+    let allNorms = [];
+
+    async function loadNorms() {
+      allNorms = await fetch('/api/matriz-legal').then(r => r.json());
+      renderTable();
+    }
+
+    const ESTADO_MAP = {
+      draft: ['Borrador', 'bg-surface-container-high text-on-surface-variant', 'edit_note'],
+      pendiente_revision: ['Pendiente de revisión', 'bg-secondary-fixed text-on-secondary-fixed-variant', 'hourglass_top'],
+      aprobado_super_admin: ['Aprobado Super-Admin', 'bg-primary-fixed text-on-primary-fixed-variant', 'verified'],
+      publicado_a_tenants: ['Publicado a tenants', 'bg-tertiary-fixed text-on-tertiary-fixed-variant', 'check_circle'],
+    };
+    const SIGUIENTE_LABEL = { draft: 'Enviar a revisión', pendiente_revision: 'Aprobar (Super-Admin)', aprobado_super_admin: 'Publicar a tenants' };
+
+    function estadoBadge(estado) {
+      const [label, cls, icon] = ESTADO_MAP[estado] || ['—', 'bg-surface-container-high', 'help'];
+      return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold ${cls}"><span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">${icon}</span>${label}</span>`;
+    }
+
+    function renderTable() {
+      const sector = document.getElementById('filter-sector').value;
+      const estado = document.getElementById('filter-estado').value;
+      const filtered = allNorms.filter(n =>
+        (!sector || n.sector_aplicable === sector || n.sector_aplicable === 'Ambas') &&
+        (!estado || n.estado === estado)
+      );
+      const tbody = document.getElementById('norms-tbody');
+      tbody.innerHTML = filtered.map(n => `
+        <tr>
+          <td class="px-4 font-label-sm text-label-sm text-on-surface-variant whitespace-nowrap">${n.codigo_norma}</td>
+          <td class="px-4 font-bold text-on-surface">${n.nombre}${n.resumen_requisito ? `<p class="font-body-md text-body-md font-normal text-on-surface-variant mt-0.5">${n.resumen_requisito}</p>` : ''}</td>
+          <td class="px-4">${n.sector_aplicable === 'Construccion' ? 'Construcción' : (n.sector_aplicable === 'Vigilancia' ? 'Vigilancia' : 'Ambas')}</td>
+          <td class="px-4 font-label-sm text-label-sm">${n.version_year || '—'}</td>
+          <td class="px-4">${estadoBadge(n.estado)}</td>
+          <td class="px-4 font-label-sm text-label-sm text-on-surface-variant">${n.fecha_publicacion || '—'}</td>
+          <td class="px-4 text-right sticky right-0 bg-surface-container-lowest whitespace-nowrap">
+            ${SIGUIENTE_LABEL[n.estado] ? `<button class="px-3 py-1.5 rounded-lg bg-primary-container text-on-primary-container text-xs font-bold hover:opacity-90" onclick="avanzarNorma('${n.id}')">${SIGUIENTE_LABEL[n.estado]}</button>` : ''}
+            <button class="p-1.5 rounded-lg hover:bg-surface-container-high text-on-surface-variant" title="Eliminar" onclick="deleteNorma('${n.id}')"><span class="material-symbols-outlined text-lg">delete</span></button>
+          </td>
+        </tr>
+      `).join('');
+      document.getElementById('results-count').textContent = `Mostrando ${filtered.length} de ${allNorms.length} normas`;
+    }
+
+    ['filter-sector', 'filter-estado'].forEach(id => document.getElementById(id).addEventListener('change', renderTable));
+
+    function openFormModal() { document.getElementById('modal-form').classList.remove('hidden'); document.getElementById('modal-form').classList.add('flex'); }
+    function closeFormModal() { document.getElementById('modal-form').classList.add('hidden'); document.getElementById('modal-form').classList.remove('flex'); }
+    document.getElementById('btn-new-norm').addEventListener('click', () => { document.getElementById('form-norm').reset(); openFormModal(); });
+    document.getElementById('modal-form-close').addEventListener('click', closeFormModal);
+    document.getElementById('modal-form-cancel').addEventListener('click', closeFormModal);
+
+    async function saveNorm() {
+      const payload = {
+        codigo_norma: document.getElementById('form-codigo').value,
+        nombre: document.getElementById('form-nombre').value,
+        sector_aplicable: document.getElementById('form-sector').value,
+        version_year: document.getElementById('form-year').value || null,
+        resumen_requisito: document.getElementById('form-resumen').value,
+      };
+      await fetch('/api/matriz-legal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      closeFormModal();
+      await loadNorms();
+    }
+
+    window.avanzarNorma = async function (id) {
+      await fetch(`/api/matriz-legal/${id}/avanzar`, { method: 'PUT' });
+      await loadNorms();
+    };
+    window.deleteNorma = async function (id) {
+      await fetch(`/api/matriz-legal/${id}`, { method: 'DELETE' });
+      await loadNorms();
+    };
+
+    loadNorms();
+  </script>
+</body></html>
