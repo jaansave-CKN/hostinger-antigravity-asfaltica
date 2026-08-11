@@ -307,10 +307,27 @@
           <div><span class="text-on-surface-variant">ARL:</span> ${estadoBadge(e.estado_arl)}</div>
           <div><span class="text-on-surface-variant">Curso Alturas:</span> ${estadoBadge(e.estado_alturas)}</div>
           <div class="col-span-2"><span class="text-on-surface-variant">Fecha de ingreso:</span> ${e.fecha_ingreso}</div>
+        </div>
+        <div class="pt-lg print:hidden">
+          <p class="font-label-md text-label-md text-on-surface-variant uppercase mb-2">Historial de Verificación ARL/Alturas</p>
+          <div id="arl-log-list" class="space-y-1 text-body-md font-body-md max-h-40 overflow-y-auto">Cargando…</div>
         </div>`;
       document.getElementById('modal-view').classList.remove('hidden');
       document.getElementById('modal-view').classList.add('flex');
+      cargarHistorialArl(id);
     };
+
+    async function cargarHistorialArl(empleadoId) {
+      const el = document.getElementById('arl-log-list');
+      try {
+        const log = await fetch(`/api/arl-verification-log?empleado_id=${empleadoId}`).then(r => r.json());
+        el.innerHTML = log.length
+          ? log.map(l => `<p class="font-label-sm text-label-sm text-on-surface-variant">${new Date(l.created_at).toLocaleString('es-CO')} — <b class="text-on-surface">${l.campo}</b>: ${l.valor_anterior || '—'} → ${l.valor_nuevo} (${l.actualizado_por}, vía ${l.adaptador})</p>`).join('')
+          : '<p class="font-label-sm text-label-sm text-on-surface-variant">Sin cambios registrados todavía.</p>';
+      } catch {
+        el.innerHTML = '<p class="font-label-sm text-label-sm text-error">No se pudo cargar el historial.</p>';
+      }
+    }
     document.getElementById('modal-view-close').addEventListener('click', () => { document.getElementById('modal-view').classList.add('hidden'); document.getElementById('modal-view').classList.remove('flex'); });
     document.getElementById('btn-print').addEventListener('click', () => window.print());
 

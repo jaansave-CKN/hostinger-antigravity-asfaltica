@@ -136,7 +136,7 @@ async function initDb() {
     CREATE TABLE IF NOT EXISTS tenants (
       id TEXT PRIMARY KEY, nit TEXT, razon_social TEXT, sector TEXT, plan_saas TEXT,
       usuarios INT DEFAULT 0, obras_puestos INT DEFAULT 0, cumplimiento_sgsst INT DEFAULT 0,
-      estado TEXT, fecha_alta TEXT, version INT NOT NULL DEFAULT 1
+      estado TEXT, fecha_alta TEXT, arl_provider TEXT, version INT NOT NULL DEFAULT 1
     );
     CREATE TABLE IF NOT EXISTS users_app (
       id TEXT PRIMARY KEY, nombre TEXT, cedula TEXT, tenant_id TEXT, rol_id TEXT,
@@ -220,6 +220,16 @@ async function initDb() {
       confianza_modelo NUMERIC(3,2) CHECK (confianza_modelo BETWEEN 0 AND 1),
       estado TEXT NOT NULL DEFAULT 'Nuevo' CHECK (estado IN ('Nuevo','Revisado','Descartado','Escalado')),
       revisado_por TEXT, version INT NOT NULL DEFAULT 1, created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+    -- Sprint 5 — patrón adaptador ARL. Solo 'manual' implementado (formaliza el flujo
+    -- humano existente) — el CHECK se amplía cuando exista un proveedor real contratado.
+    CREATE TABLE IF NOT EXISTS arl_verification_log (
+      id TEXT PRIMARY KEY, tenant_id TEXT NOT NULL REFERENCES tenants(id),
+      empleado_id TEXT NOT NULL REFERENCES empleados(id),
+      campo TEXT NOT NULL CHECK (campo IN ('estado_arl', 'estado_alturas')),
+      valor_anterior TEXT, valor_nuevo TEXT NOT NULL,
+      adaptador TEXT NOT NULL DEFAULT 'manual' CHECK (adaptador IN ('manual')),
+      actualizado_por TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );
     CREATE TABLE IF NOT EXISTS emergency_alerts (
       id TEXT PRIMARY KEY, tenant_id TEXT REFERENCES tenants(id),

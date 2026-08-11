@@ -7,6 +7,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const Anthropic = require('@anthropic-ai/sdk');
 const { pool, initDb, nextId, MODULES, ACTIONS } = require('./db');
+const arlAdapter = require('./adapters/arl/manual-adapter');
 
 const app = express();
 const PORT = process.env.PORT || 5180;
@@ -63,23 +64,28 @@ function asyncRoute(fn) {
 // genérica (matriz-legal/:id/avanzar es una transición de estado, no un edit — resuelve
 // su propia concurrencia inline, ver esa ruta). `tabla` es siempre un literal fijo del
 // código, nunca un valor del cliente — seguro interpolarlo en la sentencia.
+// Devuelve la fila actualizada (para que rutas como empleados puedan encadenar lógica
+// extra, ej. bitácora ARL) o null si respondió un error — ningún llamador existente
+// usaba el valor de retorno antes, así que este cambio no afecta a los demás.
 async function actualizarConVersion(req, res, { tabla, campos, valores, entidad }) {
   const version = Number(req.body.version);
   if (!Number.isInteger(version)) {
-    return res.status(400).json({ error: `Falta "version" (entero) en el cuerpo — recarga ${entidad} y vuelve a intentar` });
+    res.status(400).json({ error: `Falta "version" (entero) en el cuerpo — recarga ${entidad} y vuelve a intentar` });
+    return null;
   }
   const asignaciones = campos.map((c, i) => `${c}=$${i + 1}`).join(', ');
   const { rows } = await req.db.query(
     `UPDATE ${tabla} SET ${asignaciones}, version = version + 1 WHERE id=$${campos.length + 1} AND version=$${campos.length + 2} RETURNING *`,
     [...valores, req.params.id, version]
   );
-  if (rows.length) return res.json(rows[0]);
+  if (rows.length) { res.json(rows[0]); return rows[0]; }
   const existe = await req.db.query(`SELECT 1 FROM ${tabla} WHERE id=$1`, [req.params.id]);
-  return res.status(existe.rows.length ? 409 : 404).json({
+  res.status(existe.rows.length ? 409 : 404).json({
     error: existe.rows.length
       ? `${entidad} fue editado por otro usuario mientras tanto — recarga antes de guardar`
       : `${entidad} no encontrado`,
   });
+  return null;
 }
 
 app.post('/api/login', asyncRoute(async (req, res) => {
@@ -372,19 +378,45 @@ app.post('/api/empleados', asyncRoute(async (req, res) => {
 app.put('/api/empleados/:id', asyncRoute(async (req, res) => {
   const current = await req.db.query('SELECT * FROM empleados WHERE id = $1', [req.params.id]);
   if (!current.rows.length) return res.status(404).json({ error: 'Empleado no encontrado' });
-  const merged = { ...current.rows[0], ...req.body, id: req.params.id, tenant_id: current.rows[0].tenant_id };
-  await actualizarConVersion(req, res, {
+  const antes = current.rows[0];
+  const merged = { ...antes, ...req.body, id: req.params.id, tenant_id: antes.tenant_id };
+  const actualizado = await actualizarConVersion(req, res, {
     tabla: 'empleados',
     campos: ['tenant_id', 'project_id', 'nombre', 'cedula', 'cargo', 'tipo_contrato', 'fecha_ingreso', 'eps', 'estado_arl', 'estado_alturas', 'estado_cuenta'],
     valores: [merged.tenant_id, merged.project_id, merged.nombre, merged.cedula, merged.cargo, merged.tipo_contrato, merged.fecha_ingreso, merged.eps, merged.estado_arl, merged.estado_alturas, merged.estado_cuenta],
     entidad: 'El empleado',
   });
+  if (!actualizado) return; // actualizarConVersion ya respondió 400/409/404
+
+  // Sprint 5 — bitácora ARL: solo si estado_arl/estado_alturas realmente cambió.
+  const camposArl = ['estado_arl', 'estado_alturas'].filter(c => antes[c] !== actualizado[c]);
+  if (camposArl.length) {
+    const verificacion = await arlAdapter.verificar(actualizado);
+    for (const campo of camposArl) {
+      const logId = await nextId('arl_verification_log', 'ARL', 5);
+      await req.db.query(
+        `INSERT INTO arl_verification_log (id, tenant_id, empleado_id, campo, valor_anterior, valor_nuevo, adaptador, actualizado_por)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+        [logId, actualizado.tenant_id, actualizado.id, campo, antes[campo], actualizado[campo], verificacion.adaptador, req.session.nombre || 'Usuario Actual']
+      );
+    }
+  }
 }));
 
 app.delete('/api/empleados/:id', asyncRoute(async (req, res) => {
   const { rowCount } = await req.db.query('DELETE FROM empleados WHERE id = $1', [req.params.id]);
   if (!rowCount) return res.status(404).json({ error: 'Empleado no encontrado' });
   res.status(204).end();
+}));
+
+app.get('/api/arl-verification-log', asyncRoute(async (req, res) => {
+  const { empleado_id } = req.query;
+  if (!empleado_id) return res.status(400).json({ error: 'empleado_id es obligatorio' });
+  const { rows } = await req.db.query(
+    'SELECT * FROM arl_verification_log WHERE empleado_id = $1 ORDER BY created_at DESC',
+    [empleado_id]
+  );
+  res.json(rows);
 }));
 
 // --- Charlas Diarias ---
